@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
+using Ventura.GameLogic.Actions;
 using Ventura.Generators;
 using Ventura.Util;
 
 
 namespace Ventura.GameLogic
 {
-#nullable enable
     public class Orchestrator
     {
         private static Orchestrator _instance = new Orchestrator();
@@ -22,23 +22,23 @@ namespace Ventura.GameLogic
 
 
         private GameMap _currMap;
-        public GameMap? CurrMap { get { return _currMap; } set { _currMap = value; } }
+        public GameMap CurrMap { get => _currMap; set => _currMap = value; }
 
         private World _world;
-        public World World { get { return _world; } }
+        public World World { get => _world; }
 
         private Actor _player;
-        public Actor Player { get { return _player; } }
+        public Actor Player { get => _player; }
 
         private SortedSet<PendingType> _pendingUpdates = new();
-        public SortedSet<PendingType> PendingUpdates { get { return _pendingUpdates; } }
+        public SortedSet<PendingType> PendingUpdates { get => _pendingUpdates; }
 
         //private HashSet<string> _exploredMaps = new();
         //private List<Actor> _actors;
         //private bool isGameActive = false;
 
         private CircularList<Actor> _scheduler = new();
-        private Queue<Action> _playerActionQueue = new();
+        private Queue<GameAction> _playerActionQueue = new();
 
 
         public enum PendingType
@@ -73,7 +73,7 @@ namespace Ventura.GameLogic
 
             MoveActorTo(_player, _currMap.StartingPos.x, _currMap.StartingPos.y);
 
-            _currMap.UpdateExploration(_player.X, _player.Y, VISIBILITY_RADIUS);
+            _currMap.UpdateExploration(_player.x, _player.y, VISIBILITY_RADIUS);
 
             ActivateActors();
 
@@ -108,12 +108,6 @@ namespace Ventura.GameLogic
         }
 
 
-        //public void RemoveActor(Actor a)
-        //{
-        //    _currMap.entities.Remove(a);
-        //    //TODO: remove from all maps
-        //}
-
         public bool IsTransparent(int x, int y)
         {
             if (_currMap == null)
@@ -136,9 +130,7 @@ namespace Ventura.GameLogic
                 return false;
 
             else
-                return _currMap.Terrain[x, y].Walkable;
-
-            //TODO: check if any actor is there
+                return (_currMap.Terrain[x, y].Walkable) && (_currMap.GetBlockingEntityAt(x, y) == null);
         }
 
 
@@ -148,25 +140,32 @@ namespace Ventura.GameLogic
             {
 
                 a.MoveTo(targetX, targetY);
-                if (a.Name == "player")
+                if (a.Name == "player") //FIXME: use a more robust way to check if actor is player
                     _currMap.UpdateExploration(targetX, targetY, VISIBILITY_RADIUS);
 
             }
 
             _pendingUpdates.Add(PendingType.Player);
 
-            return new Vector2Int(a.X, a.Y);
+            return new Vector2Int(a.x, a.y);
+        }
+
+        public void MoveItemTo(GameItem item, Container targetContainer)
+        {
+            _currMap.RemoveItem(item);
+            targetContainer.AddItem(item);
+            item.Parent = targetContainer;
         }
 
 
-        public void EnqueuePlayerAction(Action a)
+        public void EnqueuePlayerAction(GameAction a)
         {
             //Messages.Log("EnqueuePlayerAction");
             _playerActionQueue.Enqueue(a);
         }
 
 
-        public Action? DequeuePlayerAction()
+        public GameAction? DequeuePlayerAction()
         {
             if (_playerActionQueue.Count > 0)
                 return _playerActionQueue.Dequeue();
@@ -185,15 +184,6 @@ namespace Ventura.GameLogic
                 if (a is Actor && a.Name != "player")
                     _scheduler.Add((Actor)a);
 		    }
-        }
-
-        public void RemoveActor(Actor a) {
-            _scheduler.Remove(a);
-            //TODO: remove from all maps
-            if (_currMap == null)
-                return;
-
-            _currMap.Entities.Remove(a);
         }
 
         public void DeactivateActors() {
@@ -220,7 +210,7 @@ namespace Ventura.GameLogic
             var newMap = MapGenerator.GenerateWildernessMap(10, 10, mapName, false);
             //newMap.Orchestrator = this;
 
-            _world.PushMap(newMap, new Vector2Int(_player.X, _player.Y));
+            _world.PushMap(newMap, new Vector2Int(_player.x, _player.y));
             _currMap = newMap;
             //_exploredMaps.add(newMap.name);
 

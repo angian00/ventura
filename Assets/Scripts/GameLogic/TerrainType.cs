@@ -4,16 +4,16 @@ namespace Ventura.GameLogic
     public record TerrainType: GameLogicObject
     {
         private string _name;
-        public string Name { get { return _name; } }
+        public string Name { get => _name; }
 
         private string _label;
-        public string Label { get { return _label; } }
+        public string Label { get => _label; }
 
         private bool _walkable;
-        public bool Walkable { get { return _walkable; } }
+        public bool Walkable { get => _walkable; }
 
         private bool _transparent;
-        public bool Transparent { get { return _transparent; } }
+        public bool Transparent { get => _transparent; }
 
         //darkTile: TerrainAspect
         //lightTile: TerrainAspect

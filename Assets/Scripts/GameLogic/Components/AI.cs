@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Ventura.GameLogic;
+using Ventura.GameLogic.Actions;
 using Ventura.Util;
 
 namespace Ventura.GameLogic.Components
@@ -34,12 +35,12 @@ public abstract class AI
 
 		    foreach (var e in targetMap.Entities)
             {
-                if (e.IsBlocking && !(e == _parent) && !(e.X == destX && e.Y == destY))
+                if (e.IsBlocking && !(e == _parent) && !(e.x == destX && e.y == destY))
                     //walkables[e.x][e.y] = false;
                     ;
             }
 
-            //TODO: use Unity pathfinding algo
+            //TODO: use Unity pathfinding algorithm
 
             //        let passableDelegate = function(x: number, y: number): boolean
             //        {
@@ -68,7 +69,7 @@ public abstract class AI
             return outputPath;
         }
 
-        public abstract Action? ChooseAction();
+        public abstract GameAction? ChooseAction();
         //public abstract AI Clone(Actor newParent);
         //public abstract ToObject()
 
@@ -94,18 +95,18 @@ public abstract class AI
         public EnemyAI(Orchestrator orch, Actor parent) : base(orch, parent) { }
 
 
-        public override Action? ChooseAction()
+        public override GameAction? ChooseAction()
         {
             Messages.Log("EnemyAI.chooseAction");
 
             var target = _orch.Player;
-            var dx = target.X - _parent.Y;
-            var dy = target.Y - _parent.Y;
+            var dx = target.x - _parent.y;
+            var dy = target.y - _parent.y;
 
             var distance = Math.Max(Math.Abs(dx), Math.Abs(dy));
 
 
-            if (_orch.CurrMap.Visible[_parent.X, _parent.Y])
+            if (_orch.CurrMap.Visible[_parent.x, _parent.y])
             {
                 //if monster is visible to player, 
                 //then player is visible to monster
@@ -113,7 +114,7 @@ public abstract class AI
                     return new MeleeAction(_orch, _parent, dx, dy);
 
 
-                _path = GetPathTo(target.X, target.Y);
+                _path = GetPathTo(target.x, target.y);
             }
 
             if (_path.Count > 0)
@@ -122,7 +123,7 @@ public abstract class AI
                 _path.RemoveAt(0);
 
                 Messages.Log("EnemyAI chose MovementAction");
-                return new MovementAction(_orch, _parent, dest.x - _parent.X, dest.y - _parent.Y);
+                return new MovementAction(_orch, _parent, dest.x - _parent.x, dest.y - _parent.y);
             }
 
             return new WaitAction(_orch, _parent);
@@ -134,7 +135,7 @@ public abstract class AI
     {
         public PlayerAI(Orchestrator orch, Actor parent) : base(orch, parent) { }
 
-        public override Action? ChooseAction() {
+        public override GameAction? ChooseAction() {
             return _orch.DequeuePlayerAction();
         }
 

@@ -1,6 +1,5 @@
-﻿
-using System;
-using Ventura.GameLogic.Components;
+﻿using Ventura.GameLogic.Components;
+using Ventura.GameLogic.Actions;
 using Ventura.Util;
 
 namespace Ventura.GameLogic
@@ -10,14 +9,14 @@ namespace Ventura.GameLogic
     public class Entity: GameLogicObject
     {
         protected string _name;
-        public string Name { get { return _name; } }
+        public string Name { get => _name; }
         protected int _x;
-        public int X { get { return _x; } }
+        public int x { get => _x; }
         protected int _y;
-        public int Y { get { return _y; } }
+        public int y { get => _y; }
 
         protected bool _isBlocking;
-        public bool IsBlocking { get { return _isBlocking;  } }
+        public bool IsBlocking { get => _isBlocking; }
 
 
         protected Entity(string name, bool isBlocking = false)
@@ -45,25 +44,10 @@ namespace Ventura.GameLogic
         private Orchestrator _orch;
         private AI? _ai;
 
-        public Orchestrator Orchestrator
-        {
-            get => _orch;
-            set
-            {
-                _orch = value;
-                //    if (stats)
-                //    stats.Orchestrator = value
+        private Inventory? _inventory;
+        public Inventory Inventory { get => _inventory;  }
+        //private Equipment? _equipment;
 
-                //   if (inventory)
-                //    inventory.Orchestrator = value
-
-                //    if (equipment)
-                //    equipment.Orchestrator = value
-
-                //    if (ai)
-                //    ai.Orchestrator= value
-            }
-        }
 
         //stats?: Stats
         //inventory?: Inventory
@@ -72,7 +56,7 @@ namespace Ventura.GameLogic
         public Actor(Orchestrator orch, string name) : base(name, true)
         {
             this._orch = orch;
-            if (name == "player")
+            if (name == "player") //FIXME: use a more robust way to check if actor is player
                 _ai = new PlayerAI(_orch, this);
         }
 
@@ -115,21 +99,27 @@ namespace Ventura.GameLogic
 
 
 
-    public class Item : Entity
+    public class GameItem : Entity
     {
-        public Item(string name) : base(name, false)
-        {
+        private Container? _parent;
+        public Container Parent { get => _parent; set => _parent = value;  }
 
-        }
+        private Consumable? _consumable;
+        public Consumable Consumable { get => _consumable; }
+        //private Equippable? _equippable;
+        //private Combinable? _combinable;
+
+        public GameItem(string name) : base(name, false)
+        { }
     }
 
 #nullable enable
     public class Site : Entity
     {
         private GameMap? _parent;
-        public GameMap? Parent { get { return _parent; } }
+        public GameMap? Parent { get => _parent; }
         private string? _mapName;
-        public string? MapName { get { return _mapName; } }
+        public string? MapName { get => _mapName; }
 
         public Site(string name, string mapName) : base(name, false)
         {

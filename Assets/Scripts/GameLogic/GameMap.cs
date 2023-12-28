@@ -2,43 +2,44 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 using Random = UnityEngine.Random;
 
 
 #nullable enable
 namespace Ventura.GameLogic
 {
-    public class GameMap: GameLogicObject
+    public class GameMap: GameLogicObject, Container
     {
         const bool MAP_DEBUGGING = false;
         //const bool MAP_DEBUGGING = true;
 
         private string _name;
-        public string Name { get { return _name; } }
+        public string Name { get => _name; }
 
         private string _label;
-        public string Label { get { return _label; } }
+        public string Label { get => _label; }
 
         private int _width;
-        public int Width { get { return _width; } }
+        public int Width { get => _width; }
 
         private int _height;
-        public int Height { get { return _height; } }
+        public int Height { get => _height; }
 
         private TerrainType[,] _terrain;
-        public TerrainType[,] Terrain { get { return _terrain; } }
+        public TerrainType[,] Terrain { get => _terrain; }
 
         private bool[,] _visible;
-        public bool[,] Visible { get { return _visible; } }
+        public bool[,] Visible { get => _visible; }
 
         private bool[,] _explored;
-        public bool[,] Explored { get { return _explored; } }
+        public bool[,] Explored { get => _explored; }
 
         private Vector2Int _startingPos;
-        public Vector2Int StartingPos { get { return _startingPos; } set { _startingPos = value; } }
+        public Vector2Int StartingPos { get => _startingPos; set =>  _startingPos = value; }
 
         private HashSet<Entity> _entities = new();
-        public HashSet<Entity> Entities { get { return _entities; } }
+        public HashSet<Entity> Entities { get => _entities; }
 
 
         //public Orchestrator Orchestrator
@@ -106,7 +107,7 @@ namespace Ventura.GameLogic
         {
             foreach (var e in _entities)
             {
-                if ((e.X == x) && (e.Y == y) && (e is Site))
+                if ((e.x == x) && (e.y == y) && (e is Site))
                     return e as Site;
             }
 
@@ -123,7 +124,7 @@ namespace Ventura.GameLogic
         {
             foreach (var e in _entities)
             {
-                if ((e.X == x) && (e.Y == y) && (e is Actor))
+                if ((e.x == x) && (e.y == y) && (e is Actor))
                     return e as Actor;
             }
 
@@ -142,7 +143,7 @@ namespace Ventura.GameLogic
 
             foreach (var e in _entities)
             {
-                if (e.X == x && e.Y == y)
+                if (e.x == x && e.y == y)
                     result.Add(e);
 
             }
@@ -150,11 +151,26 @@ namespace Ventura.GameLogic
             return result;
         }
 
+        public List<GameItem> GetItemsAt(int x, int y)
+        {
+            var result = new List<GameItem>();
+
+            foreach (var e in _entities)
+            {
+                if (e.x == x && e.y == y && (e is GameItem))
+                    result.Add((GameItem)e);
+
+            }
+
+            return result;
+        }
+
+
         public Entity? GetBlockingEntityAt(int x, int y)
         {
             foreach (var e in _entities)
             {
-                if (e.X == x && e.Y == y & e.IsBlocking)
+                if (e.x == x && e.y == y & e.IsBlocking)
                     return e;
             }
             return null;
@@ -191,7 +207,7 @@ namespace Ventura.GameLogic
                 }
             }
 
-            //TODO: proper line-of-sight algorithm
+            //TODO: use Unity line-of-sight algorithm
             var startX = (int)Math.Max(targetX - r, 0);
             var endX   = (int)Math.Min(targetX + r, _width - 1);
             var startY = (int)Math.Max(targetY - r, 0);
@@ -208,5 +224,21 @@ namespace Ventura.GameLogic
         }
 
 
+        public bool IsFull { get => false; }
+
+        public bool ContainsItem(GameItem item)
+        {
+            return _entities.Contains(item);
+        }
+
+        public void AddItem(GameItem item)
+        {
+            _entities.Add(item);
+        }
+
+        public void RemoveItem(GameItem item)
+        {
+            _entities.Remove(item);
+        }
     }
 }

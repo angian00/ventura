@@ -1,9 +1,9 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using Ventura.GameLogic;
+using Ventura.GameLogic.Actions;
 using Ventura.Util;
 
 
@@ -42,7 +42,7 @@ namespace Ventura.Behaviours
             //Messages.Log("OnKeyPressed");
 
             var keyboard = Keyboard.current;
-            Action? newAction = null;
+            GameAction? newAction = null;
 
 
             int deltaX = 0;
@@ -86,6 +86,10 @@ namespace Ventura.Behaviours
             else if (key == keyboard.numpad5Key)
             {
                 newAction = new WaitAction(_orch, _orch.Player);
+            }
+            else if (key == keyboard.gKey)
+            {
+                newAction = new PickupAction(_orch, _orch.Player);
             }
             else
             {
@@ -145,8 +149,8 @@ namespace Ventura.Behaviours
         private void updatePlayer() {
             Messages.Log("GameManager.updatePlayer()");
 
-            var playerX = _orch.Player.X;
-            var playerY = _orch.Player.Y;
+            var playerX = _orch.Player.x;
+            var playerY = _orch.Player.y;
 
             var targetObjPos = _playerObj.transform.position;
             targetObjPos.x = playerX;

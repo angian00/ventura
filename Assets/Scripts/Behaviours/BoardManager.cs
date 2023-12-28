@@ -91,7 +91,7 @@ namespace Ventura.Behaviours
                             continue;
                         }
 
-                        var newEntity = Instantiate(entityTemplate, new Vector3(e.X, e.Y), Quaternion.identity);
+                        var newEntity = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
                         newEntity.name = e.Name; //FIXME: there is no guarantee that entity name is unique
                         newEntity.GetComponent<SpriteRenderer>().sprite = sprite;
                         newEntity.transform.SetParent(_sitesLayer);

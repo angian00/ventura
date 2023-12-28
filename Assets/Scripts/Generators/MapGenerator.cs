@@ -102,7 +102,6 @@ namespace Ventura.Generators
         }
 
 
-        //TODO: differentiate by site type
         private static void addSites(GameMap targetMap, int nSites)
 		{
             Messages.Log($"addSite({targetMap.Name}, {nSites})");
@@ -122,7 +121,7 @@ namespace Ventura.Generators
                 var isTileOk = targetMap.Terrain[x, y].Walkable;
                 foreach (var e in targetMap.Entities)
                 {
-                    if ((e.X == x && e.Y == y) || (e is Site && Math.Abs(e.X - x) < MIN_SITE_DISTANCE && Math.Abs(e.Y - y) < MIN_SITE_DISTANCE))
+                    if ((e.x == x && e.y == y) || (e is Site && Math.Abs(e.x - x) < MIN_SITE_DISTANCE && Math.Abs(e.y - y) < MIN_SITE_DISTANCE))
                     {
                         isTileOk = false;
                         break;

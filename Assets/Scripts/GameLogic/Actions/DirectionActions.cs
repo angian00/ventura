@@ -1,69 +1,16 @@
 ﻿using UnityEngine;
 using Ventura.Util;
-using Ventura.Generators;
 
-namespace Ventura.GameLogic
+namespace Ventura.GameLogic.Actions
 {
-#nullable enable
-    public record ActionResult
-    {
-        private bool _success;
-        private string? _reason;
-
-        public bool Success { get { return _success; } }
-        public string? Reason { get { return _reason; } }
-
-
-        public ActionResult(bool success, string? reason=null)
-        {
-            _success = success;
-            _reason = reason;
-        }
-    }
-
-
-    public abstract class Action
-    {
-        protected Actor _actor;
-        protected Orchestrator _orch;
-
-        protected Action(Orchestrator orch, Actor actor)
-        {
-            this._orch = orch;
-            this._actor = actor;
-        }
-
-        public abstract ActionResult Perform();
-    }
-
-
-    public class WaitAction: Action
-    {
-        public WaitAction(Orchestrator orch, Actor actor) : base(orch, actor) { }
-
-        public override ActionResult Perform()
-        {
-            //do nothing, spend a turn
-            if (_orch.CurrMap != null && _orch.CurrMap.Visible[_actor.X, _actor.Y])
-                Messages.Display(_actor.Name + " is waiting... ");
-    
-
-            return new ActionResult(true);
-        }
-    }
-
-    //-----------------------------------------------------
-    // Direction Actions
-    //-----------------------------------------------------
-
-    public abstract class DirectionAction : Action
+    public abstract class DirectionAction : GameAction
     {
         protected int _dx;
         protected int _dy;
 
-        public Vector2Int TargetXY { get { return new Vector2Int(_actor.X + _dx, _actor.Y + _dy); } }
-        public Actor? TargetActor { get { return _orch.CurrMap == null ? null : _orch.CurrMap.GetActorAt(TargetXY) ; } }
-        public Site? TargetSite { get { return _orch.CurrMap == null ? null : _orch.CurrMap.GetSiteAt(TargetXY) ; } }
+        public Vector2Int TargetXY { get => new Vector2Int(_actor.x + _dx, _actor.y + _dy); }
+        public Actor? TargetActor  { get => (_orch.CurrMap == null ? null : _orch.CurrMap.GetActorAt(TargetXY)); }
+        public Site? TargetSite    { get => (_orch.CurrMap == null ? null : _orch.CurrMap.GetSiteAt(TargetXY)); }
 
         public DirectionAction(Orchestrator orch, Actor actor, int dx, int dy) : base(orch, actor)
         {

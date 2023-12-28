@@ -19,7 +19,7 @@ namespace Ventura.GameLogic
         }
 
         private Stack<MapStackItem> _mapStack = new();
-        public int MapStackSize { get { return _mapStack.Count; } }
+        public int MapStackSize { get => _mapStack.Count; }
 
         public List<string> GetStackMapNames()
         {

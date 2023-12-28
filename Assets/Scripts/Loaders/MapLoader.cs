@@ -21,7 +21,7 @@ namespace Ventura.Loaders
         {
             var terrainTypes = new Dictionary<string, TerrainType>();
             var actorDefs = new Dictionary<string, Actor>();
-            var itemDefs = new Dictionary<string, Item>();
+            var itemDefs = new Dictionary<string, GameItem>();
             var mapDefs = new Dictionary<string, GameMap>();
 
             var actorFiles = new string[] { "monsters.json" };
@@ -35,7 +35,7 @@ namespace Ventura.Loaders
                 loadData<Actor>(f, actorDefs);
 
             foreach (var f in itemFiles)
-                loadData<Item>(f, itemDefs);
+                loadData<GameItem>(f, itemDefs);
 
             foreach (var f in mapFiles)
                 loadData<GameMap>(f, mapDefs);
