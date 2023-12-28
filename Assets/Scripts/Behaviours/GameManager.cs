@@ -21,8 +21,8 @@ namespace Ventura.Behaviours
 
         void Start()
         {
-            _playerObj = GameObject.Find("Player") as GameObject;
-            _cameraObj = GameObject.Find("Game Camera") as GameObject;
+            _playerObj = GameObject.Find("Player");
+            _cameraObj = GameObject.Find("Game Camera");
 
             _boardManager = GameObject.Find("Board").GetComponent<BoardManager>();
 
@@ -47,20 +47,47 @@ namespace Ventura.Behaviours
 
             int deltaX = 0;
             int deltaY = 0;
-            if (key == keyboard.rightArrowKey)
+            if (key == keyboard.rightArrowKey || key == keyboard.numpad6Key)
                 deltaX = 1;
-            else if (key == keyboard.leftArrowKey)
+            else if (key == keyboard.leftArrowKey || key == keyboard.numpad4Key)
                 deltaX = -1;
-            else if (key == keyboard.upArrowKey)
+            else if (key == keyboard.upArrowKey || key == keyboard.numpad8Key)
                 deltaY = 1;
-            else if (key == keyboard.downArrowKey)
+            else if (key == keyboard.downArrowKey || key == keyboard.numpad2Key)
                 deltaY = -1;
+
+            else if (key == keyboard.numpad9Key)
+            {
+                deltaX = 1;
+                deltaY = 1;
+            }
+            else if (key == keyboard.numpad3Key)
+            {
+                deltaX = 1;
+                deltaY = -1;
+            }
+            else if (key == keyboard.numpad7Key)
+            {
+                deltaX = -1;
+                deltaY = 1;
+            }
+            else if (key == keyboard.numpad1Key)
+            {
+                deltaX = -1;
+                deltaY = -1;
+            }
+
 
             if (deltaX != 0 || deltaY != 0)
             {
                 newAction = new BumpAction(_orch, _orch.Player, deltaX, deltaY);
 
-            } else
+            }
+            else if (key == keyboard.numpad5Key)
+            {
+                newAction = new WaitAction(_orch, _orch.Player);
+            }
+            else
             {
                 //ignore keyPressed
             }

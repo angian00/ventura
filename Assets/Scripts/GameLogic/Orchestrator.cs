@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 using Ventura.Generators;
 using Ventura.Util;
-using static UnityEngine.GraphicsBuffer;
 
 
 namespace Ventura.GameLogic
@@ -70,6 +69,7 @@ namespace Ventura.GameLogic
             var startMap = MapGenerator.GenerateWildernessMap(WORLD_MAP_WIDTH, WORLD_MAP_HEIGHT);
             _world.PushMap(startMap, null);
             _currMap = startMap;
+            _currMap.Entities.Add(_player);
 
             MoveActorTo(_player, _currMap.StartingPos.x, _currMap.StartingPos.y);
 
@@ -211,8 +211,8 @@ namespace Ventura.GameLogic
         public void EnterMap(string mapName)
         {
             DeactivateActors();
-            _currMap.RemoveEntity(_player);
-            
+            _currMap.Entities.Remove(_player);
+
             //if (!(target.mapName in mapDefs))
             //    return new ActionResult(false, $"Unknown map: [{TargetSite.mapName}]");
             //_orch.World.PushMap(mapDefs[target.mapName]);
@@ -240,7 +240,7 @@ namespace Ventura.GameLogic
         public void ExitMap()
         {
             DeactivateActors();
-            _currMap.RemoveEntity(_player);
+            _currMap.Entities.Remove(_player);
 
             var previousMapPos = _world.PopMap();
             _currMap = _world.CurrMap;

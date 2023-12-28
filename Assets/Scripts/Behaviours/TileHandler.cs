@@ -24,13 +24,13 @@ namespace Ventura.Behaviours
         public void OnPointerEnter(PointerEventData eventData)
         {
             //Debug.Log($"Mouse is on tile {x}, {y}");
-            uiManager.UpdateTileInfo($"x={x}, y={y}");
+            uiManager.UpdateTileInfo(new Vector2Int(x, y));
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             //Debug.Log($"Mouse is no longer on tile {x}, {y}");
-            uiManager.UpdateTileInfo("");
+            uiManager.UpdateTileInfo(null);
         }
     }
 

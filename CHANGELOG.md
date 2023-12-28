@@ -6,7 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Added
 - Perlin noise for wilderness map generation
+- name generation from text files
+- keybinding for numpad keys (with diagonal movement)
+- keybinding for wait action
+- auto-repeat behaviour for keyboard keys
+- more detailed tile info in ui
 
 
 ## [0.2] - 2023-12-28

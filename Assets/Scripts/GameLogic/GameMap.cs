@@ -17,6 +17,7 @@ namespace Ventura.GameLogic
         public string Name { get { return _name; } }
 
         private string _label;
+        public string Label { get { return _label; } }
 
         private int _width;
         public int Width { get { return _width; } }
@@ -174,19 +175,6 @@ namespace Ventura.GameLogic
             }
 
             return null;
-        }
-
-
-        public void RemoveEntity(Entity targetEntity)
-        {
-            foreach (var e in _entities)
-            {
-                if (e.Equals(targetEntity))
-                {
-                    _entities.Remove(e);
-                    break;
-                }
-            }
         }
 
 
