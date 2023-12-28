@@ -44,24 +44,13 @@ namespace Ventura.Generators
 
         private static void generateTerrain(GameMap targetMap)
         {
-            //const double percForest = 0.1;
-
-            //int nForest = (int)Math.Round(percForest * nRows * nCols);
-
-            //for (int i = 0; i < nForest; i++)
-            //{
-            //    int x = Random.Range(0, nRows);
-            //    int y = Random.Range(0, nCols);
-
-            //    //TODO: repeat if it is already a Mountains
-            //    newMap.Terrain[x, y] = TerrainType.Mountains;
-            //}
             float noiseXOffset = 0.0f;
             float noiseYOffset = 0.0f;
             float noiseScale = 10.0f;
 
 
-            float[] terrainLevels = new float[] { 0.0f, 0.4f, 0.65f, 0.85f, .99f, 1.0f };
+            //float[] terrainLevels = new float[] { 0.0f, 0.4f, 0.65f, 0.85f, .99f, 1.0f };
+            float[] terrainLevels = new float[] { 0.0f, 0.40f, 0.62f, 0.80f, .90f, 1.0f };
             TerrainType[] terrainTypes = new TerrainType[] {
                 TerrainType.Plains1,
                 TerrainType.Plains2,
@@ -69,6 +58,13 @@ namespace Ventura.Generators
                 TerrainType.Hills2,
                 TerrainType.Mountains,
             };
+
+
+            //stats collection
+            var maxTerrain = 0;
+            var maxNoise = -1.0f;
+            int[] countTerrain = new int[terrainTypes.Length];
+            //
 
             for (var x = 0; x < targetMap.Width; x++)
             {
@@ -79,6 +75,8 @@ namespace Ventura.Generators
 
                     var noiseVal = Mathf.PerlinNoise(noiseX, noiseY);
                     //Messages.Log($"noiseVal (x/y): {noiseVal}");
+                    if (noiseVal > maxNoise)
+                        maxNoise = noiseVal;
 
                     int iTerrain;
                     for (iTerrain=0; iTerrain < terrainLevels.Length; iTerrain++) {
@@ -86,17 +84,26 @@ namespace Ventura.Generators
     					    break;
                     }
 
-                    //Messages.Log($"iTerrain: {iTerrain}, x: {x}, y: {y}");
+                    //stats collection
+                    if (iTerrain > maxTerrain)
+                        maxTerrain = iTerrain;
+                    countTerrain[iTerrain - 1]++;
+                    //
+
                     targetMap.Terrain[x, y] = terrainTypes[iTerrain - 1];
                 }
             }
 
-
+            //Messages.Log($"DEBUG - maxTerrain: {maxTerrain}, maxPerlin: {maxNoise}");
+            //for (var i=0; i < countTerrain.Length; i++)
+            //{
+            //    Messages.Log($"DEBUG - countTerrain[{i}]: {countTerrain[i]}");
+            //}
         }
 
 
-		//TODO: differentiate by site type
-		private static void addSites(GameMap targetMap, int nSites)
+        //TODO: differentiate by site type
+        private static void addSites(GameMap targetMap, int nSites)
 		{
             Messages.Log($"addSite({targetMap.Name}, {nSites})");
 
