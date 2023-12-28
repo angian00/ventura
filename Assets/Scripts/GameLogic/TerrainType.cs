@@ -22,7 +22,11 @@ namespace Ventura.GameLogic
             this._transparent = transparent;
         }
 
-        public static TerrainType Plains = new TerrainType("plains", true, true);
-        public static TerrainType Mountain = new TerrainType("mountain", false, false);
+        public static TerrainType Plains1 = new TerrainType("plains1", true, true);
+        public static TerrainType Plains2 = new TerrainType("plains2", true, true);
+        public static TerrainType Hills1 = new TerrainType("hills1", true, true);
+        public static TerrainType Hills2 = new TerrainType("hills2", true, true);
+        public static TerrainType Mountains = new TerrainType("mountains", true, true);
+
     }
 }

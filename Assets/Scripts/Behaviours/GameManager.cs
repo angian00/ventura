@@ -16,11 +16,15 @@ namespace Ventura.Behaviours
 
         private GameObject _playerObj;
         private GameObject _cameraObj;
+        private BoardManager _boardManager;
+
 
         void Start()
         {
             _playerObj = GameObject.Find("Player") as GameObject;
             _cameraObj = GameObject.Find("Game Camera") as GameObject;
+
+            _boardManager = GameObject.Find("Board").GetComponent<BoardManager>();
 
             _orch = Orchestrator.GetInstance();
             _orch.NewGame();
@@ -29,15 +33,7 @@ namespace Ventura.Behaviours
         void Update()
         {
             _orch.ProcessTurn();
-
-            if (_orch.UpdatePending)
-            {
-                //TODO: differentiate repaints
-                UpdateMap();
-                UpdateGameObjects();
-                _orch.UpdatePending = false;
-            }
-
+            updateScreen();
         }
 
 
@@ -62,8 +58,6 @@ namespace Ventura.Behaviours
 
             if (deltaX != 0 || deltaY != 0)
             {
-                Messages.Log("creating BumpAction");
-
                 newAction = new BumpAction(_orch, _orch.Player, deltaX, deltaY);
 
             } else
@@ -76,11 +70,32 @@ namespace Ventura.Behaviours
         }
 
 
-        public void UpdateMap()
+        private void updateScreen()
         {
-            var boardManager = GameObject.Find("Board").GetComponent<BoardManager>();
-            boardManager.ClearBoard();
-            boardManager.InitBoard(_orch.CurrMap);
+            foreach (var pendingType in _orch.PendingUpdates)
+            {
+                switch (pendingType)
+                {
+                    case Orchestrator.PendingType.Map:
+                        updateMap();
+                        break;
+
+                    case Orchestrator.PendingType.Player:
+                        updatePlayer();
+                        break;
+                }
+            }
+
+            _orch.PendingUpdates.Clear();
+        }
+
+
+        private void updateMap()
+        {
+            Messages.Log("GameManager.updateMap()");
+
+            _boardManager.ClearBoard();
+            _boardManager.InitBoard(_orch.CurrMap);
 
             //update ui location info
             string locationInfoStr = "";
@@ -100,7 +115,9 @@ namespace Ventura.Behaviours
         }
 
 
-        public void UpdateGameObjects() {
+        private void updatePlayer() {
+            Messages.Log("GameManager.updatePlayer()");
+
             var playerX = _orch.Player.X;
             var playerY = _orch.Player.Y;
 
@@ -113,6 +130,8 @@ namespace Ventura.Behaviours
             targetObjPos.x = playerX;
             targetObjPos.y = playerY;
             _cameraObj.transform.position = targetObjPos;
+
+            _boardManager.UpdateFog(_orch.CurrMap);
         }
 
     }

@@ -13,9 +13,11 @@ public static class GraphicsConfig
 
     public static readonly Dictionary<TerrainType, Color> TerrainColors  = new ()
         {
-            { TerrainType.Plains, fromHex("#87b6a7") },
-            //{ TerrainType.Forest, fromHex("#315c2b") },
-            { TerrainType.Mountain, fromHex("#4F3130") },
+            { TerrainType.Plains1, fromHex("#A5A58D") },
+            { TerrainType.Plains2, fromHex("#B7B7A4") },
+            { TerrainType.Hills1, fromHex("#6B705C") },
+            { TerrainType.Hills2, fromHex("#CB997E") },
+            { TerrainType.Mountains, fromHex("#DDBEA9") },
         };
 
 

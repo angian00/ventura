@@ -31,8 +31,8 @@ namespace Ventura.GameLogic
         private Actor _player;
         public Actor Player { get { return _player; } }
 
-        private bool _updatePending = false;
-        public bool UpdatePending { get { return _updatePending; } set { _updatePending = value; } }
+        private SortedSet<PendingType> _pendingUpdates = new();
+        public SortedSet<PendingType> PendingUpdates { get { return _pendingUpdates; } }
 
         //private HashSet<string> _exploredMaps = new();
         //private List<Actor> _actors;
@@ -44,6 +44,13 @@ namespace Ventura.GameLogic
         //fov = new ROT.FOV.PreciseShadowcasting(this.transparency.bind(this))
 
 
+        public enum PendingType
+        {
+            Map,
+            Player,
+        }
+
+
         public Orchestrator()
         {
             _world = new World();
@@ -51,20 +58,22 @@ namespace Ventura.GameLogic
 
         public void NewGame()
         {
-            Messages.Log("Orchestrator.NewGame");
+            Messages.Log("Orchestrator.NewGame()");
 
             //await loadAllData()
             //this.player = actorDefs["player"].clone()
             _player = new Actor(this, "player");
 
 
+            const int WORLD_MAP_WIDTH = 80;
+            const int WORLD_MAP_HEIGHT = 50;
+
             //var startMap = mapDefs["test_map_world"];
-            var startMap = MapGenerator.GenerateWildernessMap(30, 30);
+            var startMap = MapGenerator.GenerateWildernessMap(WORLD_MAP_WIDTH, WORLD_MAP_HEIGHT);
             _world.PushMap(startMap, null);
             _currMap = startMap;
 
             MoveActorTo(_player, _currMap.StartingPos.x, _currMap.StartingPos.y);
-
 
             _currMap.UpdateExploration(_player.X, _player.Y, VISIBILITY_RADIUS);
 
@@ -96,7 +105,8 @@ namespace Ventura.GameLogic
 
             Messages.Display("Welcome, adventurer!");
 
-            _updatePending = true;
+            _pendingUpdates.Add(PendingType.Map);
+            _pendingUpdates.Add(PendingType.Player);
         }
 
 
@@ -145,7 +155,7 @@ namespace Ventura.GameLogic
 
             }
 
-            _updatePending = true;
+            _pendingUpdates.Add(PendingType.Player);
 
             return new Vector2Int(a.X, a.Y);
         }
@@ -153,8 +163,7 @@ namespace Ventura.GameLogic
 
         public void EnqueuePlayerAction(Action a)
         {
-            Messages.Log("EnqueuePlayerAction");
-
+            //Messages.Log("EnqueuePlayerAction");
             _playerActionQueue.Enqueue(a);
         }
 
@@ -218,6 +227,7 @@ namespace Ventura.GameLogic
             //_exploredMaps.add(newMap.name);
 
             _currMap.Entities.Add(_player);
+            _pendingUpdates.Add(PendingType.Map);
 
             var startPos = _currMap.StartingPos;
             Messages.Log($"EnterMap; startPos={startPos}");
@@ -238,6 +248,8 @@ namespace Ventura.GameLogic
             _currMap = _world.CurrMap;
 
             _currMap.Entities.Add(_player);
+            _pendingUpdates.Add(PendingType.Map);
+
             MoveActorTo(_player, previousMapPos.x, previousMapPos.y);
 
             ActivateActors();

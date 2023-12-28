@@ -10,8 +10,8 @@ namespace Ventura.GameLogic
 {
     public class GameMap: GameLogicObject
     {
-        const bool UI_DEBUGGING = false;
-        //const bool UI_DEBUGGING = true;
+        const bool MAP_DEBUGGING = false;
+        //const bool MAP_DEBUGGING = true;
 
         private string _name;
         public string Name { get { return _name; } }
@@ -72,7 +72,7 @@ namespace Ventura.GameLogic
                     _visible[x, y] = false;
                     _explored[x, y] = false;
 
-                    if (UI_DEBUGGING)
+                    if (MAP_DEBUGGING)
                         _explored[x, y] = true;
                 }
             }
@@ -90,7 +90,7 @@ namespace Ventura.GameLogic
             {
                 for (var y = 0; y < h; y++)
                 {
-                    terrain[x, y] = TerrainType.Plains;
+                    terrain[x, y] = TerrainType.Plains1;
                 }
             }
 

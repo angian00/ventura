@@ -3,35 +3,26 @@ using Random = UnityEngine.Random;
 using System;
 using Ventura.GameLogic;
 using Ventura.Util;
-
+using static UnityEngine.Rendering.DebugUI.Table;
+using Unity.Mathematics;
+using UnityEngine.UIElements;
 
 namespace Ventura.Generators
 {
 
     public class MapGenerator
     {
-        public static GameMap GenerateWildernessMap(int nRows, int nCols, string? mapName=null, bool hasSites=true)
+
+        public static GameMap GenerateWildernessMap(int nRows, int nCols, string? mapName = null, bool hasSites = true)
         {
             Messages.Log("GenerateWildernessMap()");
-
-            // TODO: use Perlin noise
-            const double percForest = 0.1;
 
             if (mapName == null)
                 mapName = NameGenerator.GenerateMapName();
 
             var newMap = new GameMap(mapName, mapName, nRows, nCols);
-            
-            int nForest = (int)Math.Round(percForest * nRows * nCols);
 
-            for (int i = 0; i < nForest; i++)
-            {
-                int x = Random.Range(0, nRows);
-                int y = Random.Range(0, nCols);
-
-                //TODO: repeat if it is already a Mountain
-                newMap.Terrain[x, y] = TerrainType.Mountain;
-            }
+            generateTerrain(newMap);
 
             if (hasSites)
                 addSites(newMap, 8);
@@ -49,6 +40,58 @@ namespace Ventura.Generators
             }
 
             return newMap;
+        }
+
+        private static void generateTerrain(GameMap targetMap)
+        {
+            //const double percForest = 0.1;
+
+            //int nForest = (int)Math.Round(percForest * nRows * nCols);
+
+            //for (int i = 0; i < nForest; i++)
+            //{
+            //    int x = Random.Range(0, nRows);
+            //    int y = Random.Range(0, nCols);
+
+            //    //TODO: repeat if it is already a Mountains
+            //    newMap.Terrain[x, y] = TerrainType.Mountains;
+            //}
+            float noiseXOffset = 0.0f;
+            float noiseYOffset = 0.0f;
+            float noiseScale = 10.0f;
+
+
+            float[] terrainLevels = new float[] { 0.0f, 0.4f, 0.65f, 0.85f, .99f, 1.0f };
+            TerrainType[] terrainTypes = new TerrainType[] {
+                TerrainType.Plains1,
+                TerrainType.Plains2,
+                TerrainType.Hills1,
+                TerrainType.Hills2,
+                TerrainType.Mountains,
+            };
+
+            for (var x = 0; x < targetMap.Width; x++)
+            {
+                for (var y = 0; y < targetMap.Height; y++)
+                {
+                    var noiseX = noiseXOffset + noiseScale * x / targetMap.Width;
+                    var noiseY = noiseYOffset + noiseScale * y / targetMap.Height;
+
+                    var noiseVal = Mathf.PerlinNoise(noiseX, noiseY);
+                    //Messages.Log($"noiseVal (x/y): {noiseVal}");
+
+                    int iTerrain;
+                    for (iTerrain=0; iTerrain < terrainLevels.Length; iTerrain++) {
+                        if (noiseVal < terrainLevels[iTerrain])
+    					    break;
+                    }
+
+                    //Messages.Log($"iTerrain: {iTerrain}, x: {x}, y: {y}");
+                    targetMap.Terrain[x, y] = terrainTypes[iTerrain - 1];
+                }
+            }
+
+
         }
 
 

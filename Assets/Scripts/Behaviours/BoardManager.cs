@@ -25,6 +25,7 @@ namespace Ventura.Behaviours
         private Transform _sitesLayer;
         private Transform _fogLayer;
 
+        private GameObject[,] _fogTiles;
 
 
         private void Start()
@@ -32,6 +33,8 @@ namespace Ventura.Behaviours
             _terrainLayer = transform.Find("TerrainLayer");
             _sitesLayer = transform.Find("SitesLayer");
             _fogLayer = transform.Find("FogLayer");
+
+            _fogTiles = new GameObject[,] { { } };
         }
 
 
@@ -40,12 +43,16 @@ namespace Ventura.Behaviours
             UnityUtils.RemoveAllChildren(_terrainLayer);
             UnityUtils.RemoveAllChildren(_sitesLayer);
             UnityUtils.RemoveAllChildren(_fogLayer);
+
+            _fogTiles = new GameObject[,] { { } };
         }
 
 
         public void InitBoard(GameMap map)
         {
-            Messages.Log("BoardManager.InitBoard");
+            Messages.Log("BoardManager.InitBoard()");
+
+            _fogTiles = new GameObject[map.Width, map.Height];
 
             for (int x = 0; x < map.Width; x++)
             {
@@ -53,27 +60,20 @@ namespace Ventura.Behaviours
                 {
                     TerrainType terrainType = map.Terrain[x, y];
 
-                    var newMapTile = Instantiate(terrainTileTemplate, new Vector3(x, y), Quaternion.identity) as GameObject;
+                    var newMapTile = Instantiate(terrainTileTemplate, new Vector3(x, y), Quaternion.identity);
                     newMapTile.GetComponent<SpriteRenderer>().color = GraphicsConfig.TerrainColors[terrainType];
                     newMapTile.transform.SetParent(_terrainLayer);
 
 
-                    if (map.Visible[x, y])
-                        continue;
-
-                    float alpha;
-                    if (map.Explored[x, y])
-                        alpha = fogExploredAlpha;
-                    else
-                        alpha = fogUnexploredAlpha;
-
-                    var newFogTile = Instantiate(fogTileTemplate, new Vector3(x, y), Quaternion.identity) as GameObject;
-                    var tileColor = fogColor;
-                    tileColor.a = alpha;
-                    newFogTile.GetComponent<SpriteRenderer>().color = tileColor;
+                    var newFogTile = Instantiate(fogTileTemplate, new Vector3(x, y), Quaternion.identity);
+                    newFogTile.GetComponent<SpriteRenderer>().color = fogColor;
                     newFogTile.transform.SetParent(_fogLayer);
+
+                    _fogTiles[x, y] = newFogTile;
                 }
             }
+            UpdateFog(map);
+
 
             foreach (var e in map.Entities)
             {
@@ -91,7 +91,7 @@ namespace Ventura.Behaviours
                             continue;
                         }
 
-                        var newEntity = Instantiate(entityTemplate, new Vector3(e.X, e.Y), Quaternion.identity) as GameObject;
+                        var newEntity = Instantiate(entityTemplate, new Vector3(e.X, e.Y), Quaternion.identity);
                         newEntity.name = e.Name; //FIXME: there is no guarantee that entity name is unique
                         newEntity.GetComponent<SpriteRenderer>().sprite = sprite;
                         newEntity.transform.SetParent(_sitesLayer);
@@ -100,6 +100,31 @@ namespace Ventura.Behaviours
                     default:
                         Messages.Log($"No icon for entity type {e.GetType().Name}");
                         break;
+                }
+            }
+        }
+
+        public void UpdateFog(GameMap map)
+        {
+            Messages.Log("BoardManager.UpdateFog()");
+
+            for (int x = 0; x < map.Width; x++)
+            {
+                for (int y = 0; y < map.Height; y++)
+                {
+                    float alpha;
+
+                    if (map.Visible[x, y])
+                        alpha = 0.0f;
+                    else if (map.Explored[x, y])
+                        alpha = fogExploredAlpha;
+                    else
+                        alpha = fogUnexploredAlpha;
+
+                    var tileColor = fogColor;
+                    tileColor.a = alpha;
+
+                    _fogTiles[x, y].GetComponent<SpriteRenderer>().color = tileColor;
                 }
             }
         }
