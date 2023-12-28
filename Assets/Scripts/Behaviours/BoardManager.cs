@@ -106,7 +106,7 @@ namespace Ventura.Behaviours
 
         public void UpdateFog(GameMap map)
         {
-            Messages.Log("BoardManager.UpdateFog()");
+            //Messages.Log("BoardManager.UpdateFog()");
 
             for (int x = 0; x < map.Width; x++)
             {

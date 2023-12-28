@@ -41,8 +41,6 @@ namespace Ventura.GameLogic
         private CircularList<Actor> _scheduler = new();
         private Queue<Action> _playerActionQueue = new();
 
-        //fov = new ROT.FOV.PreciseShadowcasting(this.transparency.bind(this))
-
 
         public enum PendingType
         {
