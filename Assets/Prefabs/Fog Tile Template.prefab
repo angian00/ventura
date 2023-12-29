@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 175806919521173302}
   - component: {fileID: 8080553065617363208}
   m_Layer: 7
-  m_Name: FogTile
+  m_Name: Fog Tile Template
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

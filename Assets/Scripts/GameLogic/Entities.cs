@@ -60,6 +60,7 @@ namespace Ventura.GameLogic
             if (name == "player")
             {
                 _ai = new PlayerAI(_orch, this);
+                _inventory = new Inventory(999);
                 _skills = new Skills(this);
             }
         }
@@ -89,7 +90,7 @@ namespace Ventura.GameLogic
                 DebugUtils.Log($"Performing ${a.GetType().Name}");
 
                 var actionResult = a.Perform();
-                StatusLineManager.DisplayStatus(actionResult.Reason, actionResult.Success ? StatusSeverity.Normal : StatusSeverity.Warning);
+                StatusLineManager.Instance.Display(actionResult.Reason, actionResult.Success ? StatusSeverity.Normal : StatusSeverity.Warning);
             }
         }
 

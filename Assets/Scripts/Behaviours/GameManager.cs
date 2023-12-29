@@ -18,7 +18,7 @@ namespace Ventura.Behaviours
 
         void Start()
         {
-            StatusLineManager.DisplayStatus("Welcome, adventurer!");
+            StatusLineManager.Instance.Display("Welcome, adventurer!");
         }
 
 

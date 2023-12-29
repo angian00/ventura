@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 using static UnityEditor.Progress;
 using Random = UnityEngine.Random;
@@ -41,20 +42,6 @@ namespace Ventura.GameLogic
         private HashSet<Entity> _entities = new();
         public HashSet<Entity> Entities { get => _entities; }
 
-
-        //public Orchestrator Orchestrator
-        //{
-        //    set
-        //    {
-        //        foreach (var e in _entities)
-        //        {
-        //            if (e is Actor)
-        //            {
-        //                ((Actor)e).Orchestrator = value;
-        //            }
-        //        }
-        //    }
-        //}
 
         public GameMap(string name, string label, int width, int height, TerrainType[,] terrain)
         {
@@ -220,6 +207,22 @@ namespace Ventura.GameLogic
                     _visible[x, y] = true;
                     _explored[x, y] = true;
                 }
+            }
+        }
+
+
+        public ReadOnlyCollection<GameItem> Items
+        {
+            get
+            {
+                List<GameItem> res = new();
+                foreach (var e in _entities)
+                {
+                    if (e is GameItem)
+                        res.Add((GameItem)e);
+                }
+
+                return new ReadOnlyCollection<GameItem>(res);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Ventura.GameLogic.Actions;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 
 namespace Ventura.GameLogic.Components
@@ -15,7 +16,9 @@ namespace Ventura.GameLogic.Components
             this._parent = parent;
         }
 
-        public int GetSkill(SkillId skillId)
+        public ReadOnlyCollection<SkillId> SkillIds { get => new ReadOnlyCollection<SkillId>(_skillValues.Keys.ToList()); }
+
+        public int GetSkillValue(SkillId skillId)
         {
             if (_skillValues.ContainsKey(skillId))
                 return _skillValues[skillId];
@@ -23,14 +26,14 @@ namespace Ventura.GameLogic.Components
             return 0;
         }
 
-        public void SetSkill(SkillId skillId, int newValue)
+        public void SetSkillValue(SkillId skillId, int newValue)
         {
             _skillValues[skillId] = newValue;
         }
 
-        public void AddToSkill(SkillId skillId, int deltaValue)
+        public void AddToSkillValue(SkillId skillId, int deltaValue)
         {
-            _skillValues[skillId] = GetSkill(skillId) + deltaValue;
+            _skillValues[skillId] = GetSkillValue(skillId) + deltaValue;
         }
     }
 }

@@ -1,9 +1,6 @@
 ﻿
 using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
-using UnityEngine.InputSystem.EnhancedTouch;
-using Ventura.Behaviours;
 using Ventura.GameLogic.Actions;
 using Ventura.Generators;
 using Ventura.Util;
@@ -58,9 +55,8 @@ namespace Ventura.GameLogic
         {
             DebugUtils.Log("Orchestrator.NewGame()");
 
-            //await loadAllData()
-            //this.player = actorDefs["player"].clone()
             _player = new Actor(this, "player");
+            ItemGenerator.GenerateSomeItems(_player);  //DEBUG
 
 
             const int WORLD_MAP_WIDTH = 80;

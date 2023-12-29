@@ -1,11 +1,9 @@
 # TODO
 
 ## Current sprint
-- vista base inventory
-- input inventory; azione use item
-- testare SkillConsumable
-+ vista base skills
+- migliorare input inventory
 ? fixed resolution/aspect ratio in unity; ui units (pixels?)
+
 
 ## Errands
 - ui design con figma
@@ -15,7 +13,8 @@
 - Detail info panels
 
 ## Bugfixing
--
+- mostrare status bar anche in modal ui (cancellare all'ingresso)
+- cambiare nameof per valore enum
 
 ## Improvements
 - rerouting of mouse input by view

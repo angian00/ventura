@@ -7,10 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 ### Added
-- view switching
 - status line
-- Consumable component
-- Skills component
+- view switching
+- skeleton inventory view
+- skeleton skills view
+- Consumable game component
+- Skills game component
 - inventory GameLogic
 
 

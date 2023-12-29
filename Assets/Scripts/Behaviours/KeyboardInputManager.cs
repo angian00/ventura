@@ -102,6 +102,11 @@ namespace Ventura.Behaviours
                 _viewManager.Toggle(ViewManager.ViewId.Inventory);
                 processed = true;
             }
+            else if (key == keyboard.sKey)
+            {
+                _viewManager.Toggle(ViewManager.ViewId.Skills);
+                processed = true;
+            }
             else if (key == keyboard.escapeKey)
             {
                 _viewManager.SwitchTo(ViewManager.ViewId.Map);
@@ -196,6 +201,41 @@ namespace Ventura.Behaviours
 
             if (processCommonKey(key))
                 return;
+
+            var keyboard = Keyboard.current;
+            var orch = Orchestrator.GetInstance();
+            GameAction? newAction = null;
+
+            if (key == keyboard.uKey)
+            {
+                newAction = new UseAction(orch, orch.Player, orch.Player.Inventory.Items[0]); //DEBUG
+            }
+            else
+            {
+                //ignore keyPressed
+            }
+
+
+            if (newAction != null)
+                orch.EnqueuePlayerAction(newAction);
+
+
+        }
+    }
+
+
+    public class SkillsInputReceiver : KeyboardInputReceiver
+    {
+        public SkillsInputReceiver(ViewManager viewManager) : base(viewManager) { }
+
+        public override void OnKeyPressed(KeyControl key)
+        {
+            DebugUtils.Log("SkillsInputReceiver.OnKeyPressed");
+
+            if (processCommonKey(key))
+                return;
+
+            //do nothing
         }
     }
 }

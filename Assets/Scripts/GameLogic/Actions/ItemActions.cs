@@ -51,7 +51,7 @@ namespace Ventura.GameLogic.Actions
 
     public class UseAction: ItemAction
     {
-        public UseAction(Orchestrator orch, Actor actor, GameItem item, Vector2Int? targetPos) : base(orch, actor, item, targetPos) { }
+        public UseAction(Orchestrator orch, Actor actor, GameItem item, Vector2Int? targetPos=null) : base(orch, actor, item, targetPos) { }
 
         public override ActionResult Perform()
         {

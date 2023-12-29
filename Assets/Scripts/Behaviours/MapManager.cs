@@ -136,7 +136,6 @@ namespace Ventura.Behaviours
                     newMapTile.GetComponent<SpriteRenderer>().color = GraphicsConfig.TerrainColors[terrainType];
                     newMapTile.transform.SetParent(_terrainLayer);
 
-
                     var newFogTile = Instantiate(fogTileTemplate, new Vector3(x, y), Quaternion.identity);
                     newFogTile.GetComponent<SpriteRenderer>().color = fogColor;
                     newFogTile.transform.SetParent(_fogLayer);

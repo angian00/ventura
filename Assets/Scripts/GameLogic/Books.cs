@@ -12,9 +12,9 @@ namespace Ventura.GameLogic
     }
 
 
-    public class Book : GameItem
+    public class BookItem : GameItem
     {
-        public Book(string name, SkillId skill, int amount) : base(name)
+        public BookItem(string name, SkillId skill, int amount) : base(name)
         {
             _consumable = new BookConsumable(this, skill, amount);
         }
@@ -39,10 +39,10 @@ namespace Ventura.GameLogic
             if (consumer.Skills == null)
                 return new ActionResult(false, $"{consumer.Name} cannot use [{_parent.Name}]");
 
-            consumer.Skills.AddToSkill(_skill, _amount);
+            consumer.Skills.AddToSkillValue(_skill, _amount);
 
             Consume();
-            return new ActionResult(true, $"You read [{_parent.Name}], and gain {_amount} points in the skill {nameof(_skill)}");
+            return new ActionResult(true, $"You read [{_parent.Name}], and gain {_amount} points in the skill {nameof(_skill)}"); //FIXME: not nameof...
         }
     }
 }
