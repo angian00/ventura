@@ -18,17 +18,17 @@ namespace Ventura.Behaviours
 
         private Camera _modalUICamera;
         private ViewId _currView;
-        private Dictionary<ViewId, InputReceiver> _inputReceivers = new();
+        private Dictionary<ViewId, KeyboardInputReceiver> _keyboardInputReceivers = new();
 
-        public InputReceiver CurrInputReceiver { get => _inputReceivers[_currView]; }
+        public KeyboardInputReceiver CurrKeyboardReceiver { get => _keyboardInputReceivers[_currView]; }
 
 
         void Start()
         {
             _modalUICamera = GameObject.Find("Modal UI Camera").GetComponent<Camera>();
 
-            _inputReceivers.Add(ViewId.Map, new MapInputReceiver(this));
-            _inputReceivers.Add(ViewId.Inventory, new InventoryInputReceiver(this));
+            _keyboardInputReceivers.Add(ViewId.Map, new MapInputReceiver(this));
+            _keyboardInputReceivers.Add(ViewId.Inventory, new InventoryInputReceiver(this));
 
             _currView = ViewId.Map;
         }

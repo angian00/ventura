@@ -46,6 +46,9 @@ namespace Ventura.Behaviours
             _cameraObj = GameObject.Find("Map Camera");
 
             _orch = Orchestrator.GetInstance();
+
+            var collider = gameObject.GetComponent<BoxCollider2D>();
+            Messages.Log($"collider.bounds: {collider.bounds}");
         }
 
         void Update()
@@ -67,12 +70,11 @@ namespace Ventura.Behaviours
             _orch.PendingUpdates.Clear();
         }
 
-
         private void updateTerrain()
         {
             Messages.Log("MapManager.updateTerrain()");
 
-            rebuildMap(_orch.CurrMap);
+            buildTerrain(_orch.CurrMap);
 
             //update ui location info
             string locationInfoStr = "";
@@ -113,9 +115,9 @@ namespace Ventura.Behaviours
         }
 
 
-        private void rebuildMap(GameMap gameMap)
+        private void buildTerrain(GameMap gameMap)
         {
-            Messages.Log("MapManager.rebuildMap()");
+            Messages.Log("MapManager.buildTerrain()");
 
             UnityUtils.RemoveAllChildren(_terrainLayer);
             UnityUtils.RemoveAllChildren(_sitesLayer);
@@ -142,7 +144,6 @@ namespace Ventura.Behaviours
                 }
             }
             updateFog(gameMap);
-
 
             foreach (var e in gameMap.Entities)
             {
@@ -171,7 +172,12 @@ namespace Ventura.Behaviours
                         break;
                 }
             }
+
+            var collider = gameObject.GetComponent<BoxCollider2D>();
+            collider.size = new Vector2Int(gameMap.Width, gameMap.Height);
+            collider.offset = new Vector2Int(gameMap.Width/2, gameMap.Height/2); //needed for some reason
         }
+
 
         private void updateFog(GameMap gameMap)
         {

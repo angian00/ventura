@@ -10,7 +10,7 @@ using Ventura.Util;
 namespace Ventura.Behaviours
 {
 
-    public class InputManager : MonoBehaviour
+    public class KeyboardInputManager : MonoBehaviour
     {
         private ViewManager _viewManager;
         private Dictionary<KeyControl, float> _keyElapsedTimes = new();
@@ -72,18 +72,18 @@ namespace Ventura.Behaviours
                 if (triggered)
                 {
                     Messages.Log("Key press detected: " + key.displayName);
-                    _viewManager.CurrInputReceiver.OnKeyPressed(key);
+                    _viewManager.CurrKeyboardReceiver.OnKeyPressed(key);
                 }
             }
         }
     }
 
 
-    public abstract class InputReceiver
+    public abstract class KeyboardInputReceiver
     {
         protected ViewManager _viewManager;
 
-        public InputReceiver(ViewManager viewManager)
+        public KeyboardInputReceiver(ViewManager viewManager)
         {
             this._viewManager = viewManager;
         }
@@ -113,7 +113,7 @@ namespace Ventura.Behaviours
     }
 
 
-    public class MapInputReceiver: InputReceiver
+    public class MapInputReceiver: KeyboardInputReceiver
     {
         public MapInputReceiver(ViewManager viewManager) : base(viewManager) { }
 
@@ -186,7 +186,7 @@ namespace Ventura.Behaviours
     }
 
 
-    public class InventoryInputReceiver : InputReceiver
+    public class InventoryInputReceiver : KeyboardInputReceiver
     {
         public InventoryInputReceiver(ViewManager viewManager) : base(viewManager) { }
 

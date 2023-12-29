@@ -1,6 +1,7 @@
 
 using UnityEngine;
 using Ventura.GameLogic;
+using Ventura.Util;
 
 namespace Ventura.Behaviours
 {
@@ -22,7 +23,9 @@ namespace Ventura.Behaviours
 
         public void UpdateTileInfo(Vector2Int? pos)
         {
-            if (pos == null)
+            Messages.Log($"UIManager.UpdateTileInfo()");
+
+            if (pos == null || !_orch.CurrMap.IsInBounds(((Vector2Int)pos).x, ((Vector2Int)pos).y))
             {
                 _tileInfo1.GetComponent<TMPro.TextMeshProUGUI>().text = "";
                 _tileInfo2.GetComponent<TMPro.TextMeshProUGUI>().text = "";

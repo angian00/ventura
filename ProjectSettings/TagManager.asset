@@ -12,7 +12,7 @@ TagManager:
   - Water
   - UI
   - Modal UI
-  - 
+  - Map
   - 
   - 
   - 
@@ -52,4 +52,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 4280429113
+    locked: 0
+  - name: Modal UI
+    uniqueID: 2642180855
     locked: 0
