@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
 using Ventura.GameLogic;
 using Ventura.Util;
 
@@ -21,36 +23,103 @@ namespace Ventura.Behaviours
         public float fogUnexploredAlpha = 0.9f;
 
 
+        private GameObject _playerObj;
+        private GameObject _cameraObj;
+
+
         private Transform _terrainLayer;
         private Transform _sitesLayer;
         private Transform _fogLayer;
 
         private GameObject[,] _fogTiles;
 
+        private Orchestrator _orch;
 
-        private void Start()
+
+        void Start()
         {
             _terrainLayer = transform.Find("TerrainLayer");
             _sitesLayer = transform.Find("SitesLayer");
             _fogLayer = transform.Find("FogLayer");
 
-            _fogTiles = new GameObject[,] { { } };
+            _playerObj = GameObject.Find("Player");
+            _cameraObj = GameObject.Find("Map Camera");
+
+            _orch = Orchestrator.GetInstance();
+        }
+
+        void Update()
+        {
+            foreach (var pendingType in _orch.PendingUpdates)
+            {
+                switch (pendingType)
+                {
+                    case Orchestrator.PendingType.Terrain:
+                        updateTerrain();
+                        break;
+
+                    case Orchestrator.PendingType.Player:
+                        updatePlayer();
+                        break;
+                }
+            }
+
+            _orch.PendingUpdates.Clear();
         }
 
 
-        public void ClearMap()
+        private void updateTerrain()
         {
+            Messages.Log("MapManager.updateTerrain()");
+
+            rebuildMap(_orch.CurrMap);
+
+            //update ui location info
+            string locationInfoStr = "";
+            var mapNames = _orch.World.GetStackMapNames();
+
+            for (int i = mapNames.Count - 1; i >= 0; i--)
+            {
+                locationInfoStr += mapNames[i];
+
+                if (i > 0)
+                    locationInfoStr += " > ";
+            }
+
+            //FIXME: choose if this goes to UI Manager or UIManager.UpdateTileInfo goes here
+            var textObj = GameObject.Find("Location Info");
+            textObj.GetComponent<TextMeshProUGUI>().text = locationInfoStr;
+        }
+
+
+        private void updatePlayer()
+        {
+            //Messages.Log("MapManager.updatePlayer()");
+
+            var playerX = _orch.Player.x;
+            var playerY = _orch.Player.y;
+
+            var targetObjPos = _playerObj.transform.position;
+            targetObjPos.x = playerX;
+            targetObjPos.y = playerY;
+            _playerObj.transform.position = targetObjPos;
+
+            targetObjPos = _cameraObj.transform.position;
+            targetObjPos.x = playerX;
+            targetObjPos.y = playerY;
+            _cameraObj.transform.position = targetObjPos;
+
+            updateFog(_orch.CurrMap);
+        }
+
+
+        private void rebuildMap(GameMap gameMap)
+        {
+            Messages.Log("MapManager.rebuildMap()");
+
             UnityUtils.RemoveAllChildren(_terrainLayer);
             UnityUtils.RemoveAllChildren(_sitesLayer);
             UnityUtils.RemoveAllChildren(_fogLayer);
-
-            _fogTiles = new GameObject[,] { { } };
-        }
-
-
-        public void InitMap(GameMap gameMap)
-        {
-            Messages.Log("MapManager.InitMap()");
 
             _fogTiles = new GameObject[gameMap.Width, gameMap.Height];
 
@@ -72,7 +141,7 @@ namespace Ventura.Behaviours
                     _fogTiles[x, y] = newFogTile;
                 }
             }
-            UpdateFog(gameMap);
+            updateFog(gameMap);
 
 
             foreach (var e in gameMap.Entities)
@@ -104,7 +173,7 @@ namespace Ventura.Behaviours
             }
         }
 
-        public void UpdateFog(GameMap gameMap)
+        private void updateFog(GameMap gameMap)
         {
             //Messages.Log("MapManager.UpdateFog()");
 

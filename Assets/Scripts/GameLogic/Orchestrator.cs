@@ -43,7 +43,7 @@ namespace Ventura.GameLogic
 
         public enum PendingType
         {
-            Map,
+            Terrain,
             Player,
         }
 
@@ -103,7 +103,7 @@ namespace Ventura.GameLogic
 
             Messages.Display("Welcome, adventurer!");
 
-            _pendingUpdates.Add(PendingType.Map);
+            _pendingUpdates.Add(PendingType.Terrain);
             _pendingUpdates.Add(PendingType.Player);
         }
 
@@ -215,7 +215,7 @@ namespace Ventura.GameLogic
             //_exploredMaps.add(newMap.name);
 
             _currMap.Entities.Add(_player);
-            _pendingUpdates.Add(PendingType.Map);
+            _pendingUpdates.Add(PendingType.Terrain);
 
             var startPos = _currMap.StartingPos;
             Messages.Log($"EnterMap; startPos={startPos}");
@@ -236,7 +236,7 @@ namespace Ventura.GameLogic
             _currMap = _world.CurrMap;
 
             _currMap.Entities.Add(_player);
-            _pendingUpdates.Add(PendingType.Map);
+            _pendingUpdates.Add(PendingType.Terrain);
 
             MoveActorTo(_player, previousMapPos.x, previousMapPos.y);
 
