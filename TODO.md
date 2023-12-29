@@ -13,16 +13,15 @@
 - Detail info panels
 
 ## Bugfixing
-- mostrare status bar anche in modal ui (cancellare all'ingresso)
 - cambiare nameof per valore enum
 
 ## Improvements
 - rerouting of mouse input by view
 + names per skills
++ fade out messaggi status line
 
 ## Minutiae
 + Use some texture/shader for fog
-+ fade out messaggi status line
 - uniformare messaggi azioni (player vs other actor); grammar?
 
 

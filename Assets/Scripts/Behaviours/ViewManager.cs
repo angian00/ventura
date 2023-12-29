@@ -95,6 +95,7 @@ namespace Ventura.Behaviours
                 modalUIObj.transform.SetParent(_modalUIRoot, false);
             }
 
+            StatusLineManager.Instance.Clear();
             _currView = targetView;
         }
 

@@ -22,8 +22,6 @@ namespace Ventura.Behaviours
 
         public void UpdateData()
         {
-            StatusLineManager.Instance.Clear();
-
             var skills = _orch.Player.Skills;
             if (skills == null)
             {
