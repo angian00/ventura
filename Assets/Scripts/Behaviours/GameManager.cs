@@ -12,19 +12,19 @@ namespace Ventura.Behaviours
 #nullable enable
     public class GameManager : MonoBehaviour
     {
-        private Orchestrator _orch;
-
         private GameObject _playerObj;
         private GameObject _cameraObj;
-        private BoardManager _boardManager;
+        private MapManager _mapManager;
+
+        private Orchestrator _orch;
 
 
-        void Start()
+        private void Start()
         {
             _playerObj = GameObject.Find("Player");
-            _cameraObj = GameObject.Find("Game Camera");
+            _cameraObj = GameObject.Find("Map Camera");
 
-            _boardManager = GameObject.Find("Board").GetComponent<BoardManager>();
+            _mapManager = GameObject.Find("Map").GetComponent<MapManager>();
 
             _orch = Orchestrator.GetInstance();
             _orch.NewGame();
@@ -34,70 +34,6 @@ namespace Ventura.Behaviours
         {
             _orch.ProcessTurn();
             updateScreen();
-        }
-
-
-        public void OnKeyPressed(KeyControl key)
-        {
-            //Messages.Log("OnKeyPressed");
-
-            var keyboard = Keyboard.current;
-            GameAction? newAction = null;
-
-
-            int deltaX = 0;
-            int deltaY = 0;
-            if (key == keyboard.rightArrowKey || key == keyboard.numpad6Key)
-                deltaX = 1;
-            else if (key == keyboard.leftArrowKey || key == keyboard.numpad4Key)
-                deltaX = -1;
-            else if (key == keyboard.upArrowKey || key == keyboard.numpad8Key)
-                deltaY = 1;
-            else if (key == keyboard.downArrowKey || key == keyboard.numpad2Key)
-                deltaY = -1;
-
-            else if (key == keyboard.numpad9Key)
-            {
-                deltaX = 1;
-                deltaY = 1;
-            }
-            else if (key == keyboard.numpad3Key)
-            {
-                deltaX = 1;
-                deltaY = -1;
-            }
-            else if (key == keyboard.numpad7Key)
-            {
-                deltaX = -1;
-                deltaY = 1;
-            }
-            else if (key == keyboard.numpad1Key)
-            {
-                deltaX = -1;
-                deltaY = -1;
-            }
-
-
-            if (deltaX != 0 || deltaY != 0)
-            {
-                newAction = new BumpAction(_orch, _orch.Player, deltaX, deltaY);
-
-            }
-            else if (key == keyboard.numpad5Key)
-            {
-                newAction = new WaitAction(_orch, _orch.Player);
-            }
-            else if (key == keyboard.gKey)
-            {
-                newAction = new PickupAction(_orch, _orch.Player);
-            }
-            else
-            {
-                //ignore keyPressed
-            }
-
-            if (newAction != null)
-                _orch.EnqueuePlayerAction(newAction);
         }
 
 
@@ -125,8 +61,8 @@ namespace Ventura.Behaviours
         {
             Messages.Log("GameManager.updateMap()");
 
-            _boardManager.ClearBoard();
-            _boardManager.InitBoard(_orch.CurrMap);
+            _mapManager.ClearMap();
+            _mapManager.InitMap(_orch.CurrMap);
 
             //update ui location info
             string locationInfoStr = "";
@@ -140,14 +76,14 @@ namespace Ventura.Behaviours
                     locationInfoStr += " > ";
             }
 
-
+            //FIXME: choose if this goes to UI Manager or UIManager.UpdateTileInfo goes here
             var textObj = GameObject.Find("Location Info");
             textObj.GetComponent<TextMeshProUGUI>().text = locationInfoStr;
         }
 
 
         private void updatePlayer() {
-            Messages.Log("GameManager.updatePlayer()");
+            //Messages.Log("GameManager.updatePlayer()");
 
             var playerX = _orch.Player.x;
             var playerY = _orch.Player.y;
@@ -162,7 +98,7 @@ namespace Ventura.Behaviours
             targetObjPos.y = playerY;
             _cameraObj.transform.position = targetObjPos;
 
-            _boardManager.UpdateFog(_orch.CurrMap);
+            _mapManager.UpdateFog(_orch.CurrMap);
         }
 
     }

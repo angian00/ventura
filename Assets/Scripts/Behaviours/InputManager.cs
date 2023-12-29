@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.EnhancedTouch;
+using Ventura.GameLogic;
+using Ventura.GameLogic.Actions;
 using Ventura.Util;
 
 namespace Ventura.Behaviours
@@ -9,7 +12,7 @@ namespace Ventura.Behaviours
 
     public class InputManager : MonoBehaviour
     {
-        private GameManager _gameManager;
+        private ViewManager _viewManager;
         private Dictionary<KeyControl, float> _keyElapsedTimes = new();
         private Dictionary<KeyControl, bool> _pressedKeys = new();
 
@@ -21,8 +24,8 @@ namespace Ventura.Behaviours
 
         void Start()
         {
-            _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-            
+            _viewManager = GameObject.Find("View Manager").GetComponent<ViewManager>();
+
             var keyboard = Keyboard.current;
             foreach (var key in keyboard.allKeys)
             {
@@ -69,9 +72,130 @@ namespace Ventura.Behaviours
                 if (triggered)
                 {
                     Messages.Log("Key press detected: " + key.displayName);
-                    _gameManager.OnKeyPressed(key);
+                    _viewManager.CurrInputReceiver.OnKeyPressed(key);
                 }
             }
+        }
+    }
+
+
+    public abstract class InputReceiver
+    {
+        protected ViewManager _viewManager;
+
+        public InputReceiver(ViewManager viewManager)
+        {
+            this._viewManager = viewManager;
+        }
+
+        public abstract void OnKeyPressed(KeyControl key);
+
+        /**
+         * Returns true if key needs no more processing
+         */
+        protected bool processCommonKey(KeyControl key) {
+            var keyboard = Keyboard.current;
+            var processed = false;
+
+            if (key == keyboard.iKey)
+            {
+                _viewManager.Toggle(ViewManager.ViewId.Inventory);
+                processed = true;
+            }
+            else if (key == keyboard.escapeKey)
+            {
+                _viewManager.SwitchTo(ViewManager.ViewId.Map);
+                processed = true;
+            }
+
+            return processed;
+        }
+    }
+
+
+    public class MapInputReceiver: InputReceiver
+    {
+        public MapInputReceiver(ViewManager viewManager) : base(viewManager) { }
+
+        public override void OnKeyPressed(KeyControl key)
+        {
+            Messages.Log("MapInputReceiver.OnKeyPressed");
+
+            if (processCommonKey(key))
+                return;
+
+            var keyboard = Keyboard.current;
+            var orch = Orchestrator.GetInstance();
+            GameAction? newAction = null;
+
+
+            int deltaX = 0;
+            int deltaY = 0;
+            if (key == keyboard.rightArrowKey || key == keyboard.numpad6Key)
+                deltaX = 1;
+            else if (key == keyboard.leftArrowKey || key == keyboard.numpad4Key)
+                deltaX = -1;
+            else if (key == keyboard.upArrowKey || key == keyboard.numpad8Key)
+                deltaY = 1;
+            else if (key == keyboard.downArrowKey || key == keyboard.numpad2Key)
+                deltaY = -1;
+
+            else if (key == keyboard.numpad9Key)
+            {
+                deltaX = 1;
+                deltaY = 1;
+            }
+            else if (key == keyboard.numpad3Key)
+            {
+                deltaX = 1;
+                deltaY = -1;
+            }
+            else if (key == keyboard.numpad7Key)
+            {
+                deltaX = -1;
+                deltaY = 1;
+            }
+            else if (key == keyboard.numpad1Key)
+            {
+                deltaX = -1;
+                deltaY = -1;
+            }
+            if (deltaX != 0 || deltaY != 0)
+            {
+                newAction = new BumpAction(orch, orch.Player, deltaX, deltaY);
+
+            }
+            else if (key == keyboard.numpad5Key)
+            {
+                newAction = new WaitAction(orch, orch.Player);
+            }
+            else if (key == keyboard.gKey)
+            {
+                newAction = new PickupAction(orch, orch.Player);
+            }
+
+            else
+            {
+                //ignore keyPressed
+            }
+
+
+            if (newAction != null)
+                orch.EnqueuePlayerAction(newAction);
+        }
+    }
+
+
+    public class InventoryInputReceiver : InputReceiver
+    {
+        public InventoryInputReceiver(ViewManager viewManager) : base(viewManager) { }
+
+        public override void OnKeyPressed(KeyControl key)
+        {
+            Messages.Log("InventoryInputReceiver.OnKeyPressed");
+
+            if (processCommonKey(key))
+                return;
         }
     }
 }

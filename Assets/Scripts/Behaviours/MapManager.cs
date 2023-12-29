@@ -6,7 +6,7 @@ using Ventura.Util;
 namespace Ventura.Behaviours
 {
 
-    public class BoardManager : MonoBehaviour
+    public class MapManager : MonoBehaviour
     {
         public GameObject terrainTileTemplate;
         public GameObject fogTileTemplate;
@@ -38,7 +38,7 @@ namespace Ventura.Behaviours
         }
 
 
-        public void ClearBoard()
+        public void ClearMap()
         {
             UnityUtils.RemoveAllChildren(_terrainLayer);
             UnityUtils.RemoveAllChildren(_sitesLayer);
@@ -48,17 +48,17 @@ namespace Ventura.Behaviours
         }
 
 
-        public void InitBoard(GameMap map)
+        public void InitMap(GameMap gameMap)
         {
-            Messages.Log("BoardManager.InitBoard()");
+            Messages.Log("MapManager.InitMap()");
 
-            _fogTiles = new GameObject[map.Width, map.Height];
+            _fogTiles = new GameObject[gameMap.Width, gameMap.Height];
 
-            for (int x = 0; x < map.Width; x++)
+            for (int x = 0; x < gameMap.Width; x++)
             {
-                for (int y = 0; y < map.Height; y++)
+                for (int y = 0; y < gameMap.Height; y++)
                 {
-                    TerrainType terrainType = map.Terrain[x, y];
+                    TerrainType terrainType = gameMap.Terrain[x, y];
 
                     var newMapTile = Instantiate(terrainTileTemplate, new Vector3(x, y), Quaternion.identity);
                     newMapTile.GetComponent<SpriteRenderer>().color = GraphicsConfig.TerrainColors[terrainType];
@@ -72,10 +72,10 @@ namespace Ventura.Behaviours
                     _fogTiles[x, y] = newFogTile;
                 }
             }
-            UpdateFog(map);
+            UpdateFog(gameMap);
 
 
-            foreach (var e in map.Entities)
+            foreach (var e in gameMap.Entities)
             {
                 if (e.Name == "player")
                     continue;
@@ -104,19 +104,19 @@ namespace Ventura.Behaviours
             }
         }
 
-        public void UpdateFog(GameMap map)
+        public void UpdateFog(GameMap gameMap)
         {
-            //Messages.Log("BoardManager.UpdateFog()");
+            //Messages.Log("MapManager.UpdateFog()");
 
-            for (int x = 0; x < map.Width; x++)
+            for (int x = 0; x < gameMap.Width; x++)
             {
-                for (int y = 0; y < map.Height; y++)
+                for (int y = 0; y < gameMap.Height; y++)
                 {
                     float alpha;
 
-                    if (map.Visible[x, y])
+                    if (gameMap.Visible[x, y])
                         alpha = 0.0f;
-                    else if (map.Explored[x, y])
+                    else if (gameMap.Explored[x, y])
                         alpha = fogExploredAlpha;
                     else
                         alpha = fogUnexploredAlpha;

@@ -7,7 +7,7 @@ namespace Ventura.Behaviours
 
     public class TileHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        private UIManager uiManager;
+        private UIManager _uiManager;
         private int x;
         private int y;
 
@@ -17,20 +17,20 @@ namespace Ventura.Behaviours
             x = (int)Math.Round(gameObject.transform.position[0]);
             y = (int)Math.Round(gameObject.transform.position[1]);
 
-            uiManager = GameObject.Find("UI Container").GetComponent<UIManager>();
+            _uiManager = GameObject.Find("UI Manager").GetComponent<UIManager>();
         }
 
 
         public void OnPointerEnter(PointerEventData eventData)
         {
             //Debug.Log($"Mouse is on tile {x}, {y}");
-            uiManager.UpdateTileInfo(new Vector2Int(x, y));
+            _uiManager.UpdateTileInfo(new Vector2Int(x, y));
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             //Debug.Log($"Mouse is no longer on tile {x}, {y}");
-            uiManager.UpdateTileInfo(null);
+            _uiManager.UpdateTileInfo(null);
         }
     }
 

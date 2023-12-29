@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Added
+- Consumable component
+- inventory GameLogic
+- view switching
+
+### Changed
+- Refactoring of input system
 
 
 ## [0.3] - 2023-12-28

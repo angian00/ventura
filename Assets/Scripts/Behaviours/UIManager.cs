@@ -11,8 +11,7 @@ namespace Ventura.Behaviours
         private GameObject _tileInfo2;
 
         private Orchestrator _orch;
-
-
+        
         void Start()
         {
             _tileInfo1 = GameObject.Find("Tile Info 1");
