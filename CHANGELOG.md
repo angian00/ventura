@@ -7,10 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 ### Added
-- Consumable component
-- inventory GameLogic
 - view switching
 - status line
+- Consumable component
+- Skills component
+- inventory GameLogic
+
 
 ### Changed
 - Refactoring of input system

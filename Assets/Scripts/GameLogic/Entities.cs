@@ -42,22 +42,26 @@ namespace Ventura.GameLogic
     {
 
         private Orchestrator _orch;
-        private AI? _ai;
+        protected AI? _ai;
+
+        protected Skills? _skills;
+        public Skills? Skills { get => _skills; }
 
         private Inventory? _inventory;
         public Inventory Inventory { get => _inventory;  }
         //private Equipment? _equipment;
 
 
-        //stats?: Stats
-        //inventory?: Inventory
-        //equipment?: Equipment
 
         public Actor(Orchestrator orch, string name) : base(name, true)
         {
             this._orch = orch;
-            if (name == "player") //FIXME: use a more robust way to check if actor is player
+            //FIXME: use a more robust way to check if actor is player
+            if (name == "player")
+            {
                 _ai = new PlayerAI(_orch, this);
+                _skills = new Skills(this);
+            }
         }
 
         public void Act()
@@ -89,9 +93,9 @@ namespace Ventura.GameLogic
             }
         }
 
-        public void Die()
-        {
-        }
+        //public void Die()
+        //{
+        //}
 
     }
 
@@ -99,13 +103,13 @@ namespace Ventura.GameLogic
 
     public class GameItem : Entity
     {
-        private Container? _parent;
+        protected Container? _parent;
         public Container Parent { get => _parent; set => _parent = value;  }
 
-        private Consumable? _consumable;
+        protected Consumable? _consumable;
         public Consumable Consumable { get => _consumable; }
-        //private Equippable? _equippable;
-        //private Combinable? _combinable;
+        //protected Equippable? _equippable;
+        //protected Combinable? _combinable;
 
         public GameItem(string name) : base(name, false)
         { }

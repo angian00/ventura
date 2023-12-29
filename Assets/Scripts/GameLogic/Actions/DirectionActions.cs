@@ -43,7 +43,6 @@ namespace Ventura.GameLogic.Actions
 
         public override ActionResult Perform()
         {
-            DebugUtils.Log("TODO: MeleeAction.Perform()");
             return new ActionResult(false, "TODO: implement MeleeAction");
         }
     }

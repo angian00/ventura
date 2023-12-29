@@ -12,8 +12,6 @@ namespace Ventura.GameLogic.Components
             this._parent = parent;
         }
 
-        public abstract ActionResult Use(ItemAction action);
-
         public void Consume()
         {
             var item = _parent;
@@ -21,6 +19,9 @@ namespace Ventura.GameLogic.Components
 
             container.RemoveItem(item);
         }
+
+        public abstract ActionResult Use(ItemAction action);
+
     }
 }
 

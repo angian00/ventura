@@ -24,6 +24,8 @@ namespace Ventura.GameLogic.Actions
     public abstract class GameAction
     {
         protected Actor _actor;
+        public Actor Actor { get => _actor; }
+
         protected Orchestrator _orch;
 
         protected GameAction(Orchestrator orch, Actor actor)
