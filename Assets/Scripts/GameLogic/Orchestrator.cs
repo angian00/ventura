@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
+using Ventura.Behaviours;
 using Ventura.GameLogic.Actions;
 using Ventura.Generators;
 using Ventura.Util;
@@ -55,7 +56,7 @@ namespace Ventura.GameLogic
 
         public void NewGame()
         {
-            Messages.Log("Orchestrator.NewGame()");
+            DebugUtils.Log("Orchestrator.NewGame()");
 
             //await loadAllData()
             //this.player = actorDefs["player"].clone()
@@ -100,8 +101,6 @@ namespace Ventura.GameLogic
             //
         */
             //fov.compute(this.player.x, this.player.y, lightRadius, this.setFov.bind(this))
-
-            Messages.Display("Welcome, adventurer!");
 
             _pendingUpdates.Add(PendingType.Terrain);
             _pendingUpdates.Add(PendingType.Player);
@@ -160,7 +159,7 @@ namespace Ventura.GameLogic
 
         public void EnqueuePlayerAction(GameAction a)
         {
-            //Messages.Log("EnqueuePlayerAction");
+            //GameDebugging.Log("EnqueuePlayerAction");
             _playerActionQueue.Enqueue(a);
         }
 
@@ -218,7 +217,7 @@ namespace Ventura.GameLogic
             _pendingUpdates.Add(PendingType.Terrain);
 
             var startPos = _currMap.StartingPos;
-            Messages.Log($"EnterMap; startPos={startPos}");
+            DebugUtils.Log($"EnterMap; startPos={startPos}");
             if (startPos == null)
                 startPos = (Vector2Int)_currMap.GetRandomWalkablePos();
 

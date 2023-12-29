@@ -43,10 +43,7 @@ namespace Ventura.GameLogic.Actions
         public override ActionResult Perform()
         {
             //do nothing, spend a turn
-            if (_orch.CurrMap != null && _orch.CurrMap.Visible[_actor.x, _actor.y])
-                Messages.Display(_actor.Name + " is waiting... ");
-    
-            return new ActionResult(true);
+            return new ActionResult(true, $"{_actor.Name} is waiting... ");
         }
     }
 }

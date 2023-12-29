@@ -196,7 +196,7 @@ namespace Ventura.GameLogic
 
         public void UpdateExploration(int targetX, int targetY, float r)
         {
-            //Messages.Log("UpdateExploration");
+            //GameDebugging.Log("UpdateExploration");
 
             //reset visible
             for (var x = 0; x < _width; x++)

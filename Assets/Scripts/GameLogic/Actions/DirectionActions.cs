@@ -43,7 +43,7 @@ namespace Ventura.GameLogic.Actions
 
         public override ActionResult Perform()
         {
-            Messages.Log("TODO: MeleeAction.Perform()");
+            DebugUtils.Log("TODO: MeleeAction.Perform()");
             return new ActionResult(false, "TODO: implement MeleeAction");
         }
     }
@@ -81,10 +81,9 @@ namespace Ventura.GameLogic.Actions
 
             _orch.MoveActorTo(_actor, TargetXY.x, TargetXY.y);
 
-            Messages.Display($"Entering {targetSite.Name }");
             _orch.EnterMap(targetSite.Name);
 
-            return new ActionResult(true);
+            return new ActionResult(true, $"Entering {targetSite.Name}"); //FUTURE: improve message in case _actor != player
         }
     }
 
@@ -96,10 +95,9 @@ namespace Ventura.GameLogic.Actions
         {
             if (_orch.World.MapStackSize > 1)
             {
-                Messages.Display($"Returning to {_orch.World.CurrMap.Name}");
                 _orch.ExitMap();
 
-                return new ActionResult(true);
+                return new ActionResult(true, $"Returning to {_orch.World.CurrMap.Name}"); //FUTURE: improve message in case _actor != player
             }
             else
             {

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Ventura.GameLogic;
+using Ventura.Behaviours;
 
 
 public static class GraphicsConfig
@@ -19,6 +20,15 @@ public static class GraphicsConfig
             { TerrainType.Hills2, fromHex("#CB997E") },
             { TerrainType.Mountains, fromHex("#DDBEA9") },
         };
+
+
+    public static readonly Dictionary<StatusSeverity, Color> StatusLineColors = new()
+        {
+            { StatusSeverity.Normal, Color.white },
+            { StatusSeverity.Warning, fromHex("#FFA500") },
+            { StatusSeverity.Critical, Color.red },
+        };
+
 
 
     private static Color fromHex(string hexStr)

@@ -15,7 +15,7 @@ namespace Ventura.Generators
 
         public static GameMap GenerateWildernessMap(int nRows, int nCols, string? mapName = null, bool hasSites = true)
         {
-            Messages.Log("GenerateWildernessMap()");
+            DebugUtils.Log("GenerateWildernessMap()");
 
             if (mapName == null)
                 mapName = NameGenerator.Sites.GenerateName();
@@ -74,7 +74,7 @@ namespace Ventura.Generators
                     var noiseY = noiseYOffset + noiseScale * y / targetMap.Height;
 
                     var noiseVal = Mathf.PerlinNoise(noiseX, noiseY);
-                    //Messages.Log($"noiseVal (x/y): {noiseVal}");
+                    //GameDebugging.Log($"noiseVal (x/y): {noiseVal}");
                     if (noiseVal > maxNoise)
                         maxNoise = noiseVal;
 
@@ -94,17 +94,17 @@ namespace Ventura.Generators
                 }
             }
 
-            //Messages.Log($"DEBUG - maxTerrain: {maxTerrain}, maxPerlin: {maxNoise}");
+            //GameDebugging.Log($"DEBUG - maxTerrain: {maxTerrain}, maxPerlin: {maxNoise}");
             //for (var i=0; i < countTerrain.Length; i++)
             //{
-            //    Messages.Log($"DEBUG - countTerrain[{i}]: {countTerrain[i]}");
+            //    GameDebugging.Log($"DEBUG - countTerrain[{i}]: {countTerrain[i]}");
             //}
         }
 
 
         private static void addSites(GameMap targetMap, int nSites)
 		{
-            Messages.Log($"addSite({targetMap.Name}, {nSites})");
+            DebugUtils.Log($"addSite({targetMap.Name}, {nSites})");
 
             const int MIN_SITE_DISTANCE = 3;
 

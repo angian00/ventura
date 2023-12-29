@@ -1,39 +1,39 @@
 
+using TMPro;
 using UnityEngine;
 using Ventura.GameLogic;
-using Ventura.Util;
 
 namespace Ventura.Behaviours
 {
 
     public class UIManager : MonoBehaviour
     {
-        private GameObject _tileInfo1;
-        private GameObject _tileInfo2;
+        private TextMeshProUGUI _tileInfo1;
+        private TextMeshProUGUI _tileInfo2;
 
         private Orchestrator _orch;
         
         void Start()
         {
-            _tileInfo1 = GameObject.Find("Tile Info 1");
-            _tileInfo2 = GameObject.Find("Tile Info 2");
+            _tileInfo1 = GameObject.Find("Tile Info 1").GetComponent<TextMeshProUGUI>();
+            _tileInfo2 = GameObject.Find("Tile Info 2").GetComponent<TextMeshProUGUI>();
 
             _orch = Orchestrator.GetInstance();
         }
 
         public void UpdateTileInfo(Vector2Int? pos)
         {
-            Messages.Log($"UIManager.UpdateTileInfo()");
+            //DebugUtils.Log($"UIManager.UpdateTileInfo()");
 
             if (pos == null || !_orch.CurrMap.IsInBounds(((Vector2Int)pos).x, ((Vector2Int)pos).y))
             {
-                _tileInfo1.GetComponent<TMPro.TextMeshProUGUI>().text = "";
-                _tileInfo2.GetComponent<TMPro.TextMeshProUGUI>().text = "";
+                _tileInfo1.text = "";
+                _tileInfo2.text = "";
                 return;
             }
 
-            _tileInfo1.GetComponent<TMPro.TextMeshProUGUI>().text = getTileInfo((Vector2Int)pos);
-            _tileInfo2.GetComponent<TMPro.TextMeshProUGUI>().text = getEntityInfo((Vector2Int)pos);
+            _tileInfo1.text = getTileInfo((Vector2Int)pos);
+            _tileInfo2.text = getEntityInfo((Vector2Int)pos);
         }
 
 

@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Consumable component
 - inventory GameLogic
 - view switching
-
+- status line
 
 ### Changed
 - Refactoring of input system

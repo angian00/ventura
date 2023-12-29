@@ -38,9 +38,9 @@ namespace Ventura.Behaviours
 
         void Start()
         {
-            _terrainLayer = transform.Find("TerrainLayer");
-            _sitesLayer = transform.Find("SitesLayer");
-            _fogLayer = transform.Find("FogLayer");
+            _terrainLayer = transform.Find("Terrain Layer");
+            _sitesLayer = transform.Find("Sites Layer");
+            _fogLayer = transform.Find("Fog Layer");
 
             _playerObj = GameObject.Find("Player");
             _cameraObj = GameObject.Find("Map Camera");
@@ -48,7 +48,7 @@ namespace Ventura.Behaviours
             _orch = Orchestrator.GetInstance();
 
             var collider = gameObject.GetComponent<BoxCollider2D>();
-            Messages.Log($"collider.bounds: {collider.bounds}");
+            DebugUtils.Log($"collider.bounds: {collider.bounds}");
         }
 
         void Update()
@@ -70,9 +70,10 @@ namespace Ventura.Behaviours
             _orch.PendingUpdates.Clear();
         }
 
+
         private void updateTerrain()
         {
-            Messages.Log("MapManager.updateTerrain()");
+            DebugUtils.Log("MapManager.updateTerrain()");
 
             buildTerrain(_orch.CurrMap);
 
@@ -96,7 +97,7 @@ namespace Ventura.Behaviours
 
         private void updatePlayer()
         {
-            //Messages.Log("MapManager.updatePlayer()");
+            //GameDebugging.Log("MapManager.updatePlayer()");
 
             var playerX = _orch.Player.x;
             var playerY = _orch.Player.y;
@@ -117,7 +118,7 @@ namespace Ventura.Behaviours
 
         private void buildTerrain(GameMap gameMap)
         {
-            Messages.Log("MapManager.buildTerrain()");
+            DebugUtils.Log("MapManager.buildTerrain()");
 
             UnityUtils.RemoveAllChildren(_terrainLayer);
             UnityUtils.RemoveAllChildren(_sitesLayer);
@@ -157,7 +158,7 @@ namespace Ventura.Behaviours
                         var sprite = Resources.Load<Sprite>($"Sprites/{spriteName}");
                         if (sprite == null)
                         {
-                            Messages.Log($"!! Sprite not found: {spriteName}");
+                            DebugUtils.Log($"!! Sprite not found: {spriteName}");
                             continue;
                         }
 
@@ -168,7 +169,7 @@ namespace Ventura.Behaviours
                         break;
 
                     default:
-                        Messages.Log($"No icon for entity type {e.GetType().Name}");
+                        DebugUtils.Log($"No icon for entity type {e.GetType().Name}");
                         break;
                 }
             }
@@ -181,7 +182,7 @@ namespace Ventura.Behaviours
 
         private void updateFog(GameMap gameMap)
         {
-            //Messages.Log("MapManager.UpdateFog()");
+            //GameDebugging.Log("MapManager.UpdateFog()");
 
             for (int x = 0; x < gameMap.Width; x++)
             {

@@ -97,7 +97,7 @@ public abstract class AI
 
         public override GameAction? ChooseAction()
         {
-            Messages.Log("EnemyAI.chooseAction");
+            DebugUtils.Log("EnemyAI.chooseAction");
 
             var target = _orch.Player;
             var dx = target.x - _parent.y;
@@ -122,7 +122,7 @@ public abstract class AI
                 var dest = _path[0];
                 _path.RemoveAt(0);
 
-                Messages.Log("EnemyAI chose MovementAction");
+                DebugUtils.Log("EnemyAI chose MovementAction");
                 return new MovementAction(_orch, _parent, dest.x - _parent.x, dest.y - _parent.y);
             }
 

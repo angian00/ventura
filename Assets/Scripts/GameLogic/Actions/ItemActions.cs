@@ -40,9 +40,7 @@ namespace Ventura.GameLogic.Actions
             if (_actor.Inventory.ContainsItem(_item))
             {
                 _actor.Inventory.RemoveItem(_item);
-                Messages.Display($"{_actor.Name} drops the {_item.Name}");
-
-                return new ActionResult(true);
+                return new ActionResult(true, $"{_actor.Name} drops the {_item.Name}");
             }
             else
             {
@@ -84,7 +82,7 @@ namespace Ventura.GameLogic.Actions
             //    return new ActionResult(false, $"the {_item.Name}  is not equippable");
             //}
 
-            Messages.Log("TODO: EquipAction.Perform()");
+            DebugUtils.Log("TODO: EquipAction.Perform()");
             return new ActionResult(false, "TODO: implement EquipAction");
         }
     }
@@ -111,9 +109,7 @@ namespace Ventura.GameLogic.Actions
             var targetItem = items[0]; //TODO: properly support the case of multiple items on the same tile
 
             _orch.MoveItemTo(targetItem, _actor.Inventory);
-
-            Messages.Display($"{_actor.Name} picks up the ${targetItem.Name}");
-            return new ActionResult(true);
+            return new ActionResult(true, $"{_actor.Name} picks up the ${targetItem.Name}");
         }
     }
 
@@ -134,7 +130,7 @@ namespace Ventura.GameLogic.Actions
             //    return _item1.Combinable.combine(_item2.Combinable);
             //else
             //    return new ActionResult(false, $"the {_item1.Name} and {_item2.Name} cannot be combined");
-            Messages.Log("TODO: CombineAction.Perform()");
+            DebugUtils.Log("TODO: CombineAction.Perform()");
             return new ActionResult(false, "TODO: implement CombineAction");
 
         }

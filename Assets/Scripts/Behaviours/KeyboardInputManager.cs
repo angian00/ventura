@@ -71,7 +71,7 @@ namespace Ventura.Behaviours
 
                 if (triggered)
                 {
-                    Messages.Log("Key press detected: " + key.displayName);
+                    DebugUtils.Log("Key press detected: " + key.displayName);
                     _viewManager.CurrKeyboardReceiver.OnKeyPressed(key);
                 }
             }
@@ -119,7 +119,7 @@ namespace Ventura.Behaviours
 
         public override void OnKeyPressed(KeyControl key)
         {
-            Messages.Log("MapInputReceiver.OnKeyPressed");
+            DebugUtils.Log("MapInputReceiver.OnKeyPressed");
 
             if (processCommonKey(key))
                 return;
@@ -192,7 +192,7 @@ namespace Ventura.Behaviours
 
         public override void OnKeyPressed(KeyControl key)
         {
-            Messages.Log("InventoryInputReceiver.OnKeyPressed");
+            DebugUtils.Log("InventoryInputReceiver.OnKeyPressed");
 
             if (processCommonKey(key))
                 return;

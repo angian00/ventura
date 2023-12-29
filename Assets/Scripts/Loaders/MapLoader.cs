@@ -44,7 +44,7 @@ namespace Ventura.Loaders
 
         private static void loadData<T>(string filename, Dictionary<string, T> targetDict) where T : GameLogicObject
         {
-            Messages.Log($"loadData({filename})");
+            DebugUtils.Log($"loadData({filename})");
 
             var jsonLines = File.ReadAllLines(filename);
 

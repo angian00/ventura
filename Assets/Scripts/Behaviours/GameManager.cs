@@ -16,6 +16,12 @@ namespace Ventura.Behaviours
             _orch.NewGame();
         }
 
+        void Start()
+        {
+            StatusLineManager.DisplayStatus("Welcome, adventurer!");
+        }
+
+
         void Update()
         {
             _orch.ProcessTurn();

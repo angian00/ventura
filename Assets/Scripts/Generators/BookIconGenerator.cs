@@ -1,4 +1,3 @@
-using Random = UnityEngine.Random;
 using UnityEngine;
 
 
@@ -11,7 +10,7 @@ namespace Ventura.Generators
         private RenderTexture _renderTexture;
 
         private static BookIconGenerator _instance = new BookIconGenerator();
-        public static BookIconGenerator Instance { get => _instance; } //CHECK if singletons are OK in unity
+        public static BookIconGenerator Instance { get => _instance; }
 
 
         public void InitTemplateRendering()

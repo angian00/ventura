@@ -1,6 +1,6 @@
 ﻿using Ventura.GameLogic.Components;
-using Ventura.GameLogic.Actions;
 using Ventura.Util;
+using Ventura.Behaviours;
 
 namespace Ventura.GameLogic
 {
@@ -68,11 +68,11 @@ namespace Ventura.GameLogic
                 //        {
                 //            var a = _ai.ChooseAction();
 
-                //            Messages.Log($"Performing ${a.GetType().Name}");
+                //            GameDebugging.Log($"Performing ${a.GetType().Name}");
                 //var actionResult = a.Perform();
 
                 //            if (!actionResult.Success)
-                //                Messages.Display("WARNING - " + actionResult.Reason);
+                //                GameDebugging.Display("WARNING - " + actionResult.Reason);
 
                 //            //only monsters waste a turn on failed actions
                 //            if (actionResult.Success || !(_ai is PlayerAI))
@@ -82,12 +82,10 @@ namespace Ventura.GameLogic
                 var a = _ai.ChooseAction();
                 if (a == null)
                     return;
-                Messages.Log($"Performing ${a.GetType().Name}");
+                DebugUtils.Log($"Performing ${a.GetType().Name}");
 
                 var actionResult = a.Perform();
-                if (!actionResult.Success)
-                    Messages.Display("WARNING - " + actionResult.Reason);
-
+                StatusLineManager.DisplayStatus(actionResult.Reason, actionResult.Success ? StatusSeverity.Normal : StatusSeverity.Warning);
             }
         }
 
