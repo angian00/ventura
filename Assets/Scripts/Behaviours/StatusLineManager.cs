@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Ventura.Graphics;
 using Ventura.Util;
 
@@ -37,6 +38,8 @@ namespace Ventura.Behaviours
             DebugUtils.Log(msg);
             statusLine.color = GraphicsConfig.StatusLineColors[severity];
             statusLine.text = msg;
+
+            UnityUtils.FlashAndFade(statusLine);
         }
     }
 }

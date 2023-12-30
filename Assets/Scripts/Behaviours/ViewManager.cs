@@ -5,12 +5,6 @@ using Ventura.Util;
 
 namespace Ventura.Behaviours
 {
-    //public interface ModalUIManager
-    //{
-    //    public void UpdateData();
-    //}
-
-
     public class ViewManager : MonoBehaviour
     {
         public GameObject inventoryUITemplate;

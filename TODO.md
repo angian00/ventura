@@ -1,13 +1,13 @@
 # TODO
 
 ## Current sprint
-? fixed resolution/aspect ratio in unity; ui units (pixels?)
-+ fade out messaggi status line
 
 
 ## Errands
 - ui design con figma
-- capire funzionamento Unity Editor UI
+? capire funzionamento Unity Editor UI
+? capire fixed resolution/aspect ratio in unity; ui units (pixels?)
+
 
 ## Brainstorming
 - Familiarity feedback

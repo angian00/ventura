@@ -1,5 +1,6 @@
 ﻿
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Ventura.Util
 {
@@ -11,6 +12,17 @@ namespace Ventura.Util
             {
                 GameObject.Destroy(child.gameObject);
             }
+        }
+
+        /**
+         * set alpha 1 instantly, then slowly fade out
+         */
+        public static void FlashAndFade(Graphic targetObj)
+        {
+            const float duration = 1.5f; //in seconds
+
+            targetObj.GetComponent<CanvasRenderer>().SetAlpha(1.0f);
+            targetObj.CrossFadeAlpha(0.0f, duration, false);
         }
     }
 }
