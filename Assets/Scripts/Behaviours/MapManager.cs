@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem.EnhancedTouch;
 using Ventura.GameLogic;
 using Ventura.Util;
 
@@ -45,7 +44,7 @@ namespace Ventura.Behaviours
             _playerObj = GameObject.Find("Player");
             _cameraObj = GameObject.Find("Map Camera");
 
-            _orch = Orchestrator.GetInstance();
+            _orch = Orchestrator.Instance;
 
             var collider = gameObject.GetComponent<BoxCollider2D>();
             DebugUtils.Log($"collider.bounds: {collider.bounds}");
@@ -53,21 +52,19 @@ namespace Ventura.Behaviours
 
         void Update()
         {
-            foreach (var pendingType in _orch.PendingUpdates)
+            foreach (var pendingType in PendingUpdates.Instance.GetAll())
             {
                 switch (pendingType)
                 {
-                    case Orchestrator.PendingType.Terrain:
+                    case PendingUpdateId.MapTerrain:
                         updateTerrain();
                         break;
 
-                    case Orchestrator.PendingType.Player:
+                    case PendingUpdateId.MapPlayerPos:
                         updatePlayer();
                         break;
                 }
             }
-
-            _orch.PendingUpdates.Clear();
         }
 
 
@@ -75,24 +72,10 @@ namespace Ventura.Behaviours
         {
             DebugUtils.Log("MapManager.updateTerrain()");
 
-            buildTerrain(_orch.CurrMap);
-
-            //update ui location info
-            string locationInfoStr = "";
-            var mapNames = _orch.World.GetStackMapNames();
-
-            for (int i = mapNames.Count - 1; i >= 0; i--)
-            {
-                locationInfoStr += mapNames[i];
-
-                if (i > 0)
-                    locationInfoStr += " > ";
-            }
-
-            //FIXME: choose if this goes to UI Manager or UIManager.UpdateTileInfo goes here
-            var textObj = GameObject.Find("Location Info");
-            textObj.GetComponent<TextMeshProUGUI>().text = locationInfoStr;
+            buildTiles(_orch.CurrMap);
+            updateLocationInfo();
         }
+
 
 
         private void updatePlayer()
@@ -116,9 +99,9 @@ namespace Ventura.Behaviours
         }
 
 
-        private void buildTerrain(GameMap gameMap)
+        private void buildTiles(GameMap gameMap)
         {
-            DebugUtils.Log("MapManager.buildTerrain()");
+            DebugUtils.Log("MapManager.buildTiles()");
 
             UnityUtils.RemoveAllChildren(_terrainLayer);
             UnityUtils.RemoveAllChildren(_sitesLayer);
@@ -143,39 +126,41 @@ namespace Ventura.Behaviours
                     _fogTiles[x, y] = newFogTile;
                 }
             }
+
+            buildSites(gameMap);
+
+            updateCollider(gameMap);
             updateFog(gameMap);
 
+        }
+
+        private void buildSites(GameMap gameMap)
+        {
             foreach (var e in gameMap.Entities)
             {
-                if (e.Name == "player")
+                if (!(e is Site))
                     continue;
 
-                switch (e.GetType().Name)
+                var spriteName = GraphicsConfig.EntityIcons["site"];
+                var sprite = Resources.Load<Sprite>($"Sprites/{spriteName}");
+                if (sprite == null)
                 {
-                    case "Site":
-                        var spriteName = GraphicsConfig.EntityIcons["site"];
-                        var sprite = Resources.Load<Sprite>($"Sprites/{spriteName}");
-                        if (sprite == null)
-                        {
-                            DebugUtils.Log($"!! Sprite not found: {spriteName}");
-                            continue;
-                        }
-
-                        var newEntity = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
-                        newEntity.name = e.Name; //FIXME: there is no guarantee that entity name is unique
-                        newEntity.GetComponent<SpriteRenderer>().sprite = sprite;
-                        newEntity.transform.SetParent(_sitesLayer);
-                        break;
-
-                    default:
-                        DebugUtils.Log($"No icon for entity type {e.GetType().Name}");
-                        break;
+                    DebugUtils.Log($"!! Sprite not found: {spriteName}");
+                    continue;
                 }
-            }
 
+                var newEntity = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
+                newEntity.name = e.Name; //FIXME: there is no guarantee that entity name is unique
+                newEntity.GetComponent<SpriteRenderer>().sprite = sprite;
+                newEntity.transform.SetParent(_sitesLayer);
+            }
+        }
+
+        private void updateCollider(GameMap gameMap)
+        {
             var collider = gameObject.GetComponent<BoxCollider2D>();
             collider.size = new Vector2Int(gameMap.Width, gameMap.Height);
-            collider.offset = new Vector2Int(gameMap.Width/2, gameMap.Height/2); //needed for some reason
+            collider.offset = new Vector2Int(gameMap.Width / 2, gameMap.Height / 2); //needed for some reason
         }
 
 
@@ -203,5 +188,25 @@ namespace Ventura.Behaviours
                 }
             }
         }
+
+        private void updateLocationInfo()
+        {
+            //update ui location info
+            string locationInfoStr = "";
+            var mapNames = _orch.World.GetStackMapNames();
+
+            for (int i = mapNames.Count - 1; i >= 0; i--)
+            {
+                locationInfoStr += mapNames[i];
+
+                if (i > 0)
+                    locationInfoStr += " > ";
+            }
+
+            //FIXME: choose if this goes to UI Manager or UIManager.UpdateTileInfo goes here
+            var textObj = GameObject.Find("Location Info");
+            textObj.GetComponent<TextMeshProUGUI>().text = locationInfoStr;
+        }
+
     }
 }

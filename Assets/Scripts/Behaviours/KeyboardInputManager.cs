@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
-using UnityEngine.InputSystem.EnhancedTouch;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
 using Ventura.Util;
@@ -130,7 +129,7 @@ namespace Ventura.Behaviours
                 return;
 
             var keyboard = Keyboard.current;
-            var orch = Orchestrator.GetInstance();
+            var orch = Orchestrator.Instance;
             GameAction? newAction = null;
 
 
@@ -203,12 +202,12 @@ namespace Ventura.Behaviours
                 return;
 
             var keyboard = Keyboard.current;
-            var orch = Orchestrator.GetInstance();
+            var orch = Orchestrator.Instance;
             GameAction? newAction = null;
 
             if (key == keyboard.uKey)
             {
-                newAction = new UseAction(orch, orch.Player, orch.Player.Inventory.Items[0]); //DEBUG
+                //newAction = new UseAction(orch, orch.MapPlayerPos, orch.MapPlayerPos.Inventory.Items[0]); //DEBUG
             }
             else
             {

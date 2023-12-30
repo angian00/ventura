@@ -30,7 +30,7 @@ namespace Ventura.GameLogic
             this._y = 0;
         }
 
-        public void MoveTo(int x, int y)
+        public virtual void MoveTo(int x, int y)
         {
             _x = x;
             _y = y;
@@ -41,29 +41,22 @@ namespace Ventura.GameLogic
     public class Actor : Entity
     {
 
-        private Orchestrator _orch;
+        protected Orchestrator _orch;
         protected AI? _ai;
 
         protected Skills? _skills;
         public Skills? Skills { get => _skills; }
 
-        private Inventory? _inventory;
+        protected Inventory? _inventory;
         public Inventory Inventory { get => _inventory;  }
         //private Equipment? _equipment;
-
 
 
         public Actor(Orchestrator orch, string name) : base(name, true)
         {
             this._orch = orch;
-            //FIXME: use a more robust way to check if actor is player
-            if (name == "player")
-            {
-                _ai = new PlayerAI(_orch, this);
-                _inventory = new Inventory(999);
-                _skills = new Skills(this);
-            }
         }
+
 
         public void Act()
         {
@@ -100,6 +93,21 @@ namespace Ventura.GameLogic
 
     }
 
+    public class Player : Actor
+    {
+        public Player(Orchestrator orch, string name) : base(orch, name)
+        {
+            _ai = new PlayerAI(_orch, this);
+            _inventory = new Inventory(this, 999);
+            _skills = new Skills(this);
+        }
+
+        public override void MoveTo(int x, int y)
+        {
+            base.MoveTo(x, y);
+            PendingUpdates.Instance.Add(PendingUpdateId.MapPlayerPos);
+        }
+    }
 
 
     public class GameItem : Entity

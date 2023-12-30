@@ -13,6 +13,7 @@
 - Detail info panels
 
 ## Bugfixing
+- architettare bene pendingUpdates.Add(PendingType.Inventory);
 - cambiare nameof per valore enum
 
 ## Improvements

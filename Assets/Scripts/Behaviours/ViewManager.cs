@@ -1,15 +1,14 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using Ventura.GameLogic;
 using Ventura.Util;
 
 namespace Ventura.Behaviours
 {
-    public interface ModalUIManager
-    {
-        public void UpdateData();
-    }
+    //public interface ModalUIManager
+    //{
+    //    public void UpdateData();
+    //}
 
 
     public class ViewManager : MonoBehaviour

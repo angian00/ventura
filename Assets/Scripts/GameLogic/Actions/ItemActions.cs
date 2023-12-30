@@ -1,8 +1,6 @@
 ﻿
 using UnityEngine;
-using Ventura.GameLogic.Components;
-using Ventura.Util;
-using static UnityEditor.Progress;
+
 
 namespace Ventura.GameLogic.Actions
 {
@@ -82,7 +80,6 @@ namespace Ventura.GameLogic.Actions
             //    return new ActionResult(false, $"the {_item.Name}  is not equippable");
             //}
 
-            DebugUtils.Log("TODO: EquipAction.Perform()");
             return new ActionResult(false, "TODO: implement EquipAction");
         }
     }
@@ -130,7 +127,6 @@ namespace Ventura.GameLogic.Actions
             //    return _item1.Combinable.combine(_item2.Combinable);
             //else
             //    return new ActionResult(false, $"the {_item1.Name} and {_item2.Name} cannot be combined");
-            DebugUtils.Log("TODO: CombineAction.Perform()");
             return new ActionResult(false, "TODO: implement CombineAction");
 
         }

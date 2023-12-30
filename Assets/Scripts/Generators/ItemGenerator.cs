@@ -1,11 +1,6 @@
-using System.IO;
-using Random = UnityEngine.Random;
-using System;
-using UnityEngine;
-using System.Linq;
-using System.Collections.Generic;
-using Ventura.Util;
+
 using Ventura.GameLogic;
+using Random = UnityEngine.Random;
 
 namespace Ventura.Generators
 {
@@ -13,14 +8,18 @@ namespace Ventura.Generators
     {
         public static void GenerateSomeItems(Actor actor)
         {
-            var newItem = GenerateBookItem();
-            actor.Inventory.AddItem(newItem);
+            var nItems = 10;
+
+            for (var i=0; i < nItems; i++) {
+                var newItem = GenerateBookItem();
+                actor.Inventory.AddItem(newItem);
+            }
         }
 
 
         private static BookItem GenerateBookItem()
         {
-            return new BookItem("Test Skill Book", SkillId.Latin, 12);
+            return new BookItem(DummyNameGenerator.GenerateName(), SkillId.Latin, Random.Range(1, 50));
         }
     }
 

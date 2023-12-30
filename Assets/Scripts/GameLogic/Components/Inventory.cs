@@ -3,29 +3,22 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Ventura.GameLogic
+namespace Ventura.GameLogic.Components
 {
-    public interface Container
-    {
-        public ReadOnlyCollection<GameItem> Items { get; }
-
-        public bool ContainsItem(GameItem item);
-        public void AddItem(GameItem item);
-        public void RemoveItem(GameItem item);
-
-        public bool IsFull { get; }
-    }
-
     public class Inventory : Container
     {
+        protected Actor _parent;
+        public Actor Parent { get { return _parent; } }
+
         private List<GameItem> _items = new();
 
         private int _maxSize;
 
         public bool IsFull { get => (_items.Count == _maxSize); }
 
-        public Inventory(int maxSize)
+        public Inventory(Actor parent, int maxSize)
         {
+            _parent = parent;
             _maxSize = maxSize;
         }
 
@@ -45,12 +38,20 @@ namespace Ventura.GameLogic
                 oldParent.RemoveItem(item);
 
             item.Parent = this;
+            if (_parent is Player)
+            {
+                PendingUpdates.Instance.Add(PendingUpdateId.Inventory);
+            }
         }
 
         public void RemoveItem(GameItem item)
         {
-            _items.Remove(item);
+            if (_parent is Player)
+            {
+                PendingUpdates.Instance.Add(PendingUpdateId.Inventory);
+            }
 
+            _items.Remove(item);
             item.Parent = null;
         }
     }

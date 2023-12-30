@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
 using Ventura.Util;
 
 namespace Ventura.GameLogic.Components
 {
-public abstract class AI
+    public abstract class AI
 {
         protected Orchestrator _orch;
         protected Actor _parent;

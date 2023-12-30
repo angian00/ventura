@@ -11,10 +11,7 @@ namespace Ventura.GameLogic
     public class Orchestrator
     {
         private static Orchestrator _instance = new Orchestrator();
-        public static Orchestrator GetInstance()
-        {
-            return _instance;
-        }
+        public static Orchestrator Instance { get => _instance; }
 
         private const int VISIBILITY_RADIUS = 4;
 
@@ -28,22 +25,12 @@ namespace Ventura.GameLogic
         private Actor _player;
         public Actor Player { get => _player; }
 
-        private SortedSet<PendingType> _pendingUpdates = new();
-        public SortedSet<PendingType> PendingUpdates { get => _pendingUpdates; }
-
         //private HashSet<string> _exploredMaps = new();
         //private List<Actor> _actors;
         //private bool isGameActive = false;
 
         private CircularList<Actor> _scheduler = new();
         private Queue<GameAction> _playerActionQueue = new();
-
-
-        public enum PendingType
-        {
-            Terrain,
-            Player,
-        }
 
 
         public Orchestrator()
@@ -55,7 +42,7 @@ namespace Ventura.GameLogic
         {
             DebugUtils.Log("Orchestrator.NewGame()");
 
-            _player = new Actor(this, "player");
+            _player = new Player(this, "AnGian");
             ItemGenerator.GenerateSomeItems(_player);  //DEBUG
 
 
@@ -98,8 +85,7 @@ namespace Ventura.GameLogic
         */
             //fov.compute(this.player.x, this.player.y, lightRadius, this.setFov.bind(this))
 
-            _pendingUpdates.Add(PendingType.Terrain);
-            _pendingUpdates.Add(PendingType.Player);
+            PendingUpdates.Instance.Add(PendingUpdateId.MapTerrain);
         }
 
 
@@ -135,19 +121,15 @@ namespace Ventura.GameLogic
             {
 
                 a.MoveTo(targetX, targetY);
-                if (a.Name == "player") //FIXME: use a more robust way to check if actor is player
+                if (a is Player)
                     _currMap.UpdateExploration(targetX, targetY, VISIBILITY_RADIUS);
-
             }
-
-            _pendingUpdates.Add(PendingType.Player);
 
             return new Vector2Int(a.x, a.y);
         }
 
         public void MoveItemTo(GameItem item, Container targetContainer)
         {
-            _currMap.RemoveItem(item);
             targetContainer.AddItem(item);
             item.Parent = targetContainer;
         }
@@ -210,7 +192,7 @@ namespace Ventura.GameLogic
             //_exploredMaps.add(newMap.name);
 
             _currMap.Entities.Add(_player);
-            _pendingUpdates.Add(PendingType.Terrain);
+            PendingUpdates.Instance.Add(PendingUpdateId.MapTerrain);
 
             var startPos = _currMap.StartingPos;
             DebugUtils.Log($"EnterMap; startPos={startPos}");
@@ -231,7 +213,7 @@ namespace Ventura.GameLogic
             _currMap = _world.CurrMap;
 
             _currMap.Entities.Add(_player);
-            _pendingUpdates.Add(PendingType.Terrain);
+            PendingUpdates.Instance.Add(PendingUpdateId.MapTerrain);
 
             MoveActorTo(_player, previousMapPos.x, previousMapPos.y);
 

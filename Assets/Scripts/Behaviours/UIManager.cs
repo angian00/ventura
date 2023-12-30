@@ -18,7 +18,7 @@ namespace Ventura.Behaviours
             _tileInfo1 = GameObject.Find("Tile Info 1").GetComponent<TextMeshProUGUI>();
             _tileInfo2 = GameObject.Find("Tile Info 2").GetComponent<TextMeshProUGUI>();
 
-            _orch = Orchestrator.GetInstance();
+            _orch = Orchestrator.Instance;
         }
 
         public void UpdateTileInfo(Vector2Int? pos)

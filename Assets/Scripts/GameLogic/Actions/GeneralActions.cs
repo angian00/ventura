@@ -1,7 +1,4 @@
-﻿using TMPro;
-using Ventura.Util;
-
-namespace Ventura.GameLogic.Actions
+﻿namespace Ventura.GameLogic.Actions
 {
 #nullable enable
     public record ActionResult

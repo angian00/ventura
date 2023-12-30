@@ -52,6 +52,8 @@ namespace Ventura.GameLogic
                 _mapStack.Peek().pos = oldPos;
 
             this._mapStack.Push(new MapStackItem(newMap, null));
+
+            PendingUpdates.Instance.Add(PendingUpdateId.MapTerrain);
         }
 
 
@@ -74,6 +76,8 @@ namespace Ventura.GameLogic
                     "this.currMap.pos is valid",
                     "this.currMap.pos is null");
             }
+
+            PendingUpdates.Instance.Add(PendingUpdateId.MapTerrain);
 
             return (Vector2Int)currPos;
         }

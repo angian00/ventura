@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
-using static UnityEditor.Progress;
 using Random = UnityEngine.Random;
 
 
@@ -237,11 +236,13 @@ namespace Ventura.GameLogic
         public void AddItem(GameItem item)
         {
             _entities.Add(item);
+            PendingUpdates.Instance.Add(PendingUpdateId.MapItems);
         }
 
         public void RemoveItem(GameItem item)
         {
             _entities.Remove(item);
+            PendingUpdates.Instance.Add(PendingUpdateId.MapItems);
         }
     }
 }

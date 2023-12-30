@@ -3,9 +3,6 @@ using Random = UnityEngine.Random;
 using System;
 using Ventura.GameLogic;
 using Ventura.Util;
-using static UnityEngine.Rendering.DebugUI.Table;
-using Unity.Mathematics;
-using UnityEngine.UIElements;
 
 namespace Ventura.Generators
 {

@@ -1,5 +1,3 @@
-
-using TMPro;
 using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.Util;
@@ -7,20 +5,33 @@ using Ventura.Util;
 namespace Ventura.Behaviours
 {
 
-    public class InventoryUIManager : MonoBehaviour, ModalUIManager
+    public class InventoryUIManager : MonoBehaviour
     {
+        public GameObject inventoryItemTemplate;
+        
+        private Transform _contentRoot;
+
         private Orchestrator _orch;
-        private TextMeshProUGUI _debugText;
+        //private TextMeshProUGUI _debugText;
+
+
 
         void Start()
         {
-            _orch = Orchestrator.GetInstance();
-            _debugText = transform.Find("Debug Text").GetComponent<TextMeshProUGUI>();
+            _orch = Orchestrator.Instance;
 
-            UpdateData();
+            _contentRoot = transform.Find("Content Panel");
+
+            updateData();
         }
 
-        public void UpdateData()
+        void Update()
+        {
+            if (PendingUpdates.Instance.Contains(PendingUpdateId.Inventory))
+                updateData();
+        }
+
+        private void updateData()
         {
             var inventory = _orch.Player.Inventory;
             if (inventory == null)
@@ -29,16 +40,17 @@ namespace Ventura.Behaviours
                 return;
             }
 
-            var msg = "";
+            UnityUtils.RemoveAllChildren(_contentRoot);
+
             foreach (var invItem in inventory.Items)
             {
                 DebugUtils.Log($"Found in inventory: {invItem.Name}");
 
-                msg += invItem.Name;
-                msg += "\n";
-            }
+                var newItem = Instantiate(inventoryItemTemplate);
+                newItem.transform.SetParent(_contentRoot, false);
 
-            _debugText.text = msg;
+                newItem.SendMessage("Customize", invItem);
+            }
         }
 
     }
