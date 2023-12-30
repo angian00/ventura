@@ -1,6 +1,8 @@
 ﻿
+using System;
 using System.Collections.Generic;
-using UnityEngine;
+using Random = UnityEngine.Random;
+
 
 namespace Ventura.Util
 {
@@ -40,6 +42,11 @@ namespace Ventura.Util
             }
 
             return values[chosenIndex];
+        }
+
+        public static string EnumToStr<T>(T value) where T : Enum
+        {
+            return Enum.GetName(typeof(T), value);
         }
     }
 

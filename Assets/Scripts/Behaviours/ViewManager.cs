@@ -73,10 +73,10 @@ namespace Ventura.Behaviours
             else
             {
                 _modalUICamera.depth = foregroundDepth;
-                //TODO: reuse old _modalUIObjs
+                //FUTURE: reuse old _modalUIObjs
 
                 //GameObject modalUIObj;
-                //TODO: lastModalUIObj.SetActive(false);
+                //lastModalUIObj.SetActive(false);
                 //if (_modalUIObjs.ContainsKey(targetView))
                 //    modalUIObj = _modalUIObjs[targetView];
 

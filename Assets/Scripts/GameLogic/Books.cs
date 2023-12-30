@@ -2,6 +2,8 @@
 
 using Ventura.GameLogic.Actions;
 using Ventura.GameLogic.Components;
+using Ventura.Util;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace Ventura.GameLogic
 {
@@ -42,7 +44,7 @@ namespace Ventura.GameLogic
             consumer.Skills.AddToSkillValue(_skill, _amount);
 
             Consume();
-            return new ActionResult(true, $"You read [{_parent.Name}], and gain {_amount} points in the skill {nameof(_skill)}"); //FIXME: not nameof...
+            return new ActionResult(true, $"You read [{_parent.Name}], and gain {_amount} points in the skill [{DataUtils.EnumToStr<SkillId>(_skill)}]");
         }
     }
 }

@@ -1,25 +1,23 @@
 # TODO
 
 ## Current sprint
-- migliorare input inventory
 ? fixed resolution/aspect ratio in unity; ui units (pixels?)
++ fade out messaggi status line
 
 
 ## Errands
 - ui design con figma
+- capire funzionamento Unity Editor UI
 
 ## Brainstorming
 - Familiarity feedback
 - Detail info panels
 
 ## Bugfixing
-- architettare bene pendingUpdates.Add(PendingType.Inventory);
 - cambiare nameof per valore enum
 
 ## Improvements
 - rerouting of mouse input by view
-+ names per skills
-+ fade out messaggi status line
 
 ## Minutiae
 + Use some texture/shader for fog
@@ -60,7 +58,7 @@
 	- ...
 - frequenza per ogni valore di ogni parametro
 
-+ orientamento/prospettiva
++ orientamento/prospettiva immagine
 + alcuni valori disponibili solo per certe culture
 
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using Ventura.GameLogic;
 using Ventura.Util;
 
@@ -46,10 +47,11 @@ namespace Ventura.Behaviours
             {
                 DebugUtils.Log($"Found in inventory: {invItem.Name}");
 
-                var newItem = Instantiate(inventoryItemTemplate);
-                newItem.transform.SetParent(_contentRoot, false);
+                var newItemObj = Instantiate(inventoryItemTemplate);
+                newItemObj.GetComponent<InventoryItemHandler>().gameItem = invItem;
+                newItemObj.transform.SetParent(_contentRoot, false);
 
-                newItem.SendMessage("Customize", invItem);
+                //newItemObj.SendMessage("Customize", invItem);
             }
         }
 
