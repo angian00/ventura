@@ -9,6 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - start menu
 
+### Changed
+- Tidied up Awake and Start for MonoBehaviours
+
+### Fixed
+- game exit on Q keypress
+
 
 ## [0.4] - 2023-12-30
 ### Added
