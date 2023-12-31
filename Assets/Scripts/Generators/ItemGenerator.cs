@@ -34,11 +34,17 @@ namespace Ventura.Generators
 
         private BookItem GenerateBookItem()
         {
+            var name = DummyStringGenerator.Instance.GenerateString();
+
             var skill = SkillId.Latin;
-            var title = _titleGen.GenerateString(new Dictionary<string, string>() { { "skill", DataUtils.EnumToStr<SkillId>(skill)} });
             var amount = Random.Range(1, 50);
 
-            return new BookItem(title, skill, amount);
+            var title = _titleGen.GenerateString(new Dictionary<string, string>() { { "skill", DataUtils.EnumToStr<SkillId>(skill)} });
+            string author = null;
+            if (DataUtils.RandomBool())
+                author = FileStringGenerator.FirstNames.GenerateString();
+
+            return new BookItem(name, title, author, skill, amount);
         }
     }
 

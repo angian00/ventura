@@ -184,6 +184,7 @@ namespace Ventura.GameLogic
         public void UpdateExploration(int targetX, int targetY, float r)
         {
             //GameDebugging.Log("UpdateExploration");
+            //fov.compute(this.player.x, this.player.y, lightRadius, this.setFov.bind(this))
 
             //reset visible
             for (var x = 0; x < _width; x++)

@@ -66,7 +66,7 @@ namespace Ventura.Unity.Behaviours
 
                 if (triggered)
                 {
-                    DebugUtils.Log("Key press detected: " + key.displayName);
+                    //DebugUtils.Log("Key press detected: " + key.displayName);
                     viewManager.CurrInputHandler.OnKeyPressed(key);
                 }
             }

@@ -17,28 +17,5 @@ namespace Ventura.Unity.Behaviours
         }
 
 
-        public void NewGame()
-        {
-            DebugUtils.Log("Switching to Game Scene");
-            SceneManager.LoadScene("Game Scene");
-        }
-
-        public void ExitGame()
-        {
-            DebugUtils.Log("Exiting Game");
-            Application.Quit();
-        }
-
-
-        public void LoadGame()
-        {
-            //TODO: LoadGame
-        }
-
-        public void SaveGame()
-        {
-            //TODO: SaveGame?
-        }
-
     }
 }

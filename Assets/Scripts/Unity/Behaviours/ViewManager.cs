@@ -8,6 +8,10 @@ namespace Ventura.Unity.Behaviours
 {
     public class ViewManager : MonoBehaviour
     {
+        private static ViewManager _instance;
+        public static ViewManager Instance { get => _instance; }
+
+
         public GameObject inventoryUITemplate;
         public GameObject skillsUITemplate;
 
@@ -21,7 +25,7 @@ namespace Ventura.Unity.Behaviours
         public Camera mapCamera;
         public Camera modalUICamera;
         public Transform modalUIRoot;
-
+        public PopupManager popupManager;
 
         private Dictionary<ViewId, GameObject> _viewTemplates;
         //private Dictionary<ViewId, GameObject> _modalUIObjs = new();
@@ -34,8 +38,10 @@ namespace Ventura.Unity.Behaviours
         public ViewInputHandler? CurrInputHandler { get => _currView == null ? null : _inputHandlers[(ViewId)_currView]; }
 
 
-        void Start()
+        void Awake()
         {
+            _instance = this;
+
             _inputHandlers.Add(ViewId.Map, new MapInputHandler(this));
             _inputHandlers.Add(ViewId.Inventory, new InventoryInputHandler(this));
             _inputHandlers.Add(ViewId.Skills, new SkillsInputHandler(this));
@@ -45,7 +51,16 @@ namespace Ventura.Unity.Behaviours
                 { ViewId.Inventory, inventoryUITemplate },
                 { ViewId.Skills,    skillsUITemplate    },
             };
+        }
 
+
+        void Start()
+        {
+            NewGame();
+        }
+
+        public void NewGame()
+        {
             SwitchTo(ViewId.Map);
         }
 
@@ -95,5 +110,11 @@ namespace Ventura.Unity.Behaviours
             else
                 SwitchTo(targetView);
         }
+
+        public void ShowPopup(string title, SystemManager.Command command)
+        {
+            popupManager.ShowPopup(title, command);
+        }
+
     }
 }

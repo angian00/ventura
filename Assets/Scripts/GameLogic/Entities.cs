@@ -80,7 +80,7 @@ namespace Ventura.GameLogic
                 var a = _ai.ChooseAction();
                 if (a == null)
                     return;
-                DebugUtils.Log($"Performing ${a.GetType().Name}");
+                //DebugUtils.Log($"Performing ${a.GetType().Name}");
 
                 var actionResult = a.Perform();
                 if (actionResult.Reason != null)
@@ -120,6 +120,8 @@ namespace Ventura.GameLogic
         public Consumable Consumable { get => _consumable; }
         //protected Equippable? _equippable;
         //protected Combinable? _combinable;
+
+        public virtual string Label { get => _name; }
 
         public GameItem(string name) : base(name, false)
         { }

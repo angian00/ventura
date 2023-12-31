@@ -8,7 +8,6 @@ namespace Ventura.Unity.Input
     {
         public SkillsInputHandler(ViewManager viewManager) : base(viewManager) { }
 
-
         public override void OnKeyPressed(KeyControl key)
         {
             DebugUtils.Log("SkillsInputHandler.OnKeyPressed");

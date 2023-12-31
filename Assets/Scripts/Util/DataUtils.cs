@@ -44,6 +44,14 @@ namespace Ventura.Util
             return values[chosenIndex];
         }
 
+
+        public static bool RandomBool()
+        {
+            if (Random.value >= 0.5)
+                return true;
+            return false;
+        }
+     
         public static string EnumToStr<T>(T value) where T : Enum
         {
             return Enum.GetName(typeof(T), value);

@@ -15,8 +15,16 @@ namespace Ventura.GameLogic
 
     public class BookItem : GameItem
     {
-        public BookItem(string name, SkillId skill, int amount) : base(name)
+        protected string _title;
+        protected string _author;
+
+        public override string Label { get => _author == null ? _title : $"{_author} - '{_title}'"; }
+
+        public BookItem(string name, string title, string? author, SkillId skill, int amount) : base(name)
         {
+            this._title = title;
+            this._author = author;
+
             _consumable = new BookConsumable(this, skill, amount);
         }
     }

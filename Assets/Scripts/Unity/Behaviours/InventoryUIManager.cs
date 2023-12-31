@@ -43,7 +43,7 @@ namespace Ventura.Unity.Behaviours
                 DebugUtils.Log($"Found in inventory: {invItem.Name}");
 
                 var newItemObj = Instantiate(inventoryItemTemplate);
-                newItemObj.GetComponent<InventoryItemHandler>().gameItem = invItem;
+                newItemObj.GetComponent<InventoryItemManager>().gameItem = invItem;
                 newItemObj.transform.SetParent(_contentRoot, false);
             }
         }

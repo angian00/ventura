@@ -9,7 +9,7 @@ namespace Ventura.Unity.Input
     {
         protected ViewManager _viewManager;
 
-        public ViewInputHandler(ViewManager viewManager)
+        protected ViewInputHandler(ViewManager viewManager)
         {
             this._viewManager = viewManager;
         }
@@ -34,13 +34,28 @@ namespace Ventura.Unity.Input
             var keyboard = Keyboard.current;
             var processed = false;
 
-            if (key == keyboard.qKey)
+            //------------------- system commands -------------------
+            if (key == keyboard.escapeKey)
             {
-                GameManager.Instance.ExitGame();
-                //TODO: viewManager.SwitchTo(ViewManager.ViewId.Confirmation);
+                //FUTURE: system command menu
+                _viewManager.SwitchTo(ViewManager.ViewId.Map);
                 processed = true;
             }
-            if (key == keyboard.iKey)
+            else if (key == keyboard.nKey)
+            {
+                //SystemManager.Instance.ExecuteCommand(SystemManager.Command.New);
+                _viewManager.ShowPopup("New Game", SystemManager.Command.New);
+                processed = true;
+            }
+            else if (key == keyboard.qKey)
+            {
+                //SystemManager.Instance.ExecuteCommand(SystemManager.Command.Exit);
+                _viewManager.ShowPopup("Exit Game", SystemManager.Command.Exit);
+                processed = true;
+            }
+            
+            //------------------- view toggle commands -------------------
+            else if (key == keyboard.iKey)
             {
                 _viewManager.Toggle(ViewManager.ViewId.Inventory);
                 processed = true;
@@ -52,15 +67,12 @@ namespace Ventura.Unity.Input
             }
             else if (key == keyboard.mKey)
             {
-                _viewManager.SwitchTo(ViewManager.ViewId.Map);
+                //NB: map view doesn't have a toggle behaviour,
+                //    it is the default view
+                _viewManager.SwitchTo(ViewManager.ViewId.Map); 
                 processed = true;
             }
-            else if (key == keyboard.escapeKey)
-            {
-                //FUTURE: pop-up confirmation to main menu
-                _viewManager.SwitchTo(ViewManager.ViewId.Map);
-                processed = true;
-            }
+
 
             return processed;
         }

@@ -8,10 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - start menu
+- book title generator
+- book author field
+- system commands (New Game, Exit Game) with confirmation popup
+
 
 ### Changed
 - Tidied up Awake and Start for MonoBehaviours
 - Refactored input handlers to be more selective
+- Used camera stack to switch between views, popup
 
 ### Fixed
 - game exit on Q keypress

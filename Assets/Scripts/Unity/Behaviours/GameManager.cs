@@ -42,18 +42,5 @@ namespace Ventura.Unity.Behaviours
         {
             PendingUpdates.Instance.Clear();
         }
-
-
-        public void ExitGame()
-        {
-            DebugUtils.Log("Exiting Game");
-            //diffrent calls needed if application is run in Unity editor or as a standalone application
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
-        }
     }
 }
-

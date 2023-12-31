@@ -1,23 +1,22 @@
 # TODO
 
 ## Current sprint
-- architettura confirmation popup
 - save/load
 
 
 ## Bugfixing
 
+
 ## Improvements
-- books
-	- aggiungere autore
-	- book uniqueness
-- mouse input solo sulla view attiva
+- pensare logica nomi univoci per Entities
+- azioni che non consumano il turno (es. Look)
 + irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - key handler per inventory view
 - grafica base per skills view
-- refactoring UIManager
+- refactoring UIManager (unire a MapManager)
 
 ## Minutiae
+- padding in popup text inventory item
 + Use some texture/shader for fog
 - uniformare messaggi azioni (player vs other actor); grammar?
 

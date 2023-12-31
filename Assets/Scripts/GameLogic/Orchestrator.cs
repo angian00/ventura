@@ -26,18 +26,9 @@ namespace Ventura.GameLogic
         private Actor _player;
         public Actor Player { get => _player; }
 
-        //private HashSet<string> _exploredMaps = new();
-        //private List<Actor> _actors;
-        //private bool isGameActive = false;
-
         private CircularList<Actor> _scheduler = new();
         private Queue<GameAction> _playerActionQueue = new();
 
-
-        public Orchestrator()
-        {
-            _world = new World();
-        }
 
         public void NewGame()
         {
@@ -46,12 +37,10 @@ namespace Ventura.GameLogic
             _player = new Player(this, "AnGian");
             //DEBUG
             foreach (var book in BookItemGenerator.Instance.GenerateBooks())
-            {
                 _player.Inventory.AddItem(book);
-
-            }
             //
 
+            _world = new World();
 
             const int WORLD_MAP_WIDTH = 80;
             const int WORLD_MAP_HEIGHT = 50;
@@ -64,33 +53,7 @@ namespace Ventura.GameLogic
 
             MoveActorTo(_player, _currMap.StartingPos.x, _currMap.StartingPos.y);
 
-            _currMap.UpdateExploration(_player.x, _player.y, VISIBILITY_RADIUS);
-
             ActivateActors();
-
-            /*
-            //DEBUG: add a consumable item
-            let potion = makeItem(this, ItemType.PotionHealth)
-            this.map.place(potion, 16, 8)
-            //
-
-            //DEBUG: add equipment items
-            let dagger = makeItem(this, ItemType.Dagger)
-            this.map.place(dagger, 19, 8)
-
-            let armor = makeItem(this, ItemType.LeatherArmor)
-            this.map.place(armor, 19, 10)
-            //
-
-            //DEBUG: add ingredients
-            let herb1 = makeItem(this, ItemType.HerbHenbane)
-            this.map.place(herb1, 17, 8)
-
-            let herb2 = makeItem(this, ItemType.HerbNightshade)
-            this.map.place(herb2, 17, 10)
-            //
-        */
-            //fov.compute(this.player.x, this.player.y, lightRadius, this.setFov.bind(this))
 
             PendingUpdates.Instance.Add(PendingUpdateId.MapTerrain);
         }
