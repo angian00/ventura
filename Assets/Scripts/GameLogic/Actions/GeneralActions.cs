@@ -1,4 +1,7 @@
-﻿namespace Ventura.GameLogic.Actions
+﻿using UnityEngine;
+using Ventura.Unity.Behaviours;
+
+namespace Ventura.GameLogic.Actions
 {
 #nullable enable
     public record ActionResult
@@ -43,6 +46,27 @@
         {
             //do nothing, spend a turn
             return new ActionResult(true, $"{_actor.Name} is waiting... ");
+        }
+    }
+
+    public class LookAction : GameAction
+    {
+        protected Vector2Int? _tilePos;
+
+        //CHECK if it can merged with DirectionAction
+        public LookAction(Orchestrator orch, Actor actor, Vector2Int? tilePos) : base(orch, actor) 
+        {
+            _tilePos = tilePos;
+        }
+
+        public override ActionResult Perform()
+        {
+            if (_orch.CurrMap == null)
+                return new ActionResult(false, "Invalid map");
+
+            UIManager.Instance.UpdateTileInfo(_tilePos); //FIXME: recfactor
+
+            return new ActionResult(true);
         }
     }
 }

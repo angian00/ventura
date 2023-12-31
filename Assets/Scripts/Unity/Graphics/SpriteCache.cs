@@ -3,7 +3,7 @@ using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.Loaders;
 
-namespace Ventura.Graphics
+namespace Ventura.Unity.Graphics
 {
 
     public class SpriteCache

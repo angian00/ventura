@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Ventura.Behaviours;
+using Ventura.Unity.Behaviours;
 using Ventura.GameLogic;
 
-namespace Ventura.Graphics
+namespace Ventura.Unity.Graphics
 {
 
     public class GraphicsConfig

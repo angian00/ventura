@@ -3,11 +3,14 @@ using TMPro;
 using UnityEngine;
 using Ventura.GameLogic;
 
-namespace Ventura.Behaviours
+namespace Ventura.Unity.Behaviours
 {
 
     public class UIManager : MonoBehaviour
     {
+        private static UIManager _instance;
+        public static UIManager Instance { get => _instance; }
+
         public TextMeshProUGUI tileInfo1;
         public TextMeshProUGUI tileInfo2;
 
@@ -15,6 +18,7 @@ namespace Ventura.Behaviours
 
         void Awake()
         {
+            _instance = this;
             _orch = Orchestrator.Instance;
         }
 

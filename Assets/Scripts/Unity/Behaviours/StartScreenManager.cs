@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Ventura.Util;
 
-namespace Ventura.Behaviours
+namespace Ventura.Unity.Behaviours
 {
 
     public class StartScreenManager : MonoBehaviour

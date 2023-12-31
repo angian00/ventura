@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Ventura.Util;
+using Ventura.Unity.Input;
 
-
-namespace Ventura.Behaviours
+namespace Ventura.Unity.Behaviours
 {
     public class ViewManager : MonoBehaviour
     {
@@ -18,27 +18,27 @@ namespace Ventura.Behaviours
             Skills,
         }
 
+        public Camera mapCamera;
         public Camera modalUICamera;
         public Transform modalUIRoot;
 
 
-        private const int foregroundDepth = 99;
-        private const int hiddenDepth = -99;
-
         private Dictionary<ViewId, GameObject> _viewTemplates;
         //private Dictionary<ViewId, GameObject> _modalUIObjs = new();
 
-        private ViewId _currView;
-        private Dictionary<ViewId, KeyboardInputReceiver> _keyboardInputReceivers = new();
+        private ViewId? _currView;
 
-        public KeyboardInputReceiver CurrKeyboardReceiver { get => _keyboardInputReceivers[_currView]; }
+        public Camera CurrCamera { get => modalUICamera.enabled ? modalUICamera : mapCamera; }
+
+        private Dictionary<ViewId, ViewInputHandler> _inputHandlers = new();
+        public ViewInputHandler? CurrInputHandler { get => _currView == null ? null : _inputHandlers[(ViewId)_currView]; }
 
 
         void Start()
         {
-            _keyboardInputReceivers.Add(ViewId.Map, new MapInputReceiver(this));
-            _keyboardInputReceivers.Add(ViewId.Inventory, new InventoryInputReceiver(this));
-            _keyboardInputReceivers.Add(ViewId.Skills, new SkillsInputReceiver(this));
+            _inputHandlers.Add(ViewId.Map, new MapInputHandler(this));
+            _inputHandlers.Add(ViewId.Inventory, new InventoryInputHandler(this));
+            _inputHandlers.Add(ViewId.Skills, new SkillsInputHandler(this));
 
             _viewTemplates = new()
             {
@@ -46,25 +46,23 @@ namespace Ventura.Behaviours
                 { ViewId.Skills,    skillsUITemplate    },
             };
 
-            _currView = ViewId.Map;
+            SwitchTo(ViewId.Map);
         }
 
 
         public void SwitchTo(ViewId targetView)
         {
-            //SceneManager.LoadScene("Test Modal UI", LoadSceneMode.Additive);
-            //SceneManager.SetActiveScene(SceneManager.GetSceneByName("Test Modal UI")); //FIXME: move it where the scene has loaded
-
             if (_currView == targetView)
                 return;
 
             if (targetView == ViewId.Map)
             {
-                modalUICamera.depth = hiddenDepth;
+                modalUICamera.enabled = false;
             }
             else
             {
-                modalUICamera.depth = foregroundDepth;
+                modalUICamera.enabled = true;
+
                 //FUTURE: reuse old _modalUIObjs
 
                 //GameObject modalUIObj;

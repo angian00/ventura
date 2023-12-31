@@ -4,9 +4,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
-using Ventura.Graphics;
+using Ventura.Unity.Graphics;
 
-namespace Ventura.Behaviours
+namespace Ventura.Unity.Behaviours
 {
 
     public class InventoryItemHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler

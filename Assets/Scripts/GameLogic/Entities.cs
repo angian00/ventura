@@ -1,4 +1,4 @@
-﻿using Ventura.Behaviours;
+﻿using Ventura.Unity.Behaviours;
 using Ventura.GameLogic.Components;
 using Ventura.Util;
 
@@ -83,7 +83,8 @@ namespace Ventura.GameLogic
                 DebugUtils.Log($"Performing ${a.GetType().Name}");
 
                 var actionResult = a.Perform();
-                StatusLineManager.Instance.Display(actionResult.Reason, actionResult.Success ? StatusSeverity.Normal : StatusSeverity.Warning);
+                if (actionResult.Reason != null)
+                    StatusLineManager.Instance.Display(actionResult.Reason, actionResult.Success ? StatusSeverity.Normal : StatusSeverity.Warning);
             }
         }
 

@@ -1,9 +1,9 @@
 using TMPro;
 using UnityEngine;
-using Ventura.Graphics;
+using Ventura.Unity.Graphics;
 using Ventura.Util;
 
-namespace Ventura.Behaviours
+namespace Ventura.Unity.Behaviours
 {
     public enum StatusSeverity
     {

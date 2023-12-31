@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Ventura.Behaviours
+namespace Ventura.Unity.Behaviours
 {
 
     public class StartMenuButton : MonoBehaviour

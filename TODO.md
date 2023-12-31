@@ -2,13 +2,14 @@
 
 ## Current sprint
 - architettura confirmation popup
-- uniformare in tutti i behaviour Start vs Awake vs properties
 - save/load
 
 
 ## Bugfixing
 
 ## Improvements
+- key handler per inventory view
+- grafica base per skills view
 - book title generator
 - book uniqueness
 - mouse input solo sulla view attiva

@@ -4,7 +4,7 @@ using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.Util;
 
-namespace Ventura.Behaviours
+namespace Ventura.Unity.Behaviours
 {
 
     public class SkillsUIManager : MonoBehaviour

@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Tidied up Awake and Start for MonoBehaviours
+- Refactored input handlers to be more selective
 
 ### Fixed
 - game exit on Q keypress
