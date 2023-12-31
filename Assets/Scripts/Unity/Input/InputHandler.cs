@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using Ventura.Unity.Behaviours;
-using Ventura.Util;
 
 namespace Ventura.Unity.Input
 {

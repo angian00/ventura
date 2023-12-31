@@ -15,7 +15,7 @@ namespace Ventura.Generators
             DebugUtils.Log("GenerateWildernessMap()");
 
             if (mapName == null)
-                mapName = NameGenerator.Sites.GenerateName();
+                mapName = FileStringGenerator.Sites.GenerateString();
 
             var newMap = new GameMap(mapName, mapName, nRows, nCols);
 
@@ -130,7 +130,7 @@ namespace Ventura.Generators
                     continue;
 
 
-                var siteName = NameGenerator.Sites.GenerateName();
+                var siteName = FileStringGenerator.Sites.GenerateString();
                 var newSite = new Site(siteName, targetMap.Name);
                 newSite.MoveTo(x, y);
 

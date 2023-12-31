@@ -8,19 +8,21 @@
 ## Bugfixing
 
 ## Improvements
-- key handler per inventory view
-- grafica base per skills view
-- book title generator
-- book uniqueness
+- books
+	- aggiungere autore
+	- book uniqueness
 - mouse input solo sulla view attiva
 + irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
-? refactoring UIManager
+- key handler per inventory view
+- grafica base per skills view
+- refactoring UIManager
 
 ## Minutiae
 + Use some texture/shader for fog
 - uniformare messaggi azioni (player vs other actor); grammar?
 
 ## Errands
+- creare progetto github
 - ui design con figma
 ? scouting musica
 

@@ -4,11 +4,20 @@ using Ventura.Util;
 
 namespace Ventura.Generators
 {
-    public class DummyNameGenerator
+    public interface StringGenerator
     {
-        private static char _currChar = 'A';
+        public string GenerateString();
+    }
 
-        public static string GenerateName()
+
+    public class DummyStringGenerator: StringGenerator
+    {
+        private static DummyStringGenerator _instance = new DummyStringGenerator();
+        public static DummyStringGenerator Instance { get => _instance; }
+
+        private char _currChar = 'A';
+
+        public string GenerateString()
         {
             var res = "";
 
@@ -24,30 +33,26 @@ namespace Ventura.Generators
     }
 
 
-    public class NameGenerator
+    public class FileStringGenerator: StringGenerator
     {
         private List<string> _names = new();
         private List<int> _frequencies = new();
 
 
-        //public static NameGenerator Sites = new NameGenerator("names_sites_international");
-        public static NameGenerator Sites = new NameGenerator("names_sites_italia");
+        //public static FileStringGenerator Sites = new FileStringGenerator("names_sites_international");
+        public static FileStringGenerator Sites = new FileStringGenerator("names_sites_italia");
 
 
-        private NameGenerator(string sourceFile)
-        {
-            loadNameFile(sourceFile);
-        }
+        protected FileStringGenerator(string sourceFile): this(new string[] { sourceFile }) { }
 
-
-        private NameGenerator(string[] sourceFiles)
+        protected FileStringGenerator(string[] sourceFiles)
         {
             foreach (var file in sourceFiles)
-                loadNameFile(file);
+                loadFile(file);
         }
 
 
-        private void loadNameFile(string filename)
+        private void loadFile(string filename)
         {
             var fileObj = Resources.Load<TextAsset>($"Data/{filename}");
             var fileLines = fileObj.text.Split("\n");
@@ -71,7 +76,7 @@ namespace Ventura.Generators
         }
 
 
-        public string GenerateName()
+        public string GenerateString()
         {
             return DataUtils.ChooseWeighted(_names, _frequencies);
         }

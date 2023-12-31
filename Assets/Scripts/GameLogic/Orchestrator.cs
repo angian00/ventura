@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using Ventura.GameLogic.Actions;
 using Ventura.Generators;
@@ -43,7 +44,13 @@ namespace Ventura.GameLogic
             DebugUtils.Log("Orchestrator.NewGame()");
 
             _player = new Player(this, "AnGian");
-            ItemGenerator.GenerateSomeItems(_player);  //DEBUG
+            //DEBUG
+            foreach (var book in BookItemGenerator.Instance.GenerateBooks())
+            {
+                _player.Inventory.AddItem(book);
+
+            }
+            //
 
 
             const int WORLD_MAP_WIDTH = 80;

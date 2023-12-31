@@ -1,26 +1,44 @@
 
-using Ventura.GameLogic;
+using System.Collections.Generic;
 using Random = UnityEngine.Random;
+using Ventura.GameLogic;
+using Ventura.Util;
 
 namespace Ventura.Generators
 {
-    public class ItemGenerator
+    public class BookItemGenerator
     {
-        public static void GenerateSomeItems(Actor actor)
+        private static BookItemGenerator _instance = new BookItemGenerator();
+        public static BookItemGenerator Instance { get => _instance; }
+
+        private TemplatedStringGenerator _titleGen;
+
+        private BookItemGenerator()
         {
-            var nItems = 10;
+            _titleGen = new TemplatedStringGenerator("language_book_titles");
+        }
+
+        //public void GenerateBooks(Actor actor, int nItems=10)
+        public List<BookItem> GenerateBooks(int nItems=10)
+        {
+            var res = new List<BookItem>();
 
             for (var i = 0; i < nItems; i++)
             {
-                var newItem = GenerateBookItem();
-                actor.Inventory.AddItem(newItem);
+                res.Add(GenerateBookItem());
             }
+
+            return res;
         }
 
 
-        private static BookItem GenerateBookItem()
+        private BookItem GenerateBookItem()
         {
-            return new BookItem(DummyNameGenerator.GenerateName(), SkillId.Latin, Random.Range(1, 50));
+            var skill = SkillId.Latin;
+            var title = _titleGen.GenerateString(new Dictionary<string, string>() { { "skill", DataUtils.EnumToStr<SkillId>(skill)} });
+            var amount = Random.Range(1, 50);
+
+            return new BookItem(title, skill, amount);
         }
     }
 
