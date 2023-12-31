@@ -1,11 +1,15 @@
 using UnityEngine;
 using Ventura.GameLogic;
-
+using Ventura.Util;
 
 namespace Ventura.Behaviours
 {
     public class GameManager : MonoBehaviour
     {
+        private static GameManager instance;
+        public static GameManager Instance { get => instance; }
+
+
         private Orchestrator _orch;
 
         void Awake()
@@ -35,6 +39,13 @@ namespace Ventura.Behaviours
         void LateUpdate()
         {
             PendingUpdates.Instance.Clear();
+        }
+
+
+        public void ExitGame()
+        {
+            DebugUtils.Log("Exiting Game");
+            Application.Quit();
         }
     }
 }

@@ -96,6 +96,12 @@ namespace Ventura.Behaviours
             var keyboard = Keyboard.current;
             var processed = false;
 
+            if (key == keyboard.qKey)
+            {
+                GameManager.Instance.ExitGame();
+                //TODO: _viewManager.SwitchTo(ViewManager.ViewId.Confirmation);
+                processed = true;
+            }
             if (key == keyboard.iKey)
             {
                 _viewManager.Toggle(ViewManager.ViewId.Inventory);
