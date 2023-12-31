@@ -151,22 +151,25 @@ namespace Ventura.GameLogic
         }
 
 
-        public void ActivateActors() {
+        public void ActivateActors()
+        {
             _scheduler.Add(_player);
 
             if (_currMap == null)
                 return;
 
-            foreach (var a in _currMap.Entities) {
+            foreach (var a in _currMap.Entities)
+            {
                 if (a is Actor && a.Name != "player")
                     _scheduler.Add((Actor)a);
-		    }
+            }
         }
 
-        public void DeactivateActors() {
+        public void DeactivateActors()
+        {
             _scheduler.Clear();
         }
-        
+
         public void ProcessTurn()
         {
             var currActor = _scheduler.Next();

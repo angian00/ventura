@@ -22,33 +22,21 @@ namespace Ventura.Behaviours
         [Range(0.0f, 1.0f)]
         public float fogUnexploredAlpha = 0.9f;
 
+        public GameObject playerObj;
+        public GameObject cameraObj;
+        public Transform terrainLayer;
+        public Transform sitesLayer;
+        public Transform fogLayer;
+        public BoxCollider2D mapCollider;
 
-        private GameObject _playerObj;
-        private GameObject _cameraObj;
-
-
-        private Transform _terrainLayer;
-        private Transform _sitesLayer;
-        private Transform _fogLayer;
 
         private GameObject[,] _fogTiles;
-
         private Orchestrator _orch;
 
 
         void Start()
         {
-            _terrainLayer = transform.Find("Terrain Layer");
-            _sitesLayer = transform.Find("Sites Layer");
-            _fogLayer = transform.Find("Fog Layer");
-
-            _playerObj = GameObject.Find("Player");
-            _cameraObj = GameObject.Find("Map Camera");
-
             _orch = Orchestrator.Instance;
-
-            var collider = gameObject.GetComponent<BoxCollider2D>();
-            DebugUtils.Log($"collider.bounds: {collider.bounds}");
         }
 
         void Update()
@@ -77,8 +65,6 @@ namespace Ventura.Behaviours
             updateLocationInfo();
         }
 
-
-
         private void updatePlayer()
         {
             //GameDebugging.Log("MapManager.updatePlayer()");
@@ -86,15 +72,15 @@ namespace Ventura.Behaviours
             var playerX = _orch.Player.x;
             var playerY = _orch.Player.y;
 
-            var targetObjPos = _playerObj.transform.position;
+            var targetObjPos = playerObj.transform.position;
             targetObjPos.x = playerX;
             targetObjPos.y = playerY;
-            _playerObj.transform.position = targetObjPos;
+            playerObj.transform.position = targetObjPos;
 
-            targetObjPos = _cameraObj.transform.position;
+            targetObjPos = cameraObj.transform.position;
             targetObjPos.x = playerX;
             targetObjPos.y = playerY;
-            _cameraObj.transform.position = targetObjPos;
+            cameraObj.transform.position = targetObjPos;
 
             updateFog(_orch.CurrMap);
         }
@@ -102,11 +88,11 @@ namespace Ventura.Behaviours
 
         private void buildTiles(GameMap gameMap)
         {
-            DebugUtils.Log("MapManager.buildTiles()");
+            //DebugUtils.Log("MapManager.buildTiles()");
 
-            UnityUtils.RemoveAllChildren(_terrainLayer);
-            UnityUtils.RemoveAllChildren(_sitesLayer);
-            UnityUtils.RemoveAllChildren(_fogLayer);
+            UnityUtils.RemoveAllChildren(terrainLayer);
+            UnityUtils.RemoveAllChildren(sitesLayer);
+            UnityUtils.RemoveAllChildren(fogLayer);
 
             _fogTiles = new GameObject[gameMap.Width, gameMap.Height];
 
@@ -118,11 +104,11 @@ namespace Ventura.Behaviours
 
                     var newMapTile = Instantiate(terrainTileTemplate, new Vector3(x, y), Quaternion.identity);
                     newMapTile.GetComponent<SpriteRenderer>().color = GraphicsConfig.TerrainColors[terrainType];
-                    newMapTile.transform.SetParent(_terrainLayer);
+                    newMapTile.transform.SetParent(terrainLayer);
 
                     var newFogTile = Instantiate(fogTileTemplate, new Vector3(x, y), Quaternion.identity);
                     newFogTile.GetComponent<SpriteRenderer>().color = fogColor;
-                    newFogTile.transform.SetParent(_fogLayer);
+                    newFogTile.transform.SetParent(fogLayer);
 
                     _fogTiles[x, y] = newFogTile;
                 }
@@ -132,8 +118,8 @@ namespace Ventura.Behaviours
 
             updateCollider(gameMap);
             updateFog(gameMap);
-
         }
+
 
         private void buildSites(GameMap gameMap)
         {
@@ -153,15 +139,14 @@ namespace Ventura.Behaviours
                 var newEntity = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
                 newEntity.name = e.Name; //FIXME: there is no guarantee that entity name is unique
                 newEntity.GetComponent<SpriteRenderer>().sprite = sprite;
-                newEntity.transform.SetParent(_sitesLayer);
+                newEntity.transform.SetParent(sitesLayer);
             }
         }
 
         private void updateCollider(GameMap gameMap)
         {
-            var collider = gameObject.GetComponent<BoxCollider2D>();
-            collider.size = new Vector2Int(gameMap.Width, gameMap.Height);
-            collider.offset = new Vector2Int(gameMap.Width / 2, gameMap.Height / 2); //needed for some reason
+            mapCollider.size = new Vector2Int(gameMap.Width, gameMap.Height);
+            mapCollider.offset = new Vector2Int(gameMap.Width / 2, gameMap.Height / 2); //needed for some reason
         }
 
 

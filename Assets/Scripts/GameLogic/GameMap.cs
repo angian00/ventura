@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 #nullable enable
 namespace Ventura.GameLogic
 {
-    public class GameMap: GameLogicObject, Container
+    public class GameMap : GameLogicObject, Container
     {
         const bool MAP_DEBUGGING = false;
         //const bool MAP_DEBUGGING = true;
@@ -36,7 +36,7 @@ namespace Ventura.GameLogic
         public bool[,] Explored { get => _explored; }
 
         private Vector2Int _startingPos;
-        public Vector2Int StartingPos { get => _startingPos; set =>  _startingPos = value; }
+        public Vector2Int StartingPos { get => _startingPos; set => _startingPos = value; }
 
         private HashSet<Entity> _entities = new();
         public HashSet<Entity> Entities { get => _entities; }
@@ -66,7 +66,7 @@ namespace Ventura.GameLogic
             }
         }
 
-        public GameMap(string name, string label, int width, int height): this(name, label, width, height, makeDefaultTerrain(width, height))
+        public GameMap(string name, string label, int width, int height) : this(name, label, width, height, makeDefaultTerrain(width, height))
         { }
 
 
@@ -85,7 +85,8 @@ namespace Ventura.GameLogic
             return terrain;
         }
 
-        public bool IsInBounds(int x, int y) {
+        public bool IsInBounds(int x, int y)
+        {
             return (0 <= x && x < _width && 0 <= y && y < _height);
         }
 
@@ -99,7 +100,7 @@ namespace Ventura.GameLogic
 
             return null;
         }
-        
+
         public Site? GetSiteAt(Vector2Int pos)
         {
             return GetSiteAt(pos.x, pos.y);
@@ -195,11 +196,11 @@ namespace Ventura.GameLogic
 
             //TODO: use Unity line-of-sight algorithm
             var startX = (int)Math.Max(targetX - r, 0);
-            var endX   = (int)Math.Min(targetX + r, _width - 1);
+            var endX = (int)Math.Min(targetX + r, _width - 1);
             var startY = (int)Math.Max(targetY - r, 0);
-            var endY   = (int)Math.Min(targetY + r, _height - 1);
+            var endY = (int)Math.Min(targetY + r, _height - 1);
 
-           for (var x = startX; x <= endX; x++)
+            for (var x = startX; x <= endX; x++)
             {
                 for (var y = startY; y <= endY; y++)
                 {

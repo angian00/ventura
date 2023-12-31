@@ -547,6 +547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf02a53f4e308c64abd2534dbbcf22eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  viewManager: {fileID: 527047362}
   keyRepeatInitialDelay: 0.5
   keyRepeatRate: 0.1
 --- !u!4 &136669894
@@ -576,6 +577,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6b116522131da4493d59cb5d9fa143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiManager: {fileID: 1927844763}
+  targetCamera: {fileID: 906978890}
+  collider: {fileID: 827930049}
 --- !u!1 &162792845
 GameObject:
   m_ObjectHideFlags: 0
@@ -1071,6 +1075,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryUITemplate: {fileID: 3499050730733780068, guid: 1da19f82b36ec9741b1434283c579405, type: 3}
   skillsUITemplate: {fileID: 3499050730733780068, guid: bae6d2b55a4cb9d4090301427e5379b3, type: 3}
+  modalUICamera: {fileID: 544597678}
+  modalUIRoot: {fileID: 2073832799}
 --- !u!4 &527047363
 Transform:
   m_ObjectHideFlags: 0
@@ -1115,7 +1121,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 827930046}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &544597677
 GameObject:
@@ -1350,10 +1356,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1195255142}
-  - {fileID: 1299771524}
-  - {fileID: 876365598}
   - {fileID: 533152921}
+  - {fileID: 876365598}
+  - {fileID: 1299771524}
+  - {fileID: 1195255142}
   - {fileID: 972199889}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -1376,6 +1382,12 @@ MonoBehaviour:
   fogColor: {r: 0.3018868, g: 0.2947668, b: 0.2947668, a: 1}
   fogExploredAlpha: 0.2
   fogUnexploredAlpha: 0.9
+  playerObj: {fileID: 1195255141}
+  cameraObj: {fileID: 906978888}
+  terrainLayer: {fileID: 533152921}
+  sitesLayer: {fileID: 876365598}
+  fogLayer: {fileID: 1299771524}
+  mapCollider: {fileID: 827930049}
 --- !u!61 &827930049
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1431,7 +1443,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 827930046}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &886285553
 GameObject:
@@ -1808,7 +1820,7 @@ Transform:
   m_Children:
   - {fileID: 2125658807}
   m_Father: {fileID: 827930046}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1284237498
 GameObject:
@@ -1870,7 +1882,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 827930046}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1420489679
 GameObject:
@@ -1947,6 +1959,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1c1fedc3ea15347b0ef170923a92e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileInfo1: {fileID: 230462816}
+  tileInfo2: {fileID: 289616079}
 --- !u!1 &1931827357
 GameObject:
   m_ObjectHideFlags: 0
@@ -2104,7 +2118,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2073832799}
   m_Layer: 6
-  m_Name: Instantiation Target
+  m_Name: Content Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

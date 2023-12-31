@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Ventura.Util;
 
+
 namespace Ventura.Behaviours
 {
     public class ViewManager : MonoBehaviour
@@ -17,13 +18,14 @@ namespace Ventura.Behaviours
             Skills,
         }
 
+        public Camera modalUICamera;
+        public Transform modalUIRoot;
+
+
         private const int foregroundDepth = 99;
         private const int hiddenDepth = -99;
 
         private Dictionary<ViewId, GameObject> _viewTemplates;
-
-        private Camera _modalUICamera;
-        private Transform _modalUIRoot;
         //private Dictionary<ViewId, GameObject> _modalUIObjs = new();
 
         private ViewId _currView;
@@ -34,13 +36,9 @@ namespace Ventura.Behaviours
 
         void Start()
         {
-            _modalUICamera = GameObject.Find("Modal UI Camera").GetComponent<Camera>();
-            _modalUIRoot = GameObject.Find("Modal UI Canvas").transform.Find("Instantiation Target");
-
             _keyboardInputReceivers.Add(ViewId.Map, new MapInputReceiver(this));
             _keyboardInputReceivers.Add(ViewId.Inventory, new InventoryInputReceiver(this));
             _keyboardInputReceivers.Add(ViewId.Skills, new SkillsInputReceiver(this));
-
 
             _viewTemplates = new()
             {
@@ -62,11 +60,11 @@ namespace Ventura.Behaviours
 
             if (targetView == ViewId.Map)
             {
-                _modalUICamera.depth = hiddenDepth;
+                modalUICamera.depth = hiddenDepth;
             }
             else
             {
-                _modalUICamera.depth = foregroundDepth;
+                modalUICamera.depth = foregroundDepth;
                 //FUTURE: reuse old _modalUIObjs
 
                 //GameObject modalUIObj;
@@ -76,16 +74,16 @@ namespace Ventura.Behaviours
 
                 //else {
                 //    modalUIObj = Instantiate(inventoryUITemplate);
-                //    modalUIObj.transform.SetParent(_modalUIRoot);
+                //    modalUIObj.transform.SetParent(modalUIRoot);
                 //}
                 //_modalUIObjs[targetView] = modalUIObj;
                 //modalUIObj.GetComponent<ModalUIManager>().UpdateData(); //too early to call it here anyway
 
 
-                UnityUtils.RemoveAllChildren(_modalUIRoot);
+                UnityUtils.RemoveAllChildren(modalUIRoot);
 
                 var modalUIObj = Instantiate(_viewTemplates[targetView]);
-                modalUIObj.transform.SetParent(_modalUIRoot, false);
+                modalUIObj.transform.SetParent(modalUIRoot, false);
             }
 
             StatusLineManager.Instance.Clear();

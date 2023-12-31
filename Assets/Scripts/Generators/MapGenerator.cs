@@ -1,8 +1,8 @@
-using UnityEngine;
-using Random = UnityEngine.Random;
 using System;
+using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.Util;
+using Random = UnityEngine.Random;
 
 namespace Ventura.Generators
 {
@@ -76,9 +76,10 @@ namespace Ventura.Generators
                         maxNoise = noiseVal;
 
                     int iTerrain;
-                    for (iTerrain=0; iTerrain < terrainLevels.Length; iTerrain++) {
+                    for (iTerrain = 0; iTerrain < terrainLevels.Length; iTerrain++)
+                    {
                         if (noiseVal < terrainLevels[iTerrain])
-    					    break;
+                            break;
                     }
 
                     //stats collection
@@ -100,7 +101,7 @@ namespace Ventura.Generators
 
 
         private static void addSites(GameMap targetMap, int nSites)
-		{
+        {
             DebugUtils.Log($"addSite({targetMap.Name}, {nSites})");
 
             const int MIN_SITE_DISTANCE = 3;
@@ -137,6 +138,6 @@ namespace Ventura.Generators
 
                 i++;
             }
-		}
+        }
     }
 }

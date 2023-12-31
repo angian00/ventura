@@ -7,7 +7,7 @@ using Ventura.Util;
 namespace Ventura.GameLogic.Components
 {
     public abstract class AI
-{
+    {
         protected Orchestrator _orch;
         protected Actor _parent;
 
@@ -21,18 +21,21 @@ namespace Ventura.GameLogic.Components
          * Compute and return a path to the target position.
          * If there is no valid path then returns an empty list.
          */
-        protected List<Vector2Int> GetPathTo(int destX, int destY) {
+        protected List<Vector2Int> GetPathTo(int destX, int destY)
+        {
             var targetMap = _orch.CurrMap;
             //var walkables = new bool[,]();
 
-            for (var x=0; x < targetMap.Width; x++) {
-			    //walkables.push([]);
-			    for (var y = 0; y < targetMap.Height; y++) {
+            for (var x = 0; x < targetMap.Width; x++)
+            {
+                //walkables.push([]);
+                for (var y = 0; y < targetMap.Height; y++)
+                {
                     //walkables[x].push(map.tiles[x][y].walkable);
                 }
-		    }
+            }
 
-		    foreach (var e in targetMap.Entities)
+            foreach (var e in targetMap.Entities)
             {
                 if (e.IsBlocking && !(e == _parent) && !(e.x == destX && e.y == destY))
                     //walkables[e.x][e.y] = false;
@@ -130,11 +133,12 @@ namespace Ventura.GameLogic.Components
     }
 
 
-    public class PlayerAI: AI
+    public class PlayerAI : AI
     {
         public PlayerAI(Orchestrator orch, Actor parent) : base(orch, parent) { }
 
-        public override GameAction? ChooseAction() {
+        public override GameAction? ChooseAction()
+        {
             return _orch.DequeuePlayerAction();
         }
 

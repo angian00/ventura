@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Ventura.Graphics;
 using Ventura.Util;
 
@@ -19,8 +18,8 @@ namespace Ventura.Behaviours
         private static StatusLineManager _instance;
         public static StatusLineManager Instance { get => _instance; }
 
-
         public TextMeshProUGUI statusLine;
+
 
         void Awake()
         {

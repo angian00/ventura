@@ -17,10 +17,6 @@ namespace Ventura.Behaviours
         public StartScreenManager startScreenManager;
         public StartMenuCommand command;
 
-        void Start()
-        {
-        }
-
 
         public void OnButtonClick()
         {

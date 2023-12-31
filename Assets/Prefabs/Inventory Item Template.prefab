@@ -223,6 +223,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b43fa05ce5d73d488009c24b3759a9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thumbnail: {fileID: 3945174540026394247}
+  labelPanel: {fileID: 3992295025537142218}
+  labelText: {fileID: 1033847543371936444}
 --- !u!1 &3992295025537142218
 GameObject:
   m_ObjectHideFlags: 0

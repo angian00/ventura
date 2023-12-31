@@ -8,16 +8,13 @@ namespace Ventura.Behaviours
 
     public class UIManager : MonoBehaviour
     {
-        private TextMeshProUGUI _tileInfo1;
-        private TextMeshProUGUI _tileInfo2;
+        public TextMeshProUGUI tileInfo1;
+        public TextMeshProUGUI tileInfo2;
 
         private Orchestrator _orch;
-        
-        void Start()
-        {
-            _tileInfo1 = GameObject.Find("Tile Info 1").GetComponent<TextMeshProUGUI>();
-            _tileInfo2 = GameObject.Find("Tile Info 2").GetComponent<TextMeshProUGUI>();
 
+        void Awake()
+        {
             _orch = Orchestrator.Instance;
         }
 
@@ -27,13 +24,13 @@ namespace Ventura.Behaviours
 
             if (pos == null || !_orch.CurrMap.IsInBounds(((Vector2Int)pos).x, ((Vector2Int)pos).y))
             {
-                _tileInfo1.text = "";
-                _tileInfo2.text = "";
+                tileInfo1.text = "";
+                tileInfo2.text = "";
                 return;
             }
 
-            _tileInfo1.text = getTileInfo((Vector2Int)pos);
-            _tileInfo2.text = getEntityInfo((Vector2Int)pos);
+            tileInfo1.text = getTileInfo((Vector2Int)pos);
+            tileInfo2.text = getEntityInfo((Vector2Int)pos);
         }
 
 

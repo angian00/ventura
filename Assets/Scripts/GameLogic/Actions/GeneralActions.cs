@@ -10,7 +10,7 @@
         public string? Reason { get => _reason; }
 
 
-        public ActionResult(bool success, string? reason=null)
+        public ActionResult(bool success, string? reason = null)
         {
             _success = success;
             _reason = reason;
@@ -35,7 +35,7 @@
     }
 
 
-    public class WaitAction: GameAction
+    public class WaitAction : GameAction
     {
         public WaitAction(Orchestrator orch, Actor actor) : base(orch, actor) { }
 

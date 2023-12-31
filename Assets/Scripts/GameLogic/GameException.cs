@@ -2,7 +2,7 @@
 
 namespace Ventura.GameLogic
 {
-    public class GameException: Exception
+    public class GameException : Exception
     {
         private string message;
         private string expected;

@@ -8,8 +8,8 @@ namespace Ventura.GameLogic.Actions
         protected int _dy;
 
         public Vector2Int TargetXY { get => new Vector2Int(_actor.x + _dx, _actor.y + _dy); }
-        public Actor? TargetActor  { get => (_orch.CurrMap == null ? null : _orch.CurrMap.GetActorAt(TargetXY)); }
-        public Site? TargetSite    { get => (_orch.CurrMap == null ? null : _orch.CurrMap.GetSiteAt(TargetXY)); }
+        public Actor? TargetActor { get => (_orch.CurrMap == null ? null : _orch.CurrMap.GetActorAt(TargetXY)); }
+        public Site? TargetSite { get => (_orch.CurrMap == null ? null : _orch.CurrMap.GetSiteAt(TargetXY)); }
 
         public DirectionAction(Orchestrator orch, Actor actor, int dx, int dy) : base(orch, actor)
         {
@@ -102,6 +102,6 @@ namespace Ventura.GameLogic.Actions
                 return new ActionResult(false, "That way is blocked");
             }
         }
-       
+
     }
 }

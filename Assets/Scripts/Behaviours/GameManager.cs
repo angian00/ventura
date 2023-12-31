@@ -6,14 +6,16 @@ namespace Ventura.Behaviours
 {
     public class GameManager : MonoBehaviour
     {
-        private static GameManager instance;
-        public static GameManager Instance { get => instance; }
+        private static GameManager _instance;
+        public static GameManager Instance { get => _instance; }
 
 
         private Orchestrator _orch;
 
         void Awake()
         {
+            _instance = this;
+
             _orch = Orchestrator.Instance;
             _orch.NewGame();
         }

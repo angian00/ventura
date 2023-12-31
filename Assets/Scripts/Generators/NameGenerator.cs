@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 using Ventura.Util;
 
 namespace Ventura.Generators
@@ -53,7 +53,7 @@ namespace Ventura.Generators
             var fileLines = fileObj.text.Split("\n");
 
 
-    		foreach (var line in fileLines)
+            foreach (var line in fileLines)
             {
                 if (line.Length == 0 || line[0] == '#' || line.Trim() == "")
                     //skip comments and empty lines
@@ -61,9 +61,9 @@ namespace Ventura.Generators
 
                 var tokens = line.Trim().Split("|");
                 Debug.Assert(tokens.Length <= 2);
-                
+
                 var name = tokens[0];
-                var freq = ( tokens.Length == 1 ? 1 : int.Parse(tokens[1]) );
+                var freq = (tokens.Length == 1 ? 1 : int.Parse(tokens[1]));
 
                 _names.Add(name);
                 _frequencies.Add(freq);

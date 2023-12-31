@@ -3,6 +3,6 @@ namespace Ventura.GameLogic
 {
     public interface GameLogicObject
     {
-        public string Name { get;  }
+        public string Name { get; }
     }
 }

@@ -1,12 +1,12 @@
-﻿using Ventura.GameLogic.Components;
+﻿using Ventura.Behaviours;
+using Ventura.GameLogic.Components;
 using Ventura.Util;
-using Ventura.Behaviours;
 
 namespace Ventura.GameLogic
 {
 
 
-    public class Entity: GameLogicObject
+    public class Entity : GameLogicObject
     {
         protected string _name;
         public string Name { get => _name; }
@@ -48,7 +48,7 @@ namespace Ventura.GameLogic
         public Skills? Skills { get => _skills; }
 
         protected Inventory? _inventory;
-        public Inventory Inventory { get => _inventory;  }
+        public Inventory Inventory { get => _inventory; }
         //private Equipment? _equipment;
 
 
@@ -113,7 +113,7 @@ namespace Ventura.GameLogic
     public class GameItem : Entity
     {
         protected Container? _parent;
-        public Container Parent { get => _parent; set => _parent = value;  }
+        public Container Parent { get => _parent; set => _parent = value; }
 
         protected Consumable? _consumable;
         public Consumable Consumable { get => _consumable; }

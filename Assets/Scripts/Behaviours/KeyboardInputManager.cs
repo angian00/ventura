@@ -8,23 +8,21 @@ using Ventura.Util;
 
 namespace Ventura.Behaviours
 {
-
     public class KeyboardInputManager : MonoBehaviour
     {
-        private ViewManager _viewManager;
-        private Dictionary<KeyControl, float> _keyElapsedTimes = new();
-        private Dictionary<KeyControl, bool> _pressedKeys = new();
+        public ViewManager viewManager;
 
         [Tooltip("In seconds")]
         public float keyRepeatInitialDelay = 0.5f;
         [Tooltip("In seconds")]
         public float keyRepeatRate = 0.1f;
 
+        private Dictionary<KeyControl, float> _keyElapsedTimes = new();
+        private Dictionary<KeyControl, bool> _pressedKeys = new();
+
 
         void Start()
         {
-            _viewManager = GameObject.Find("View Manager").GetComponent<ViewManager>();
-
             var keyboard = Keyboard.current;
             foreach (var key in keyboard.allKeys)
             {
@@ -71,7 +69,7 @@ namespace Ventura.Behaviours
                 if (triggered)
                 {
                     DebugUtils.Log("Key press detected: " + key.displayName);
-                    _viewManager.CurrKeyboardReceiver.OnKeyPressed(key);
+                    viewManager.CurrKeyboardReceiver.OnKeyPressed(key);
                 }
             }
         }
@@ -92,14 +90,15 @@ namespace Ventura.Behaviours
         /**
          * Returns true if key needs no more processing
          */
-        protected bool processCommonKey(KeyControl key) {
+        protected bool processCommonKey(KeyControl key)
+        {
             var keyboard = Keyboard.current;
             var processed = false;
 
             if (key == keyboard.qKey)
             {
                 GameManager.Instance.ExitGame();
-                //TODO: _viewManager.SwitchTo(ViewManager.ViewId.Confirmation);
+                //TODO: viewManager.SwitchTo(ViewManager.ViewId.Confirmation);
                 processed = true;
             }
             if (key == keyboard.iKey)
@@ -123,7 +122,7 @@ namespace Ventura.Behaviours
     }
 
 
-    public class MapInputReceiver: KeyboardInputReceiver
+    public class MapInputReceiver : KeyboardInputReceiver
     {
         public MapInputReceiver(ViewManager viewManager) : base(viewManager) { }
 

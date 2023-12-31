@@ -1,7 +1,7 @@
 ﻿
 namespace Ventura.GameLogic
 {
-    public record TerrainType: GameLogicObject
+    public record TerrainType : GameLogicObject
     {
         private string _name;
         public string Name { get => _name; }

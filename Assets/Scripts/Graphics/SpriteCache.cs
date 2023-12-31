@@ -1,7 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 using Ventura.GameLogic;
-using Ventura.Behaviours;
 using Ventura.Loaders;
 
 namespace Ventura.Graphics
@@ -13,7 +12,7 @@ namespace Ventura.Graphics
         public static SpriteCache Instance { get { return _instance; } }
 
         private Dictionary<Entity, Sprite> _sprites = new();
-        
+
         public Sprite GetSprite(Entity e)
         {
             Sprite sprite;

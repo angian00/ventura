@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using Ventura.GameLogic;
 using Ventura.Util;
 
@@ -9,22 +8,18 @@ namespace Ventura.Behaviours
     public class InventoryUIManager : MonoBehaviour
     {
         public GameObject inventoryItemTemplate;
-        
-        private Transform _contentRoot;
+        public Transform _contentRoot;
 
         private Orchestrator _orch;
-        //private TextMeshProUGUI _debugText;
-
 
 
         void Start()
         {
             _orch = Orchestrator.Instance;
 
-            _contentRoot = transform.Find("Content Panel");
-
             updateData();
         }
+
 
         void Update()
         {
@@ -50,8 +45,6 @@ namespace Ventura.Behaviours
                 var newItemObj = Instantiate(inventoryItemTemplate);
                 newItemObj.GetComponent<InventoryItemHandler>().gameItem = invItem;
                 newItemObj.transform.SetParent(_contentRoot, false);
-
-                //newItemObj.SendMessage("Customize", invItem);
             }
         }
 

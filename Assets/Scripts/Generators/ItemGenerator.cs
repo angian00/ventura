@@ -10,7 +10,8 @@ namespace Ventura.Generators
         {
             var nItems = 10;
 
-            for (var i=0; i < nItems; i++) {
+            for (var i = 0; i < nItems; i++)
+            {
                 var newItem = GenerateBookItem();
                 actor.Inventory.AddItem(newItem);
             }
