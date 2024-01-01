@@ -1,5 +1,6 @@
 using UnityEngine;
 using Ventura.GameLogic;
+using Ventura.GameLogic.Actions;
 using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
@@ -27,6 +28,14 @@ namespace Ventura.Unity.Behaviours
                 updateData();
         }
 
+        public void OnItemClick(GameItem gameItem)
+        {
+            var orch = Orchestrator.Instance;
+            var newAction = new UseAction(orch, orch.Player, gameItem);
+            orch.EnqueuePlayerAction(newAction);
+        }
+
+
         private void updateData()
         {
             var inventory = _orch.Player.Inventory;
@@ -43,6 +52,7 @@ namespace Ventura.Unity.Behaviours
                 DebugUtils.Log($"Found in inventory: {invItem.Name}");
 
                 var newItemObj = Instantiate(inventoryItemTemplate);
+                newItemObj.GetComponent<InventoryItemManager>().inventoryManager = this;
                 newItemObj.GetComponent<InventoryItemManager>().gameItem = invItem;
                 newItemObj.transform.SetParent(_contentRoot, false);
             }

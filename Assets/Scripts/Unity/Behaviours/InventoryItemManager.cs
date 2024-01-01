@@ -11,12 +11,12 @@ namespace Ventura.Unity.Behaviours
 
     public class InventoryItemManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
+        public InventoryUIManager inventoryManager;
         public GameItem gameItem;
 
         public Image thumbnail;
         public GameObject labelPanel;
         public TextMeshProUGUI labelText;
-
 
         void Start()
         {
@@ -30,22 +30,19 @@ namespace Ventura.Unity.Behaviours
         public void OnButtonClick()
         {
             //Debug.Log($"InventoryItemManager.OnButtonClick; gameItem.Name: {gameItem.Name}");
-
-            var orch = Orchestrator.Instance;
-            var newAction = new UseAction(orch, orch.Player, gameItem);
-            orch.EnqueuePlayerAction(newAction);
+            inventoryManager.OnItemClick(gameItem);
         }
 
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            Debug.Log($"InventoryItemManager.OnPointerEnter; gameItem.Name: {gameItem.Name}");
+            //Debug.Log($"InventoryItemManager.OnPointerEnter; gameItem.Name: {gameItem.Name}");
             labelPanel.SetActive(true);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            Debug.Log($"InventoryItemManager.OnPointerExit; gameItem.Name: {gameItem.Name}");
+            //Debug.Log($"InventoryItemManager.OnPointerExit; gameItem.Name: {gameItem.Name}");
             labelPanel.SetActive(false);
         }
 

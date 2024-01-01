@@ -8,7 +8,7 @@ using System;
 
 namespace Ventura.Unity.Input
 {
-    public class MapInputHandler : ViewInputHandler
+    public class MapInputHandler : AbstractViewInputHandler
     {
         private Vector2Int? _lastPos = null;
 

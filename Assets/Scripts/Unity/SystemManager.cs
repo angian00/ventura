@@ -74,7 +74,8 @@ namespace Ventura.Unity.Behaviours
 
         private void saveGame()
         {
-            DebugUtils.Log("TODO: SystemManager.saveGame()");
+            DebugUtils.Log("Saving Game");
+            Persistence.SaveGame(Orchestrator.Instance, "testSave.json");
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Ventura.Util;
 using Ventura.Unity.Input;
+using UnityEngine.UI;
 
 namespace Ventura.Unity.Behaviours
 {
@@ -24,7 +25,8 @@ namespace Ventura.Unity.Behaviours
 
         public Camera mapCamera;
         public Camera modalUICamera;
-        public Transform modalUIRoot;
+        //public Transform contentRoot;
+        public Canvas modalUICanvas;
         public PopupManager popupManager;
 
         private Dictionary<ViewId, GameObject> _viewTemplates;
@@ -34,8 +36,8 @@ namespace Ventura.Unity.Behaviours
 
         public Camera CurrCamera { get => modalUICamera.enabled ? modalUICamera : mapCamera; }
 
-        private Dictionary<ViewId, ViewInputHandler> _inputHandlers = new();
-        public ViewInputHandler? CurrInputHandler { get => _currView == null ? null : _inputHandlers[(ViewId)_currView]; }
+        private Dictionary<ViewId, AbstractViewInputHandler> _inputHandlers = new();
+        public AbstractViewInputHandler? CurrInputHandler { get => _currView == null ? null : _inputHandlers[(ViewId)_currView]; }
 
 
         void Awake()
@@ -73,10 +75,13 @@ namespace Ventura.Unity.Behaviours
             if (targetView == ViewId.Map)
             {
                 modalUICamera.enabled = false;
+                //manual Raycaster management is apparently needed in spite of Canvas RenderCamera property
+                modalUICanvas.GetComponent<GraphicRaycaster>().enabled = false;
             }
             else
             {
                 modalUICamera.enabled = true;
+                modalUICanvas.GetComponent<GraphicRaycaster>().enabled = true;
 
                 //FUTURE: reuse old _modalUIObjs
 
@@ -87,16 +92,16 @@ namespace Ventura.Unity.Behaviours
 
                 //else {
                 //    modalUIObj = Instantiate(inventoryUITemplate);
-                //    modalUIObj.transform.SetParent(modalUIRoot);
+                //    modalUIObj.transform.SetParent(contentRoot);
                 //}
                 //_modalUIObjs[targetView] = modalUIObj;
                 //modalUIObj.GetComponent<ModalUIManager>().UpdateData(); //too early to call it here anyway
 
-
-                UnityUtils.RemoveAllChildren(modalUIRoot);
+                var contentRoot = modalUICanvas.transform.Find("Content Root");
+                UnityUtils.RemoveAllChildren(contentRoot);
 
                 var modalUIObj = Instantiate(_viewTemplates[targetView]);
-                modalUIObj.transform.SetParent(modalUIRoot, false);
+                modalUIObj.transform.SetParent(contentRoot, false);
             }
 
             StatusLineManager.Instance.Clear();

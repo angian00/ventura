@@ -4,7 +4,7 @@ using Ventura.Unity.Behaviours;
 
 namespace Ventura.Unity.Input
 {
-    public class SkillsInputHandler : ViewInputHandler
+    public class SkillsInputHandler : AbstractViewInputHandler
     {
         public SkillsInputHandler(ViewManager viewManager) : base(viewManager) { }
 

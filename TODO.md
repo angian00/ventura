@@ -2,7 +2,8 @@
 
 ## Current sprint
 - save/load
-
+- keyboard input per confirmation
+- esc con confirmation attiva
 
 ## Bugfixing
 
@@ -14,6 +15,9 @@
 - key handler per inventory view
 - grafica base per skills view
 - refactoring UIManager (unire a MapManager)
+- verificare funzionamento scheduling con altri Actor
+- ridurre al minimo l'uso di Behaviour.Instance
+- rimuovere MouseInputHandler
 
 ## Minutiae
 - padding in popup text inventory item
@@ -21,6 +25,7 @@
 - uniformare messaggi azioni (player vs other actor); grammar?
 
 ## Errands
+- scegliere e documentare key bindings
 - creare progetto github
 - ui design con figma
 ? scouting musica

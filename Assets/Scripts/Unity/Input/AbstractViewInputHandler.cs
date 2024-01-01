@@ -5,11 +5,11 @@ using Ventura.Unity.Behaviours;
 
 namespace Ventura.Unity.Input
 {
-    public abstract class ViewInputHandler
+    public abstract class AbstractViewInputHandler
     {
         protected ViewManager _viewManager;
 
-        protected ViewInputHandler(ViewManager viewManager)
+        protected AbstractViewInputHandler(ViewManager viewManager)
         {
             this._viewManager = viewManager;
         }
@@ -37,30 +37,38 @@ namespace Ventura.Unity.Input
             //------------------- system commands -------------------
             if (key == keyboard.escapeKey)
             {
-                //FUTURE: system command menu
+                //TODO: open system command menu
                 _viewManager.SwitchTo(ViewManager.ViewId.Map);
                 processed = true;
             }
             else if (key == keyboard.nKey)
             {
-                //SystemManager.Instance.ExecuteCommand(SystemManager.Command.New);
                 _viewManager.ShowPopup("New Game", SystemManager.Command.New);
                 processed = true;
             }
             else if (key == keyboard.qKey)
             {
-                //SystemManager.Instance.ExecuteCommand(SystemManager.Command.Exit);
                 _viewManager.ShowPopup("Exit Game", SystemManager.Command.Exit);
                 processed = true;
             }
-            
+            else if (key == keyboard.sKey)
+            {
+                _viewManager.ShowPopup("Save Game", SystemManager.Command.Save);
+                processed = true;
+            }
+            else if (key == keyboard.lKey)
+            {
+                _viewManager.ShowPopup("Load Game", SystemManager.Command.Load);
+                processed = true;
+            }
+
             //------------------- view toggle commands -------------------
             else if (key == keyboard.iKey)
             {
                 _viewManager.Toggle(ViewManager.ViewId.Inventory);
                 processed = true;
             }
-            else if (key == keyboard.sKey)
+            else if (key == keyboard.kKey) //TODO: choose sensible key mapping
             {
                 _viewManager.Toggle(ViewManager.ViewId.Skills);
                 processed = true;

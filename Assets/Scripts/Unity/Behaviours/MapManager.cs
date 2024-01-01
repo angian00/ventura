@@ -1,8 +1,11 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Ventura.GameLogic;
+using Ventura.GameLogic.Actions;
 using Ventura.Unity.Graphics;
 using Ventura.Util;
+using static UnityEditor.PlayerSettings;
 
 
 namespace Ventura.Unity.Behaviours
@@ -56,6 +59,23 @@ namespace Ventura.Unity.Behaviours
             }
         }
 
+        public void OnTileClick(Vector2Int tilePos)
+        {
+            //FUTURE: OnTileClick
+        }
+        
+        public void OnTileMouseEnter(Vector2Int tilePos)
+        {
+            var newAction = new LookAction(_orch, _orch.Player, tilePos);
+            _orch.EnqueuePlayerAction(newAction);
+        }
+
+        public void OnTileMouseExit(Vector2Int tilePos)
+        {
+            var newAction = new LookAction(_orch, _orch.Player, null);
+            _orch.EnqueuePlayerAction(newAction);
+        }
+
 
         private void updateTerrain()
         {
@@ -103,6 +123,8 @@ namespace Ventura.Unity.Behaviours
                     TerrainType terrainType = gameMap.Terrain[x, y];
 
                     var newMapTile = Instantiate(terrainTileTemplate, new Vector3(x, y), Quaternion.identity);
+                    newMapTile.GetComponent<MapTileManager>().mapManager = this;
+                    newMapTile.GetComponent<MapTileManager>().mapPos = new Vector2Int(x, y);
                     newMapTile.GetComponent<SpriteRenderer>().color = GraphicsConfig.TerrainColors[terrainType];
                     newMapTile.transform.SetParent(terrainLayer);
 
@@ -116,7 +138,7 @@ namespace Ventura.Unity.Behaviours
 
             buildSites(gameMap);
 
-            updateCollider(gameMap);
+            //updateCollider(gameMap);
             updateFog(gameMap);
         }
 
