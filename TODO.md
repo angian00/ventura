@@ -2,8 +2,6 @@
 
 ## Current sprint
 - save/load
-- keyboard input per confirmation
-- esc con confirmation attiva
 
 ## Bugfixing
 

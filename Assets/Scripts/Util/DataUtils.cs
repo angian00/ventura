@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
@@ -56,6 +57,12 @@ namespace Ventura.Util
         {
             return Enum.GetName(typeof(T), value);
         }
+
+        public static IEnumerable<T> EnumValues<T>() where T : Enum
+        {
+            return (T[])Enum.GetValues(typeof(T));
+        }
+
     }
 
 }

@@ -50,7 +50,7 @@ namespace Ventura.Unity.Behaviours
             }
             else
             {
-                ViewManager.Instance.NewGame();
+                ViewManager.Instance.Reset();
                 Orchestrator.Instance.NewGame();
             }
         }

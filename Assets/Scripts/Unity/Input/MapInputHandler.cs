@@ -71,6 +71,10 @@ namespace Ventura.Unity.Input
             {
                 newAction = new PickupAction(orch, orch.Player);
             }
+            else if (key == keyboard.escapeKey)
+            {
+                //TODO: open system command menu
+            }
 
             else
             {

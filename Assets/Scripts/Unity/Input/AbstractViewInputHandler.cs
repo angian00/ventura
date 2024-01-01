@@ -35,13 +35,7 @@ namespace Ventura.Unity.Input
             var processed = false;
 
             //------------------- system commands -------------------
-            if (key == keyboard.escapeKey)
-            {
-                //TODO: open system command menu
-                _viewManager.SwitchTo(ViewManager.ViewId.Map);
-                processed = true;
-            }
-            else if (key == keyboard.nKey)
+            if (key == keyboard.nKey)
             {
                 _viewManager.ShowPopup("New Game", SystemManager.Command.New);
                 processed = true;

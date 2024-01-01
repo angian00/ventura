@@ -1511,7 +1511,9 @@ MonoBehaviour:
   skillsUITemplate: {fileID: 3499050730733780068, guid: bae6d2b55a4cb9d4090301427e5379b3, type: 3}
   mapCamera: {fileID: 906978890}
   modalUICamera: {fileID: 544597678}
-  modalUIRoot: {fileID: 2073832799}
+  modalUICanvas: {fileID: 2145704205}
+  popupCamera: {fileID: 1521851764}
+  popupCanvas: {fileID: 232144229}
   popupManager: {fileID: 2123126293}
 --- !u!4 &527047363
 Transform:
@@ -3355,9 +3357,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd2798e78c7b54043bcca7e5d7bbe6b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  viewManager: {fileID: 0}
   titleObj: {fileID: 1660015864}
   popupCamera: {fileID: 1521851764}
   raycaster: {fileID: 232144227}
+  command: 0
 --- !u!1 &2125658805
 GameObject:
   m_ObjectHideFlags: 0

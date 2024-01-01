@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using Ventura.GameLogic;
@@ -22,7 +23,11 @@ namespace Ventura.Unity.Input
             var orch = Orchestrator.Instance;
             GameAction? newAction = null;
 
-            if (key == keyboard.uKey)
+            if (key == keyboard.escapeKey)
+            {
+                _viewManager.SwitchTo(ViewManager.ViewId.Map);
+            }
+            else if (key == keyboard.uKey)
             {
                 //newAction = new UseAction(orch, orch.MapPlayerPos, orch.MapPlayerPos.Inventory.Items[0]); //DEBUG
             }

@@ -11,53 +11,60 @@ namespace Ventura.Unity.Behaviours
 
     public class PopupManager : MonoBehaviour
     {
+        public ViewManager viewManager;
         public TextMeshProUGUI titleObj;
 
         public Camera popupCamera;
         public GraphicRaycaster raycaster;
 
-        private SystemManager.Command _command;
+        public SystemManager.Command command;
 
+        public string Title { set => titleObj.text = value; }
 
-        private void Awake()
-        {
-            hide();
-        }
+        //private void Awake()
+        //{
+        //    hide();
+        //}
 
-        public void ShowPopup(string title, SystemManager.Command command)
-        {
-            titleObj.text = title;
-            _command = command;
+        //public void Show(string title, SystemManager.Command command)
+        //{
+        //    titleObj.text = title;
+        //    _command = command;
 
-            show();
-        }
+        //    show();
+        //}
+
+        //public void Hide()
+        //{
+
+        //}
 
         public void OnYes()
         {
             Debug.Log($"PopupManager.OnYes()");
-            hide();
+            viewManager.HidePopup();
 
-            SystemManager.Instance.ExecuteCommand(_command);
+            SystemManager.Instance.ExecuteCommand(command);
         }
 
         public void OnNo()
         {
             Debug.Log($"PopupManager.OnNo()");
-            hide();
+            viewManager.HidePopup();
         }
 
 
-        private void show()
-        {
-            raycaster.enabled = true;
-            popupCamera.enabled = true;
-        }
+        //private void show()
+        //{
+        //    raycaster.enabled = true;
+        //    popupCamera.enabled = true;
+        //}
 
-        private void hide()
-        {
-            popupCamera.enabled = false;
-            raycaster.enabled = false;
-        }
+        //private void hide()
+        //{
+        //    popupCamera.enabled = false;
+        //    raycaster.enabled = false;
+        //}
 
     }
 }
