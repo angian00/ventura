@@ -1,6 +1,5 @@
 ﻿
 using System.Collections.Generic;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using Ventura.GameLogic.Actions;
 using Ventura.Generators;
@@ -17,14 +16,16 @@ namespace Ventura.GameLogic
         private const int VISIBILITY_RADIUS = 4;
 
 
+        private Dictionary<string, GameMap> _allMaps;
+
+        private MapStack _currMapStack;
+        public MapStack CurrMapStack { get => _currMapStack; }
+
         private GameMap _currMap;
         public GameMap CurrMap { get => _currMap; set => _currMap = value; }
 
-        private World _world;
-        public World World { get => _world; }
-
         private Actor _player;
-        public Actor Player { get => _player; }
+        public Actor Player { get => _player; set => _player = value;  }
 
         private CircularList<Actor> _scheduler = new();
         private Queue<GameAction> _playerActionQueue = new();
@@ -32,7 +33,7 @@ namespace Ventura.GameLogic
 
         public void NewGame()
         {
-            DebugUtils.Log("Orchestrator.NewGame()");
+            DebugUtils.Log("Orchestrator.Reset()");
 
             _player = new Player(this, "AnGian");
             //DEBUG
@@ -40,14 +41,14 @@ namespace Ventura.GameLogic
                 _player.Inventory.AddItem(book);
             //
 
-            _world = new World();
+            _currMapStack = new MapStack();
 
             const int WORLD_MAP_WIDTH = 80;
             const int WORLD_MAP_HEIGHT = 50;
 
             //var startMap = mapDefs["test_map_world"];
             var startMap = MapGenerator.GenerateWildernessMap(WORLD_MAP_WIDTH, WORLD_MAP_HEIGHT);
-            _world.PushMap(startMap, null);
+            _currMapStack.PushMap(startMap.Name, null);
             _currMap = startMap;
             _currMap.Entities.Add(_player);
 
@@ -59,35 +60,21 @@ namespace Ventura.GameLogic
         }
 
 
-        public bool IsTransparent(int x, int y)
+        public void ClearState()
         {
-            if (_currMap == null)
-                return false;
+            _currMapStack = null;
+            _currMap = null;
+            _player = null;
 
-            if (x < 0 || x >= _currMap.Width || y < 0 || y >= _currMap.Height)
-                return false;
-
-            else
-                return _currMap.Terrain[x, y].Transparent;
+            _scheduler = new();
+            _playerActionQueue = new();
         }
 
-
-        public bool IsWalkable(int x, int y)
-        {
-            if (_currMap == null)
-                return false;
-
-            if (x < 0 || x >= _currMap.Width || y < 0 || y >= _currMap.Height)
-                return false;
-
-            else
-                return (_currMap.Terrain[x, y].Walkable) && (_currMap.GetBlockingEntityAt(x, y) == null);
-        }
 
 
         public Vector2Int MoveActorTo(Actor a, int targetX, int targetY)
         {
-            if (IsWalkable(targetX, targetY))
+            if (_currMap.IsWalkable(targetX, targetY))
             {
 
                 a.MoveTo(targetX, targetY);
@@ -130,7 +117,7 @@ namespace Ventura.GameLogic
 
             foreach (var a in _currMap.Entities)
             {
-                if (a is Actor && a.Name != "player")
+                if ((a is Actor) && !(a is Player))
                     _scheduler.Add((Actor)a);
             }
         }
@@ -155,14 +142,13 @@ namespace Ventura.GameLogic
 
             //if (!(target.mapName in mapDefs))
             //    return new ActionResult(false, $"Unknown map: [{TargetSite.mapName}]");
-            //_orch.World.PushMap(mapDefs[target.mapName]);
+            //_orch.CurrMapStack.PushMap(mapDefs[target.mapName]);
 
             var newMap = MapGenerator.GenerateWildernessMap(10, 10, mapName, false);
-            //newMap.Orchestrator = this;
+            _allMaps[newMap.Name] = newMap;
 
-            _world.PushMap(newMap, new Vector2Int(_player.x, _player.y));
+            _currMapStack.PushMap(newMap.Name, new Vector2Int(_player.x, _player.y));
             _currMap = newMap;
-            //_exploredMaps.add(newMap.name);
 
             _currMap.Entities.Add(_player);
             PendingUpdates.Instance.Add(PendingUpdateId.MapTerrain);
@@ -182,8 +168,8 @@ namespace Ventura.GameLogic
             DeactivateActors();
             _currMap.Entities.Remove(_player);
 
-            var previousMapPos = _world.PopMap();
-            _currMap = _world.CurrMap;
+            var previousMapPos = _currMapStack.PopMap();
+            _currMap = _allMaps[_currMapStack.CurrMapName];
 
             _currMap.Entities.Add(_player);
             PendingUpdates.Instance.Add(PendingUpdateId.MapTerrain);

@@ -8,8 +8,8 @@ namespace Ventura.GameLogic.Actions
         protected int _dy;
 
         public Vector2Int TargetXY { get => new Vector2Int(_actor.x + _dx, _actor.y + _dy); }
-        public Actor? TargetActor { get => (_orch.CurrMap == null ? null : _orch.CurrMap.GetActorAt(TargetXY)); }
-        public Site? TargetSite { get => (_orch.CurrMap == null ? null : _orch.CurrMap.GetSiteAt(TargetXY)); }
+        public Actor? TargetActor { get => (_orch.CurrMap == null ? null : _orch.CurrMap.GetAnyEntityAt<Actor>(TargetXY)); }
+        public Site? TargetSite { get => (_orch.CurrMap == null ? null : _orch.CurrMap.GetAnyEntityAt<Site>(TargetXY)); }
 
         public DirectionAction(Orchestrator orch, Actor actor, int dx, int dy) : base(orch, actor)
         {
@@ -58,7 +58,7 @@ namespace Ventura.GameLogic.Actions
             if (!_orch.CurrMap.IsInBounds(TargetXY.x, TargetXY.y))
                 return (new ExitMapAction(_orch, _actor, _dx, _dy)).Perform();
 
-            if (!_orch.IsWalkable(TargetXY.x, TargetXY.y))
+            if (!_orch.CurrMap.IsWalkable(TargetXY.x, TargetXY.y))
                 return new ActionResult(false, "That way is blocked");
 
             _orch.MoveActorTo(_actor, TargetXY.x, TargetXY.y);
@@ -91,11 +91,11 @@ namespace Ventura.GameLogic.Actions
 
         public override ActionResult Perform()
         {
-            if (_orch.World.MapStackSize > 1)
+            if (_orch.CurrMapStack.Count > 1)
             {
                 _orch.ExitMap();
 
-                return new ActionResult(true, $"Returning to {_orch.World.CurrMap.Name}"); //FUTURE: improve message in case _actor != player
+                return new ActionResult(true, $"Returning to {_orch.CurrMapStack.CurrMapName}"); //FUTURE: improve message in case _actor != player
             }
             else
             {

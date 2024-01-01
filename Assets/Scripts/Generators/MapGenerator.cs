@@ -29,7 +29,7 @@ namespace Ventura.Generators
             {
                 int x = Random.Range(0, nRows);
                 int y = Random.Range(0, nCols);
-                if (newMap.Terrain[x, y].Walkable && (newMap.GetEntitiesAt(x, y).Count == 0))
+                if (newMap.Terrain[x, y].Walkable && (newMap.GetAnyEntityAt<Entity>(x, y) == null))
                 {
                     newMap.StartingPos = new Vector2Int(x, y);
                     break;

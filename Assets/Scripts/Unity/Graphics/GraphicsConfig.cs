@@ -23,6 +23,10 @@ namespace Ventura.Unity.Graphics
             { TerrainType.Mountains, fromHex("#DDBEA9") },
         };
 
+        //darkTile: TerrainAspect
+        //lightTile: TerrainAspect
+
+
 
         public static readonly Dictionary<StatusSeverity, Color> StatusLineColors = new()
         {

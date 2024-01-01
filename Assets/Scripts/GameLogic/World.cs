@@ -4,54 +4,45 @@ using UnityEngine;
 
 namespace Ventura.GameLogic
 {
-    public class World
+    public class MapStack
     {
         public record MapStackItem
         {
-            public readonly GameMap map;
+            public readonly string mapName;
             public Vector2Int? pos;
 
-            public MapStackItem(GameMap map, Vector2Int? pos)
+            public MapStackItem(string mapName, Vector2Int? pos)
             {
-                this.map = map;
+                this.mapName = mapName;
                 this.pos = pos;
             }
         }
 
-        private Stack<MapStackItem> _mapStack = new();
-        public int MapStackSize { get => _mapStack.Count; }
+        private Stack<MapStackItem> _data = new();
+        public int Count { get => _data.Count; }
+
+        public string CurrMapName { get => _data.Peek().mapName; }
 
         public List<string> GetStackMapNames()
         {
             var res = new List<string>();
 
-            var en = _mapStack.GetEnumerator();
+            var en = _data.GetEnumerator();
             while (en.MoveNext())
             {
-                res.Add(en.Current.map.Name);
+                res.Add(en.Current.mapName);
             }
 
             return res;
         }
 
-        public GameMap CurrMap
+
+        public void PushMap(string newMapName, Vector2Int? oldPos)
         {
-            get
-            {
-                if (_mapStack.Count == 0)
-                    return null;
+            if (_data.Count > 0)
+                _data.Peek().pos = oldPos;
 
-                return _mapStack.Peek().map;
-            }
-        }
-
-
-        public void PushMap(GameMap newMap, Vector2Int? oldPos)
-        {
-            if (_mapStack.Count > 0)
-                _mapStack.Peek().pos = oldPos;
-
-            this._mapStack.Push(new MapStackItem(newMap, null));
+            this._data.Push(new MapStackItem(newMapName, null));
 
             PendingUpdates.Instance.Add(PendingUpdateId.MapTerrain);
         }
@@ -59,20 +50,20 @@ namespace Ventura.GameLogic
 
         public Vector2Int PopMap()
         {
-            _mapStack.Pop();
-            if (CurrMap == null)
+            _data.Pop();
+            if (_data.Count == 0)
             {
                 throw new GameException(
-                    "Inconsistency in World",
+                    "Inconsistency in CurrMapStack",
                     "this.currMapis is valid",
                     "this.currMapis is null");
             }
 
-            var currPos = _mapStack.Peek().pos;
+            var currPos = _data.Peek().pos;
             if (currPos == null)
             {
                 throw new GameException(
-                    "Inconsistency in World",
+                    "Inconsistency in CurrMapStack",
                     "this.currMap.pos is valid",
                     "this.currMap.pos is null");
             }

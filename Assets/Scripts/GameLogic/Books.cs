@@ -1,5 +1,7 @@
 ﻿
 
+using System;
+using UnityEngine;
 using Ventura.GameLogic.Actions;
 using Ventura.GameLogic.Components;
 using Ventura.Util;
@@ -12,10 +14,13 @@ namespace Ventura.GameLogic
         Greek,
     }
 
-
+    [Serializable]
     public class BookItem : GameItem
     {
+        [SerializeField]
         protected string _title;
+
+        [SerializeField]
         protected string _author;
 
         public override string Label { get => _author == null ? _title : $"{_author} - '{_title}'"; }
@@ -30,9 +35,13 @@ namespace Ventura.GameLogic
     }
 
 
+    [Serializable]
     public class BookConsumable : Consumable
     {
+        [SerializeField]
         private SkillId _skill;
+
+        [SerializeField]
         private int _amount;
 
         public BookConsumable(GameItem parent, SkillId skill, int amount) : base(parent)

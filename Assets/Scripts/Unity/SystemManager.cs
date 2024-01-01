@@ -69,13 +69,25 @@ namespace Ventura.Unity.Behaviours
 
         private void loadGame()
         {
-            DebugUtils.Log("TODO: SystemManager.loadGame()");
+            DebugUtils.Log("Loading Game");
+            Persistence.LoadGame("testSave.json");
+
+            //orch.ClearState();
+
+            //orch.World = loadWorld();
+            //orch.CurrMap = _allMaps[orch.CurrMapStack.CurrMapName];
+            //orch.Player = orch.CurrMap.GetAnyEntity<Player>();
+
+            ViewManager.Instance.Reset();
+            PendingUpdates.Instance.AddAll();
+
+            DebugUtils.Log($"Game successfully loaded");
         }
 
         private void saveGame()
         {
             DebugUtils.Log("Saving Game");
-            Persistence.SaveGame(Orchestrator.Instance, "testSave.json");
+            Persistence.SaveGame("testSave.json");
         }
     }
 }

@@ -9,7 +9,11 @@ namespace Ventura.GameLogic.Components
     public abstract class AI
     {
         protected Orchestrator _orch;
+        public Orchestrator Orchestrator { set => _orch = value; }
+
         protected Actor _parent;
+        public Actor Parent { get => _parent; set => _parent = value; }
+
 
         protected AI(Orchestrator orch, Actor parent)
         {

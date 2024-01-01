@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 namespace Ventura.GameLogic
 {
     public record TerrainType : GameLogicObject
@@ -15,9 +17,6 @@ namespace Ventura.GameLogic
         private bool _transparent;
         public bool Transparent { get => _transparent; }
 
-        //darkTile: TerrainAspect
-        //lightTile: TerrainAspect
-
         public TerrainType(string name, string label, bool walkable, bool transparent)
         {
             this._name = name;
@@ -32,5 +31,21 @@ namespace Ventura.GameLogic
         public static TerrainType Hills2 = new TerrainType("hills2", "Hills", true, true);
         public static TerrainType Mountains = new TerrainType("mountains", "Mountains", true, true);
 
+
+        public static TerrainType FromName(string name)
+        {
+            if (name == "plains1")
+                return Plains1;
+            if (name == "plains2")
+                return Plains2;
+            if (name == "hills1")
+                return Hills1;
+            if (name == "hills2")
+                return Hills2;
+            if (name == "mountains")
+                return Mountains;
+
+            throw new GameException($"Invalid TerrainType name: {name}");
+        }
     }
 }

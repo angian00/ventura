@@ -1,17 +1,22 @@
 ﻿
-
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using UnityEngine;
+using Ventura.Util;
 
 namespace Ventura.GameLogic.Components
 {
+    [Serializable]
     public class Inventory : Container
     {
         protected Actor _parent;
-        public Actor Parent { get { return _parent; } }
+        public Actor Parent { get => _parent; set => _parent = value; }
 
+        [SerializeReference]
         private List<GameItem> _items = new();
 
+        [SerializeField]
         private int _maxSize;
 
         public bool IsFull { get => (_items.Count == _maxSize); }
@@ -54,5 +59,13 @@ namespace Ventura.GameLogic.Components
             _items.Remove(item);
             item.Parent = null;
         }
+
+        public void Dump()
+        {
+            DebugUtils.Log($"maxSize: {_maxSize}");
+            foreach (var gameItem in _items)
+                gameItem.Dump();
+        }
+
     }
 }

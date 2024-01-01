@@ -1,11 +1,14 @@
-﻿using Ventura.GameLogic.Actions;
+﻿using System;
+using Ventura.GameLogic.Actions;
 
 
 namespace Ventura.GameLogic.Components
 {
+    [Serializable]
     public abstract class Consumable
     {
         protected GameItem _parent;
+        public GameItem Parent { set => _parent = value; }
 
         protected Consumable(GameItem parent)
         {

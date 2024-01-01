@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-
+using Ventura.Util;
 
 namespace Ventura.GameLogic
 {
@@ -31,6 +31,12 @@ namespace Ventura.GameLogic
         public void Add(PendingUpdateId updateId)
         {
             _data.Add(updateId);
+        }
+
+        public void AddAll()
+        {
+            foreach (var updateId in DataUtils.EnumValues<PendingUpdateId>())
+                _data.Add(updateId);
         }
 
         public bool Contains(PendingUpdateId updateId)

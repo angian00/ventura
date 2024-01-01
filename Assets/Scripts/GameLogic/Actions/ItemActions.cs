@@ -25,7 +25,7 @@ namespace Ventura.GameLogic.Actions
          */
         public Actor? targetActor
         {
-            get => _targetPos == null ? null : _orch.CurrMap.GetActorAt(((Vector2Int)_targetPos).x, ((Vector2Int)_targetPos).y);
+            get => _targetPos == null ? null : _orch.CurrMap.GetAnyEntityAt<Actor>((Vector2Int)_targetPos);
 
         }
     }
@@ -98,7 +98,7 @@ namespace Ventura.GameLogic.Actions
 
         public override ActionResult Perform()
         {
-            var items = _orch.CurrMap.GetItemsAt(_actor.x, _actor.y);
+            var items = _orch.CurrMap.GetAllEntitiesAt<GameItem>(_actor.x, _actor.y);
             if (items.Count == 0)
                 return new ActionResult(false, "There is nothing here to pick up");
 

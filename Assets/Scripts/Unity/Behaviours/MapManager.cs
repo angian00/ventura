@@ -201,7 +201,7 @@ namespace Ventura.Unity.Behaviours
         {
             //update ui location info
             string locationInfoStr = "";
-            var mapNames = _orch.World.GetStackMapNames();
+            var mapNames = _orch.CurrMapStack.GetStackMapNames();
 
             for (int i = mapNames.Count - 1; i >= 0; i--)
             {

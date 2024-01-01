@@ -9,18 +9,46 @@ namespace Ventura.Util
 {
     public class DataUtils
     {
-        public static int CountValues<T>(T[,] arr, T targetItem)
+        public static int CountValues<T>(T[,] arr2d, T targetElem)
         {
             int res = 0;
 
-            foreach (var item in arr)
+            foreach (var arrElem in arr2d)
             {
-                if (item.Equals(targetItem))
+                if (arrElem.Equals(targetElem))
                     res++;
             }
 
             return res;
         }
+
+
+        public static T[] Flatten<T>(T[,] arr2d)
+        {
+            int w = arr2d.GetLength(0);
+            int h = arr2d.GetLength(1);
+
+            T[] arr1d = new T[w * h];
+
+            for (int j = 0; j < h; j++)
+                for (int i = 0; i < w; i++)
+                    arr1d[j * w + i] = arr2d[i, j];
+
+            return arr1d;
+        }
+
+
+        public static T[,] Unflatten<T>(T[] arr1d, int w, int h)
+        {
+            T[,] arr2d = new T[w, h];
+
+            for (int j = 0; j < h; j++)
+                for (int i = 0; i < w; i++)
+                    arr2d[i, j] = arr1d[j * w + i];
+
+            return arr2d;
+        }
+
 
 
         public static T ChooseWeighted<T>(List<T> values, List<int> weights)

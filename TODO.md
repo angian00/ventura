@@ -2,20 +2,25 @@
 
 ## Current sprint
 - save/load
+- scindere orchestrator in GameState
+- all maps in orchestrator (non solo world stack)
 
 ## Bugfixing
 
 
 ## Improvements
+- non elaborare input se ci sono pending updates
 - pensare logica nomi univoci per Entities
+- dialog scelta nome savefile
 - azioni che non consumano il turno (es. Look)
 + irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
-- key handler per inventory view
+- key handler per inventory view (focus su item)
 - grafica base per skills view
 - refactoring UIManager (unire a MapManager)
 - verificare funzionamento scheduling con altri Actor
 - ridurre al minimo l'uso di Behaviour.Instance
 - rimuovere MouseInputHandler
+- controllare se/quando si possono svuotare i campi aux per la de/serializzazione
 
 ## Minutiae
 - padding in popup text inventory item
@@ -23,8 +28,9 @@
 - uniformare messaggi azioni (player vs other actor); grammar?
 
 ## Errands
-- scegliere e documentare key bindings
 - creare progetto github
+- scegliere e documentare key bindings
+- provare onGUI
 - ui design con figma
 ? scouting musica
 

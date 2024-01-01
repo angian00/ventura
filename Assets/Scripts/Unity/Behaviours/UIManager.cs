@@ -54,11 +54,11 @@ namespace Ventura.Unity.Behaviours
             if (!_orch.CurrMap.Visible[pos.x, pos.y])
                 return "";
 
-            var a = _orch.CurrMap.GetActorAt(pos.x, pos.y);
+            var a = _orch.CurrMap.GetAnyEntityAt<Actor>(pos);
             if (a != null)
                 return a.Name;
 
-            var s = _orch.CurrMap.GetSiteAt(pos.x, pos.y);
+            var s = _orch.CurrMap.GetAnyEntityAt<Site>(pos.x, pos.y);
             if (s != null)
                 return s.Name;
 

@@ -8,7 +8,7 @@ namespace Ventura.GameLogic
         private string expected;
         private string actual;
 
-        public GameException(string message, string expected, string actual)
+        public GameException(string message, string expected="", string actual="")
         {
             this.message = message;
             this.expected = expected;

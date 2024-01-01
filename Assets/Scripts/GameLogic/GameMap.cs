@@ -2,29 +2,41 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Xml;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using Ventura.Util;
 using Random = UnityEngine.Random;
 
 
-#nullable enable
 namespace Ventura.GameLogic
 {
-    public class GameMap : GameLogicObject, Container
+    public class GameMap : GameLogicObject, Container, ISerializationCallbackReceiver
     {
         const bool MAP_DEBUGGING = false;
         //const bool MAP_DEBUGGING = true;
 
+        [SerializeField]
         private string _name;
         public string Name { get => _name; }
 
+        [SerializeField]
         private string _label;
         public string Label { get => _label; }
 
+        [SerializeField]
         private int _width;
         public int Width { get => _width; }
 
+        [SerializeField]
         private int _height;
         public int Height { get => _height; }
+
+        [SerializeField]
+        private Vector2Int _startingPos;
+        public Vector2Int StartingPos { get => _startingPos; set => _startingPos = value; }
+
 
         private TerrainType[,] _terrain;
         public TerrainType[,] Terrain { get => _terrain; }
@@ -34,9 +46,6 @@ namespace Ventura.GameLogic
 
         private bool[,] _explored;
         public bool[,] Explored { get => _explored; }
-
-        private Vector2Int _startingPos;
-        public Vector2Int StartingPos { get => _startingPos; set => _startingPos = value; }
 
         private HashSet<Entity> _entities = new();
         public HashSet<Entity> Entities { get => _entities; }
@@ -70,6 +79,72 @@ namespace Ventura.GameLogic
         { }
 
 
+        /// -------- Custom Serialization -------------------
+
+        [SerializeField]
+        private string[] _auxTerrain;
+
+        [SerializeField]
+        private bool[] _auxExplored;
+
+        [SerializeField]
+        private bool[] _auxVisible;
+
+        [SerializeReference]
+        private List<Entity> _auxEntities;
+
+
+        public void OnBeforeSerialize()
+        {
+            Debug.Log($"OnBeforeSerialize");
+
+            _auxTerrain = new string[_width * _height];
+
+            for (var x = 0; x < _width; x++)
+            {
+                for (var y = 0; y < _height; y++)
+                {
+                    _auxTerrain[x * _height + y] = _terrain[x, y].Name;
+                }
+            }
+
+            _auxVisible = DataUtils.Flatten(_visible);
+            _auxExplored = DataUtils.Flatten(_explored);
+            _auxEntities = new List<Entity>(_entities);
+        }
+
+        public void OnAfterDeserialize()
+        {
+            Debug.Log($"OnAfterDeserialize");
+
+            _terrain = new TerrainType[_width, _height];
+            for (var x = 0; x < _width; x++)
+                for (var y = 0; y < _height; y++)
+                    _terrain[x, y] = TerrainType.FromName(_auxTerrain[x * _height + y]);
+
+
+            _visible = DataUtils.Unflatten(_auxVisible, _width, _height);
+            _explored = DataUtils.Unflatten(_auxExplored, _width, _height);
+            _entities = new HashSet<Entity>(_auxEntities);
+
+            foreach (var e in _entities)
+            {
+                if (e is GameItem)
+                    ((GameItem)e).Parent = this;
+            }    
+        }
+
+        /// ------------------------------------------------------
+        public void DumpEntities()
+        {
+            foreach (var e in _entities)
+            {
+                DebugUtils.Log($"Found entity {e.Name} of type {e.GetType()}");
+                e.Dump();
+            }
+        }
+
+
         private static TerrainType[,] makeDefaultTerrain(int w, int h)
         {
             var terrain = new TerrainType[w, h];
@@ -90,66 +165,66 @@ namespace Ventura.GameLogic
             return (0 <= x && x < _width && 0 <= y && y < _height);
         }
 
-        public Site? GetSiteAt(int x, int y)
+
+        public bool IsWalkable(int x, int y)
+        {
+            return (IsInBounds(x, y) && Terrain[x, y].Walkable && GetBlockingEntityAt(x, y) == null);
+        }
+
+        public T? GetAnyEntityAt<T>(int x, int y) where T: Entity
         {
             foreach (var e in _entities)
             {
                 if ((e.x == x) && (e.y == y) && (e is Site))
-                    return e as Site;
+                    return e as T;
             }
 
             return null;
         }
 
-        public Site? GetSiteAt(Vector2Int pos)
+        public T? GetAnyEntityAt<T>(Vector2Int pos) where T: Entity
         {
-            return GetSiteAt(pos.x, pos.y);
+            return GetAnyEntityAt<T>(pos.x, pos.y);
         }
 
 
-        public Actor? GetActorAt(int x, int y)
+        public ReadOnlyCollection<T> GetAllEntitiesAt<T>(int x, int y) where T: Entity
+        {
+            var result = new List<T>();
+
+            foreach (var e in _entities)
+            {
+                if (e.x == x && e.y == y && e is T)
+                    result.Add((T)e);
+
+            }
+
+            return new ReadOnlyCollection<T>(result);
+        }
+
+
+        public T? GetAnyEntity<T>() where T : Entity
         {
             foreach (var e in _entities)
             {
-                if ((e.x == x) && (e.y == y) && (e is Actor))
-                    return e as Actor;
+                if (e is T)
+                    return (T)e;
             }
 
             return null;
         }
 
-        public Actor? GetActorAt(Vector2Int pos)
+        public ReadOnlyCollection<T> GetAllEntities<T>() where T : Entity
         {
-            return GetActorAt(pos.x, pos.y);
-        }
-
-
-        public List<Entity> GetEntitiesAt(int x, int y)
-        {
-            var result = new List<Entity>();
+            var result = new List<T>();
 
             foreach (var e in _entities)
             {
-                if (e.x == x && e.y == y)
-                    result.Add(e);
-
+                if (e is T)
+                    result.Add((T)e);
             }
 
-            return result;
-        }
-
-        public List<GameItem> GetItemsAt(int x, int y)
-        {
-            var result = new List<GameItem>();
-
-            foreach (var e in _entities)
-            {
-                if (e.x == x && e.y == y && (e is GameItem))
-                    result.Add((GameItem)e);
-
-            }
-
-            return result;
+            return new ReadOnlyCollection<T>(result);
         }
 
 
