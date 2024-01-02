@@ -9,7 +9,6 @@ namespace Ventura.Unity.Input
     {
         public ViewManager viewManager;
 
-
         private Camera? _lastCamera;
         private Vector2? _lastMousePos;
 

@@ -3,8 +3,6 @@ using Ventura.GameLogic.Components;
 using Ventura.Util;
 using UnityEngine;
 using System;
-using System.Collections.Generic;
-using UnityEngine.InputSystem.EnhancedTouch;
 
 namespace Ventura.GameLogic
 {
@@ -55,9 +53,9 @@ namespace Ventura.GameLogic
 
 
     [Serializable]
-    public class Actor : Entity
+    public class Actor : Entity, ISerializationCallbackReceiver
     {
-        protected Orchestrator _orch;
+        [NonSerialized]
         protected AI? _ai;
 
         [SerializeField]
@@ -70,28 +68,23 @@ namespace Ventura.GameLogic
         //private Equipment? _equipment;
 
 
-        public Actor(): base()
-        {
-            _orch = Orchestrator.Instance; //FUTURE: minize singletons
-        }
-
-        public Actor(Orchestrator orch, string name) : base(name, true)
-        {
-            this._orch = orch;
-        }
+        public Actor(string name) : base(name, true) { }
 
         // -------- Custom Serialization -------------------
-        public void OnBeforeSerialize()
+        public virtual void OnBeforeSerialize()
         {
+            DebugUtils.Log($"Actor {_name}.OnBeforeSerialize()");
         }
 
-        public void OnAfterDeserialize()
+        public virtual void OnAfterDeserialize()
         {
+            DebugUtils.Log($"Actor {_name}.OnAfterDeserialize()");
+
+            if (this is Player)
+                _ai = new PlayerAI(this);
+
             if (_ai != null)
-            {
-                _ai.Orchestrator = _orch;
                 _ai.Parent = this;
-            }
 
             if (_inventory != null)
                 _inventory.Parent = this;
@@ -110,12 +103,20 @@ namespace Ventura.GameLogic
                 var a = _ai.ChooseAction();
                 if (a == null)
                     return;
-                //DebugUtils.Log($"Performing ${a.GetType().Name}");
+                DebugUtils.Log($"Performing ${a.GetType().Name}");
 
                 var actionResult = a.Perform();
-                if (actionResult.Reason != null)
-                    StatusLineManager.Instance.Display(actionResult.Reason, 
-                        actionResult.Success ? StatusSeverity.Normal : StatusSeverity.Warning);
+
+                if (actionResult.Success)
+                {
+                    if (actionResult.Reason != null)
+                        StatusLineManager.Instance.Display(actionResult.Reason, StatusSeverity.Normal);
+                }
+                else
+                {
+                    StatusLineManager.Instance.Display(actionResult.Reason, StatusSeverity.Warning);
+                    DebugUtils.Error($"Cannot perform {a.GetType()}: {actionResult.Reason}");
+                }
             }
         }
 
@@ -145,11 +146,9 @@ namespace Ventura.GameLogic
     [Serializable]
     public class Player : Actor
     {
-        public Player() : base() { }
-
-        public Player(Orchestrator orch, string name) : base(orch, name)
+        public Player(string name) : base(name)
         {
-            _ai = new PlayerAI(_orch, this);
+            _ai = new PlayerAI(this);
             _inventory = new Inventory(this, 999);
             _skills = new Skills(this);
         }
@@ -157,7 +156,7 @@ namespace Ventura.GameLogic
         public override void MoveTo(int x, int y)
         {
             base.MoveTo(x, y);
-            PendingUpdates.Instance.Add(PendingUpdateId.MapPlayerPos);
+            Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.MapPlayerPos);
         }
     }
 
@@ -167,6 +166,7 @@ namespace Ventura.GameLogic
         protected Container? _parent;
         public Container Parent { get => _parent; set => _parent = value; }
 
+        [SerializeReference]
         protected Consumable? _consumable;
         public Consumable Consumable { get => _consumable; }
         //protected Equippable? _equippable;

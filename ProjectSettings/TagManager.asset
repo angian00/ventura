@@ -11,7 +11,7 @@ TagManager:
   - Templates
   - Water
   - UI
-  - Modal UI
+  - Secondary UI
   - Map
   - Popup UI
   - 
@@ -56,7 +56,7 @@ TagManager:
   - name: Map UI
     uniqueID: 3356958411
     locked: 0
-  - name: Modal UI
+  - name: Secondary UI
     uniqueID: 2642180855
     locked: 0
   - name: Popup UI

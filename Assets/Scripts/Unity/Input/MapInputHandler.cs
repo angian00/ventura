@@ -4,28 +4,27 @@ using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
 using Ventura.Unity.Behaviours;
 using UnityEngine;
-using System;
+using Ventura.Util;
 
 namespace Ventura.Unity.Input
 {
     public class MapInputHandler : AbstractViewInputHandler
     {
-        private Vector2Int? _lastPos = null;
+        //private Vector2Int? _lastPos = null;
 
         public MapInputHandler(ViewManager viewManager) : base(viewManager) { }
 
 
         public override void OnKeyPressed(KeyControl key)
         {
-            //DebugUtils.Log("MapInputHandler.OnKeyPressed");
+            DebugUtils.Log("MapInputHandler.OnKeyPressed");
 
             if (processCommonKey(key))
                 return;
 
             var keyboard = Keyboard.current;
-            var orch = Orchestrator.Instance;
+            Actor player = Orchestrator.Instance.GameState.Player;
             GameAction? newAction = null;
-
 
             int deltaX = 0;
             int deltaY = 0;
@@ -60,20 +59,20 @@ namespace Ventura.Unity.Input
             }
             if (deltaX != 0 || deltaY != 0)
             {
-                newAction = new BumpAction(orch, orch.Player, deltaX, deltaY);
+                newAction = new BumpAction(player, deltaX, deltaY);
 
             }
             else if (key == keyboard.numpad5Key)
             {
-                newAction = new WaitAction(orch, orch.Player);
+                newAction = new WaitAction(player);
             }
             else if (key == keyboard.gKey)
             {
-                newAction = new PickupAction(orch, orch.Player);
+                newAction = new PickupAction(player);
             }
             else if (key == keyboard.escapeKey)
             {
-                //TODO: open system command menu
+                //TODO: open system _command menu
             }
 
             else
@@ -82,27 +81,27 @@ namespace Ventura.Unity.Input
             }
 
             if (newAction != null)
-                orch.EnqueuePlayerAction(newAction);
+                Orchestrator.Instance.EnqueuePlayerAction(newAction);
         }
 
 
-        public override void OnMouseMove(Vector2 mousePos, Camera camera)
-        {
-            var currPos = getTilePos(mousePos, camera);
-            if (currPos != _lastPos)
-            {
-                _lastPos = currPos;
-                var orch = Orchestrator.Instance;
-                var newAction = new LookAction(orch, orch.Player, currPos);
-                orch.EnqueuePlayerAction(newAction);
-            }
-        }
+        //public override void OnMouseMove(Vector2 mousePos, Camera camera)
+        //{
+        //    var currPos = getTilePos(mousePos, camera);
+        //    if (currPos != _lastPos)
+        //    {
+        //        _lastPos = currPos;
+        //        var orch = Orchestrator.Instance;
+        //        var newAction = new LookAction(orch, orch.Player, currPos);
+        //        orch.EnqueuePlayerAction(newAction);
+        //    }
+        //}
 
-        private Vector2Int? getTilePos(Vector2 mousePos, Camera mapCamera)
-        {
-            var worldMousePos = mapCamera.ScreenToWorldPoint(mousePos);
+        //private Vector2Int? getTilePos(Vector2 mousePos, Camera mapCamera)
+        //{
+        //    var worldMousePos = mapCamera.ScreenToWorldPoint(mousePos);
 
-            return new Vector2Int((int)Math.Round(worldMousePos.x), (int)Math.Round(worldMousePos.y));
-        }
+        //    return new Vector2Int((int)Math.Round(worldMousePos.x), (int)Math.Round(worldMousePos.y));
+        //}
     }
 }

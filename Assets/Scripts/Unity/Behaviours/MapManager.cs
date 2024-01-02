@@ -1,11 +1,10 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
 using Ventura.Unity.Graphics;
 using Ventura.Util;
-using static UnityEditor.PlayerSettings;
 
 
 namespace Ventura.Unity.Behaviours
@@ -34,17 +33,11 @@ namespace Ventura.Unity.Behaviours
 
 
         private GameObject[,] _fogTiles;
-        private Orchestrator _orch;
 
-
-        void Start()
-        {
-            _orch = Orchestrator.Instance;
-        }
 
         void Update()
         {
-            foreach (var pendingType in PendingUpdates.Instance.GetAll())
+            foreach (var pendingType in Orchestrator.Instance.PendingUpdates.GetAll())
             {
                 switch (pendingType)
                 {
@@ -66,14 +59,14 @@ namespace Ventura.Unity.Behaviours
         
         public void OnTileMouseEnter(Vector2Int tilePos)
         {
-            var newAction = new LookAction(_orch, _orch.Player, tilePos);
-            _orch.EnqueuePlayerAction(newAction);
+            var orch = Orchestrator.Instance;
+            orch.EnqueuePlayerAction(new LookAction(orch.GameState.Player, null));
         }
 
         public void OnTileMouseExit(Vector2Int tilePos)
         {
-            var newAction = new LookAction(_orch, _orch.Player, null);
-            _orch.EnqueuePlayerAction(newAction);
+            var orch = Orchestrator.Instance;
+            orch.EnqueuePlayerAction(new LookAction(orch.GameState.Player, null));
         }
 
 
@@ -81,16 +74,18 @@ namespace Ventura.Unity.Behaviours
         {
             DebugUtils.Log("MapManager.updateTerrain()");
 
-            buildTiles(_orch.CurrMap);
-            updateLocationInfo();
+            buildTiles(Orchestrator.Instance.GameState.CurrMap);
+            updateLocationInfo(Orchestrator.Instance.GameState.CurrMapStack.StackMapNames);
         }
 
         private void updatePlayer()
         {
             //GameDebugging.Log("MapManager.updatePlayer()");
 
-            var playerX = _orch.Player.x;
-            var playerY = _orch.Player.y;
+            var gameState = Orchestrator.Instance.GameState;
+
+            var playerX = gameState.Player.x;
+            var playerY = gameState.Player.y;
 
             var targetObjPos = playerObj.transform.position;
             targetObjPos.x = playerX;
@@ -102,7 +97,7 @@ namespace Ventura.Unity.Behaviours
             targetObjPos.y = playerY;
             cameraObj.transform.position = targetObjPos;
 
-            updateFog(_orch.CurrMap);
+            updateFog(gameState.CurrMap);
         }
 
 
@@ -124,7 +119,7 @@ namespace Ventura.Unity.Behaviours
 
                     var newMapTile = Instantiate(terrainTileTemplate, new Vector3(x, y), Quaternion.identity);
                     newMapTile.GetComponent<MapTileManager>().mapManager = this;
-                    newMapTile.GetComponent<MapTileManager>().mapPos = new Vector2Int(x, y);
+                    newMapTile.GetComponent<MapTileManager>().MapPos = new Vector2Int(x, y);
                     newMapTile.GetComponent<SpriteRenderer>().color = GraphicsConfig.TerrainColors[terrainType];
                     newMapTile.transform.SetParent(terrainLayer);
 
@@ -197,17 +192,16 @@ namespace Ventura.Unity.Behaviours
             }
         }
 
-        private void updateLocationInfo()
+        private void updateLocationInfo(List<string> mapStackNames)
         {
             //update ui location info
             string locationInfoStr = "";
-            var mapNames = _orch.CurrMapStack.GetStackMapNames();
 
-            for (int i = mapNames.Count - 1; i >= 0; i--)
+            for (int i = 0; i < mapStackNames.Count; i++)
             {
-                locationInfoStr += mapNames[i];
+                locationInfoStr += mapStackNames[i];
 
-                if (i > 0)
+                if (i < mapStackNames.Count - 1)
                     locationInfoStr += " > ";
             }
 

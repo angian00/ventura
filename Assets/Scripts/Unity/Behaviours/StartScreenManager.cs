@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {

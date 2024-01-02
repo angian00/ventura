@@ -8,10 +8,31 @@ namespace Ventura.GameLogic.Actions
         protected int _dy;
 
         public Vector2Int TargetXY { get => new Vector2Int(_actor.x + _dx, _actor.y + _dy); }
-        public Actor? TargetActor { get => (_orch.CurrMap == null ? null : _orch.CurrMap.GetAnyEntityAt<Actor>(TargetXY)); }
-        public Site? TargetSite { get => (_orch.CurrMap == null ? null : _orch.CurrMap.GetAnyEntityAt<Site>(TargetXY)); }
+        public Actor? TargetActor
+        {
+            get
+            {
+                var currMap = Orchestrator.Instance.GameState.CurrMap;
+                if (currMap == null)
+                    return null;
 
-        public DirectionAction(Orchestrator orch, Actor actor, int dx, int dy) : base(orch, actor)
+                return currMap.GetAnyEntityAt<Actor>(TargetXY);
+            }
+        }
+
+        public Site? TargetSite
+        {
+            get
+            {
+                var currMap = Orchestrator.Instance.GameState.CurrMap;
+                if (currMap == null)
+                    return null;
+
+                return currMap.GetAnyEntityAt<Site>(TargetXY);
+            }
+        }
+
+        public DirectionAction(Actor actor, int dx, int dy) : base(actor)
         {
             this._dx = dx;
             this._dy = dy;
@@ -21,24 +42,24 @@ namespace Ventura.GameLogic.Actions
 
     public class BumpAction : DirectionAction
     {
-        public BumpAction(Orchestrator orch, Actor actor, int dx, int dy) : base(orch, actor, dx, dy) { }
+        public BumpAction(Actor actor, int dx, int dy) : base(actor, dx, dy) { }
 
         public override ActionResult Perform()
         {
             if (TargetActor != null)
-                return (new MeleeAction(_orch, _actor, _dx, _dy)).Perform();
+                return (new MeleeAction(_actor, _dx, _dy)).Perform();
 
             else if (TargetSite != null)
-                return (new EnterMapAction(_orch, _actor, _dx, _dy)).Perform();
+                return (new EnterMapAction(_actor, _dx, _dy)).Perform();
 
             else
-                return (new MovementAction(_orch, _actor, _dx, _dy)).Perform();
+                return (new MovementAction(_actor, _dx, _dy)).Perform();
         }
     }
 
     public class MeleeAction : DirectionAction
     {
-        public MeleeAction(Orchestrator orch, Actor actor, int dx, int dy) : base(orch, actor, dx, dy) { }
+        public MeleeAction(Actor actor, int dx, int dy) : base(actor, dx, dy) { }
 
         public override ActionResult Perform()
         {
@@ -48,20 +69,23 @@ namespace Ventura.GameLogic.Actions
 
     public class MovementAction : DirectionAction
     {
-        public MovementAction(Orchestrator orch, Actor actor, int dx, int dy) : base(orch, actor, dx, dy) { }
+        public MovementAction(Actor actor, int dx, int dy) : base(actor, dx, dy) { }
 
         public override ActionResult Perform()
         {
-            if (_orch.CurrMap == null)
+            var gameState = Orchestrator.Instance.GameState;
+            var currMap = gameState.CurrMap;
+
+            if (currMap == null)
                 return new ActionResult(false, "Invalid map");
 
-            if (!_orch.CurrMap.IsInBounds(TargetXY.x, TargetXY.y))
-                return (new ExitMapAction(_orch, _actor, _dx, _dy)).Perform();
+            if (!currMap.IsInBounds(TargetXY.x, TargetXY.y))
+                return (new ExitMapAction(_actor, _dx, _dy)).Perform();
 
-            if (!_orch.CurrMap.IsWalkable(TargetXY.x, TargetXY.y))
+            if (!currMap.IsWalkable(TargetXY.x, TargetXY.y))
                 return new ActionResult(false, "That way is blocked");
 
-            _orch.MoveActorTo(_actor, TargetXY.x, TargetXY.y);
+            gameState.MoveActorTo(_actor, TargetXY.x, TargetXY.y);
 
             return new ActionResult(true);
         }
@@ -69,17 +93,18 @@ namespace Ventura.GameLogic.Actions
 
     public class EnterMapAction : DirectionAction
     {
-        public EnterMapAction(Orchestrator orch, Actor actor, int dx, int dy) : base(orch, actor, dx, dy) { }
+        public EnterMapAction(Actor actor, int dx, int dy) : base(actor, dx, dy) { }
 
         public override ActionResult Perform()
         {
+            var gameState = Orchestrator.Instance.GameState;
+
             var targetSite = this.TargetSite;
             if (targetSite == null)
                 return new ActionResult(false, "No site to enter");
 
-            _orch.MoveActorTo(_actor, TargetXY.x, TargetXY.y);
-
-            _orch.EnterMap(targetSite.Name);
+            gameState.MoveActorTo(_actor, TargetXY.x, TargetXY.y);
+            gameState.EnterMap(targetSite.Name);
 
             return new ActionResult(true, $"Entering {targetSite.Name}"); //FUTURE: improve message in case _actor != player
         }
@@ -87,15 +112,16 @@ namespace Ventura.GameLogic.Actions
 
     public class ExitMapAction : DirectionAction
     {
-        public ExitMapAction(Orchestrator orch, Actor actor, int dx, int dy) : base(orch, actor, dx, dy) { }
+        public ExitMapAction(Actor actor, int dx, int dy) : base(actor, dx, dy) { }
 
         public override ActionResult Perform()
         {
-            if (_orch.CurrMapStack.Count > 1)
+            var gameState = Orchestrator.Instance.GameState;
+            if (gameState.CurrMapStack.Count > 1)
             {
-                _orch.ExitMap();
+                gameState.ExitMap();
 
-                return new ActionResult(true, $"Returning to {_orch.CurrMapStack.CurrMapName}"); //FUTURE: improve message in case _actor != player
+                return new ActionResult(true, $"Returning to {gameState.CurrMapStack.CurrMapName}"); //FUTURE: improve message in case _actor != player
             }
             else
             {

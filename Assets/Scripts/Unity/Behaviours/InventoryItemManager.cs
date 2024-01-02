@@ -1,9 +1,9 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Ventura.GameLogic;
-using Ventura.GameLogic.Actions;
 using Ventura.Unity.Graphics;
 
 namespace Ventura.Unity.Behaviours
@@ -11,8 +11,11 @@ namespace Ventura.Unity.Behaviours
 
     public class InventoryItemManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
+        [NonSerialized]
+        private GameItem _gameItem;
+        public GameItem GameItem { set { _gameItem = value; } }
+
         public InventoryUIManager inventoryManager;
-        public GameItem gameItem;
 
         public Image thumbnail;
         public GameObject labelPanel;
@@ -20,8 +23,8 @@ namespace Ventura.Unity.Behaviours
 
         void Start()
         {
-            thumbnail.sprite = SpriteCache.Instance.GetSprite(gameItem);
-            labelText.text = gameItem.Label;
+            thumbnail.sprite = SpriteCache.Instance.GetSprite(_gameItem);
+            labelText.text = _gameItem.Label;
 
             labelPanel.SetActive(false);
         }
@@ -30,7 +33,7 @@ namespace Ventura.Unity.Behaviours
         public void OnButtonClick()
         {
             //Debug.Log($"InventoryItemManager.OnButtonClick; gameItem.Name: {gameItem.Name}");
-            inventoryManager.OnItemClick(gameItem);
+            inventoryManager.OnItemClick(_gameItem);
         }
 
 

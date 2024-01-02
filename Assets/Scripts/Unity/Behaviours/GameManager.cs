@@ -1,6 +1,5 @@
 using UnityEngine;
 using Ventura.GameLogic;
-using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
@@ -10,18 +9,14 @@ namespace Ventura.Unity.Behaviours
         public static GameManager Instance { get => _instance; }
 
 
-        private Orchestrator _orch;
-
         void Awake()
         {
             _instance = this;
-
-            _orch = Orchestrator.Instance;
-            _orch.NewGame();
         }
 
         void Start()
         {
+            SystemManager.Instance.ExecuteCommand(SystemManager.Command.New);
             StatusLineManager.Instance.Display("Welcome, adventurer!");
         }
 
@@ -35,12 +30,12 @@ namespace Ventura.Unity.Behaviours
             //    (2) <other MonoBehaviors>.Update  --> read PendingUpdates
             //    (3) GameManager.LateUpdate        --> clear PendingUpdates
 
-            _orch.ProcessTurn();
+            Orchestrator.Instance.ProcessTurn();
         }
 
         void LateUpdate()
         {
-            PendingUpdates.Instance.Clear();
+            Orchestrator.Instance.PendingUpdates.Clear();
         }
     }
 }

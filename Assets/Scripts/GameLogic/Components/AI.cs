@@ -8,16 +8,12 @@ namespace Ventura.GameLogic.Components
 {
     public abstract class AI
     {
-        protected Orchestrator _orch;
-        public Orchestrator Orchestrator { set => _orch = value; }
-
         protected Actor _parent;
         public Actor Parent { get => _parent; set => _parent = value; }
 
 
-        protected AI(Orchestrator orch, Actor parent)
+        protected AI(Actor parent)
         {
-            this._orch = orch;
             this._parent = parent;
         }
 
@@ -25,9 +21,8 @@ namespace Ventura.GameLogic.Components
          * Compute and return a path to the target position.
          * If there is no valid path then returns an empty list.
          */
-        protected List<Vector2Int> GetPathTo(int destX, int destY)
+        protected List<Vector2Int> GetPathTo(GameMap targetMap, int destX, int destY)
         {
-            var targetMap = _orch.CurrMap;
             //var walkables = new bool[,]();
 
             for (var x = 0; x < targetMap.Width; x++)
@@ -98,29 +93,33 @@ namespace Ventura.GameLogic.Components
     {
         private List<Vector2Int> _path = new();
 
-        public EnemyAI(Orchestrator orch, Actor parent) : base(orch, parent) { }
+        public EnemyAI(Actor parent) : base(parent) { }
 
 
         public override GameAction? ChooseAction()
         {
             DebugUtils.Log("EnemyAI.chooseAction");
 
-            var target = _orch.Player;
+            var gameState = Orchestrator.Instance.GameState;
+
+            var target = gameState.Player;
+            var gameMap = gameState.CurrMap;
+
             var dx = target.x - _parent.y;
             var dy = target.y - _parent.y;
 
             var distance = Math.Max(Math.Abs(dx), Math.Abs(dy));
 
 
-            if (_orch.CurrMap.Visible[_parent.x, _parent.y])
+            if (gameMap.Visible[_parent.x, _parent.y])
             {
                 //if monster is visible to player, 
                 //then player is visible to monster
                 if (distance <= 1)
-                    return new MeleeAction(_orch, _parent, dx, dy);
+                    return new MeleeAction(_parent, dx, dy);
 
 
-                _path = GetPathTo(target.x, target.y);
+                _path = GetPathTo(gameMap, target.x, target.y);
             }
 
             if (_path.Count > 0)
@@ -129,21 +128,21 @@ namespace Ventura.GameLogic.Components
                 _path.RemoveAt(0);
 
                 DebugUtils.Log("EnemyAI chose MovementAction");
-                return new MovementAction(_orch, _parent, dest.x - _parent.x, dest.y - _parent.y);
+                return new MovementAction(_parent, dest.x - _parent.x, dest.y - _parent.y);
             }
 
-            return new WaitAction(_orch, _parent);
+            return new WaitAction(_parent);
         }
     }
 
 
     public class PlayerAI : AI
     {
-        public PlayerAI(Orchestrator orch, Actor parent) : base(orch, parent) { }
+        public PlayerAI(Actor parent) : base(parent) { }
 
         public override GameAction? ChooseAction()
         {
-            return _orch.DequeuePlayerAction();
+            return Orchestrator.Instance.DequeuePlayerAction();
         }
 
     }

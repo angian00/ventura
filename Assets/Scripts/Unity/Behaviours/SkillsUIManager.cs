@@ -1,4 +1,5 @@
 
+using System;
 using TMPro;
 using UnityEngine;
 using Ventura.GameLogic;
@@ -7,34 +8,39 @@ using Ventura.Util;
 namespace Ventura.Unity.Behaviours
 {
 
-    public class SkillsUIManager : MonoBehaviour
+    public class SkillsUIManager : MonoBehaviour, SecondaryUIManager
     {
-        private Orchestrator _orch;
-        private TextMeshProUGUI _debugText;
+        [NonSerialized]
+        private Player _playerData;
+        public Player PlayerData { set => _playerData = value; }
+
+        public TextMeshProUGUI _debugText;
+
 
         void Start()
         {
-            _orch = Orchestrator.Instance;
-            _debugText = transform.Find("Debug Text").GetComponent<TextMeshProUGUI>();
-
-            updateData();
+            updateView();
         }
 
-        private void updateData()
+
+        void Update()
         {
-            var skills = _orch.Player.Skills;
-            if (skills == null)
-            {
-                DebugUtils.Error("No Skills component found in player");
-                return;
-            }
+            //if (Orchestrator.Instance.PendingUpdates.Contains(PendingUpdateId.Inventory))
+            //    updateView();
+        }
+
+
+        private void updateView()
+        {
+            var skillsData = _playerData.Skills;
+            Debug.Assert(skillsData != null);
 
             var msg = "";
-            foreach (var skillId in skills.SkillIds)
+            foreach (var skillId in skillsData.SkillIds)
             {
                 DebugUtils.Log($"Found in skills: {skillId}");
 
-                msg += $"{skillId}: {skills.GetSkillValue(skillId)} \n";
+                msg += $"{skillId}: {skillsData.GetSkillValue(skillId)} \n";
                 msg += "\n";
             }
 

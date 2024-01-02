@@ -8,7 +8,7 @@ using Ventura.Util;
 namespace Ventura.GameLogic.Components
 {
     [Serializable]
-    public class Inventory : Container
+    public class Inventory : Container, ISerializationCallbackReceiver
     {
         protected Actor _parent;
         public Actor Parent { get => _parent; set => _parent = value; }
@@ -27,6 +27,21 @@ namespace Ventura.GameLogic.Components
             _maxSize = maxSize;
         }
 
+        // -------- Custom Serialization -------------------
+        public virtual void OnBeforeSerialize()
+        {
+
+        }
+
+        public virtual void OnAfterDeserialize()
+        {
+            foreach (var gameItem in _items)
+            {
+                gameItem.Parent = this;
+            }
+        }
+
+
         public ReadOnlyCollection<GameItem> Items { get => new ReadOnlyCollection<GameItem>(_items); }
 
         public bool ContainsItem(GameItem item)
@@ -44,17 +59,13 @@ namespace Ventura.GameLogic.Components
 
             item.Parent = this;
             if (_parent is Player)
-            {
-                PendingUpdates.Instance.Add(PendingUpdateId.Inventory);
-            }
+                Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.Inventory);
         }
 
         public void RemoveItem(GameItem item)
         {
             if (_parent is Player)
-            {
-                PendingUpdates.Instance.Add(PendingUpdateId.Inventory);
-            }
+                Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.Inventory);
 
             _items.Remove(item);
             item.Parent = null;

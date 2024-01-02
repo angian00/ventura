@@ -24,7 +24,7 @@ namespace Ventura.Generators
             if (hasSites)
                 addSites(newMap, 8);
 
-            //choose starting pos on a empty square
+            //choose starting lastPos on a empty square
             while (true)
             {
                 int x = Random.Range(0, nRows);

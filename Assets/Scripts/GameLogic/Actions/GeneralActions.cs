@@ -3,7 +3,6 @@ using Ventura.Unity.Behaviours;
 
 namespace Ventura.GameLogic.Actions
 {
-#nullable enable
     public record ActionResult
     {
         private bool _success;
@@ -26,11 +25,8 @@ namespace Ventura.GameLogic.Actions
         protected Actor _actor;
         public Actor Actor { get => _actor; }
 
-        protected Orchestrator _orch;
-
-        protected GameAction(Orchestrator orch, Actor actor)
+        protected GameAction(Actor actor)
         {
-            this._orch = orch;
             this._actor = actor;
         }
 
@@ -40,7 +36,7 @@ namespace Ventura.GameLogic.Actions
 
     public class WaitAction : GameAction
     {
-        public WaitAction(Orchestrator orch, Actor actor) : base(orch, actor) { }
+        public WaitAction(Actor actor) : base(actor) { }
 
         public override ActionResult Perform()
         {
@@ -54,17 +50,14 @@ namespace Ventura.GameLogic.Actions
         protected Vector2Int? _tilePos;
 
         //CHECK if it can merged with DirectionAction
-        public LookAction(Orchestrator orch, Actor actor, Vector2Int? tilePos) : base(orch, actor) 
+        public LookAction(Actor actor, Vector2Int? tilePos) : base(actor) 
         {
             _tilePos = tilePos;
         }
 
         public override ActionResult Perform()
         {
-            if (_orch.CurrMap == null)
-                return new ActionResult(false, "Invalid map");
-
-            UIManager.Instance.UpdateTileInfo(_tilePos); //FIXME: recfactor
+            UIManager.Instance.UpdateTileInfo(Orchestrator.Instance.GameState.CurrMap, _tilePos); //FIXME: refactor
 
             return new ActionResult(true);
         }

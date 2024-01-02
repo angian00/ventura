@@ -11,12 +11,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - book title generator
 - book author field
 - system commands (New Game, Exit Game) with confirmation popup
-
+- saving and loading games
 
 ### Changed
 - Tidied up Awake and Start for MonoBehaviours
 - Refactored input handlers to be more selective
 - Used camera stack to switch between views, popup
+- Extracted GameState from Orchestrator
 
 ### Fixed
 - game exit on Q keypress

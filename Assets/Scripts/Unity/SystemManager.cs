@@ -1,9 +1,11 @@
-using UnityEngine;
 using Ventura.GameLogic;
 using UnityEngine.SceneManagement;
 using Ventura.Util;
+using System.IO;
+using UnityEngine;
+using Ventura.Unity.Behaviours;
 
-namespace Ventura.Unity.Behaviours
+namespace Ventura.Unity
 {
     public class SystemManager
     {
@@ -19,6 +21,8 @@ namespace Ventura.Unity.Behaviours
         public static SystemManager Instance { get => _instance; }
 
         public const string GAME_SCENE_NAME = "Game Scene";
+        private const string savegameFile = "testSave.json";
+
 
         private SystemManager() { }
 
@@ -50,8 +54,13 @@ namespace Ventura.Unity.Behaviours
             }
             else
             {
+                var gameState = new GameState();
+                gameState.NewGame();
+                Orchestrator.Instance.GameState = gameState;
+
                 ViewManager.Instance.Reset();
-                Orchestrator.Instance.NewGame();
+                Orchestrator.Instance.PendingUpdates.AddAll();
+                DebugUtils.Log($"Game initialized");
             }
         }
 
@@ -69,25 +78,32 @@ namespace Ventura.Unity.Behaviours
 
         private void loadGame()
         {
-            DebugUtils.Log("Loading Game");
-            Persistence.LoadGame("testSave.json");
+            var fullPath = Application.persistentDataPath + "/" + savegameFile;
+            DebugUtils.Log($"Loading game from {fullPath}");
 
-            //orch.ClearState();
+            var orch = Orchestrator.Instance;
+            orch.Suspend();
 
-            //orch.World = loadWorld();
-            //orch.CurrMap = _allMaps[orch.CurrMapStack.CurrMapName];
-            //orch.Player = orch.CurrMap.GetAnyEntity<Player>();
+            var jsonStr = File.ReadAllText(fullPath);
+            orch.GameState = JsonUtility.FromJson<GameState>(jsonStr);
+            orch.Resume();
 
+            orch.PendingUpdates.AddAll();
             ViewManager.Instance.Reset();
-            PendingUpdates.Instance.AddAll();
 
-            DebugUtils.Log($"Game successfully loaded");
+            DebugUtils.Log($"Game loaded");
         }
 
         private void saveGame()
         {
-            DebugUtils.Log("Saving Game");
-            Persistence.SaveGame("testSave.json");
+            var fullPath = Application.persistentDataPath + "/" + savegameFile;
+            DebugUtils.Log($"Saving game to {fullPath}");
+
+            var gameState = Orchestrator.Instance.GameState;
+            string jsonStr = JsonUtility.ToJson(gameState);
+            File.WriteAllText(fullPath, jsonStr);
+
+            DebugUtils.Log("Game saved");
         }
     }
 }

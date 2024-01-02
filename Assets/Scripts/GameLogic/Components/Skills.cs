@@ -21,7 +21,7 @@ namespace Ventura.GameLogic.Components
             this._parent = parent;
         }
 
-        /// -------- Custom Serialization -------------------
+        // -------- Custom Serialization -------------------
         
         [SerializeField]
         private List<SkillId> __auxSkillKeys;
@@ -50,7 +50,7 @@ namespace Ventura.GameLogic.Components
                 _skillValues.Add(__auxSkillKeys[i], __auxSkillValues[i]);
         }
 
-        /// -------------------------------------------------
+        // -------------------------------------------------
 
         public ReadOnlyCollection<SkillId> SkillIds { get => new ReadOnlyCollection<SkillId>(_skillValues.Keys.ToList()); }
 

@@ -2,20 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Xml;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Ventura.Util;
 using Random = UnityEngine.Random;
 
 
 namespace Ventura.GameLogic
 {
+    [Serializable]
     public class GameMap : GameLogicObject, Container, ISerializationCallbackReceiver
     {
         const bool MAP_DEBUGGING = false;
         //const bool MAP_DEBUGGING = true;
+
+        const float VISIBILITY_RADIUS = 4.0f;
 
         [SerializeField]
         private string _name;
@@ -96,7 +96,7 @@ namespace Ventura.GameLogic
 
         public void OnBeforeSerialize()
         {
-            Debug.Log($"OnBeforeSerialize");
+            Debug.Log($"GameMap.OnBeforeSerialize()");
 
             _auxTerrain = new string[_width * _height];
 
@@ -115,7 +115,7 @@ namespace Ventura.GameLogic
 
         public void OnAfterDeserialize()
         {
-            Debug.Log($"OnAfterDeserialize");
+            Debug.Log($"GameMap.OnAfterDeserialize()");
 
             _terrain = new TerrainType[_width, _height];
             for (var x = 0; x < _width; x++)
@@ -135,6 +135,8 @@ namespace Ventura.GameLogic
         }
 
         /// ------------------------------------------------------
+        
+        
         public void DumpEntities()
         {
             foreach (var e in _entities)
@@ -256,19 +258,18 @@ namespace Ventura.GameLogic
         }
 
 
-        public void UpdateExploration(int targetX, int targetY, float r)
+        public void UpdateExploration(int targetX, int targetY)
         {
+            var r = VISIBILITY_RADIUS;
+
             //GameDebugging.Log("UpdateExploration");
             //fov.compute(this.player.x, this.player.y, lightRadius, this.setFov.bind(this))
 
             //reset visible
             for (var x = 0; x < _width; x++)
-            {
                 for (var y = 0; y < _height; y++)
-                {
                     _visible[x, y] = false;
-                }
-            }
+
 
             //TODO: use Unity line-of-sight algorithm
             var startX = (int)Math.Max(targetX - r, 0);
@@ -313,13 +314,13 @@ namespace Ventura.GameLogic
         public void AddItem(GameItem item)
         {
             _entities.Add(item);
-            PendingUpdates.Instance.Add(PendingUpdateId.MapItems);
+            Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.MapItems);
         }
 
         public void RemoveItem(GameItem item)
         {
             _entities.Remove(item);
-            PendingUpdates.Instance.Add(PendingUpdateId.MapItems);
+            Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.MapItems);
         }
     }
 }

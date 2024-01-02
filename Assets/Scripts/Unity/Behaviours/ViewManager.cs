@@ -4,9 +4,7 @@ using UnityEngine;
 using Ventura.Util;
 using Ventura.Unity.Input;
 using UnityEngine.UI;
-using System;
-using System.Linq;
-using UnityEngine.UIElements;
+using Ventura.GameLogic;
 
 namespace Ventura.Unity.Behaviours
 {
@@ -28,20 +26,19 @@ namespace Ventura.Unity.Behaviours
         }
 
         public Camera mapCamera;
-        public Camera modalUICamera;
-        public Canvas modalUICanvas;
+        public Camera secondaryUICamera;
+        public Canvas secondaryUICanvas;
         public Camera popupCamera;
         public Canvas popupCanvas;
 
         public PopupManager popupManager;
 
-        private Dictionary<ViewId, GameObject> _viewTemplates;
-        //private Dictionary<ViewId, GameObject> _modalUIObjs = new();
+        private Dictionary<ViewId, GameObject> _secondaryUITemplates;
 
         private ViewId? _activeView;
         private ViewId? _mainView;
 
-        public Camera CurrCamera { get => modalUICamera.enabled ? modalUICamera : mapCamera; }
+        public Camera CurrCamera { get => secondaryUICamera.enabled ? secondaryUICamera : mapCamera; }
 
         private Dictionary<ViewId, AbstractViewInputHandler> _inputHandlers = new();
         public AbstractViewInputHandler? CurrInputHandler { get => _activeView == null ? null : _inputHandlers[(ViewId)_activeView]; }
@@ -56,7 +53,7 @@ namespace Ventura.Unity.Behaviours
             _inputHandlers.Add(ViewId.Skills, new SkillsInputHandler(this));
             _inputHandlers.Add(ViewId.Popup, new PopupInputHandler(this, popupManager));
 
-            _viewTemplates = new()
+            _secondaryUITemplates = new()
             {
                 { ViewId.Inventory, inventoryUITemplate },
                 { ViewId.Skills,    skillsUITemplate    },
@@ -107,7 +104,7 @@ namespace Ventura.Unity.Behaviours
         public void ShowPopup(string title, SystemManager.Command command)
         {
             popupManager.Title = title;
-            popupManager.command = command;
+            popupManager.Command = command;
             showView(ViewId.Popup);
 
             _activeView = ViewId.Popup;
@@ -134,17 +131,18 @@ namespace Ventura.Unity.Behaviours
             }
             else
             {
-                modalUICamera.enabled = true;
-                modalUICanvas.GetComponent<GraphicRaycaster>().enabled = true;
+                secondaryUICamera.enabled = true;
+                secondaryUICanvas.GetComponent<GraphicRaycaster>().enabled = true;
 
                 //instantiate specific secondary ui
-                //FUTURE: reuse old _modalUIObjs
+                //FUTURE: reuse old _playerUIObjs
 
-                var contentRoot = modalUICanvas.transform.Find("Content Root");
+                var contentRoot = secondaryUICanvas.transform.Find("Content Root");
                 UnityUtils.RemoveAllChildren(contentRoot);
 
-                var modalUIObj = Instantiate(_viewTemplates[viewId]);
-                modalUIObj.transform.SetParent(contentRoot, false);
+                var secondaryUIObj = Instantiate(_secondaryUITemplates[viewId]);
+                secondaryUIObj.GetComponent<SecondaryUIManager>().PlayerData = Orchestrator.Instance.GameState.Player;
+                secondaryUIObj.transform.SetParent(contentRoot, false);
             }
 
         }
@@ -164,8 +162,8 @@ namespace Ventura.Unity.Behaviours
             }
             else
             {
-                modalUICamera.enabled = false;
-                modalUICanvas.GetComponent<GraphicRaycaster>().enabled = false;
+                secondaryUICamera.enabled = false;
+                secondaryUICanvas.GetComponent<GraphicRaycaster>().enabled = false;
             }
         }
     }

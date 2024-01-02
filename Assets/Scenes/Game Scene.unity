@@ -1221,7 +1221,7 @@ GameObject:
   m_Component:
   - component: {fileID: 340364563}
   m_Layer: 0
-  m_Name: ---- Modal UI ----
+  m_Name: ---- Secondary UI ----
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1510,8 +1510,8 @@ MonoBehaviour:
   inventoryUITemplate: {fileID: 3499050730733780068, guid: 1da19f82b36ec9741b1434283c579405, type: 3}
   skillsUITemplate: {fileID: 3499050730733780068, guid: bae6d2b55a4cb9d4090301427e5379b3, type: 3}
   mapCamera: {fileID: 906978890}
-  modalUICamera: {fileID: 544597678}
-  modalUICanvas: {fileID: 2145704205}
+  secondaryUICamera: {fileID: 544597678}
+  secondaryUICanvas: {fileID: 2145704205}
   popupCamera: {fileID: 1521851764}
   popupCanvas: {fileID: 232144229}
   popupManager: {fileID: 2123126293}
@@ -1574,7 +1574,7 @@ GameObject:
   - component: {fileID: 544597680}
   - component: {fileID: 544597682}
   m_Layer: 6
-  m_Name: Modal UI Camera
+  m_Name: Secondary UI Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3361,7 +3361,6 @@ MonoBehaviour:
   titleObj: {fileID: 1660015864}
   popupCamera: {fileID: 1521851764}
   raycaster: {fileID: 232144227}
-  command: 0
 --- !u!1 &2125658805
 GameObject:
   m_ObjectHideFlags: 0
@@ -3459,7 +3458,7 @@ GameObject:
   - component: {fileID: 2145704204}
   - component: {fileID: 2145704203}
   m_Layer: 6
-  m_Name: Modal UI Canvas
+  m_Name: Secondary UI Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

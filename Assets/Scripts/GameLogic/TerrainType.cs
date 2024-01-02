@@ -1,7 +1,4 @@
-﻿
-using UnityEngine;
-
-namespace Ventura.GameLogic
+﻿namespace Ventura.GameLogic
 {
     public record TerrainType : GameLogicObject
     {

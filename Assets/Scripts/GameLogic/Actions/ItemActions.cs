@@ -9,7 +9,7 @@ namespace Ventura.GameLogic.Actions
         protected GameItem _item;
         protected Vector2Int? _targetPos;
 
-        public ItemAction(Orchestrator orch, Actor actor, GameItem item, Vector2Int? targetPos) : base(orch, actor)
+        public ItemAction(Actor actor, GameItem item, Vector2Int? targetPos) : base(actor)
         {
             this._item = item;
 
@@ -17,23 +17,18 @@ namespace Ventura.GameLogic.Actions
                 this._targetPos = targetPos;
             else
                 this._targetPos = new Vector2Int(actor.x, actor.y);
-
         }
 
-        /** 
-         * Return the actor at this actions destination
-         */
-        public Actor? targetActor
+        public Actor? TargetActor
         {
-            get => _targetPos == null ? null : _orch.CurrMap.GetAnyEntityAt<Actor>((Vector2Int)_targetPos);
-
+            get => _targetPos == null ? null : Orchestrator.Instance.GameState.CurrMap.GetAnyEntityAt<Actor>((Vector2Int)_targetPos);
         }
     }
 
 
     public class DropAction : ItemAction
     {
-        public DropAction(Orchestrator _orch, Actor actor, GameItem item, Vector2Int? targetPos) : base(_orch, actor, item, targetPos) { }
+        public DropAction(Actor actor, GameItem item, Vector2Int? targetPos) : base(actor, item, targetPos) { }
 
         public override ActionResult Perform()
         {
@@ -51,7 +46,7 @@ namespace Ventura.GameLogic.Actions
 
     public class UseAction : ItemAction
     {
-        public UseAction(Orchestrator orch, Actor actor, GameItem item, Vector2Int? targetPos = null) : base(orch, actor, item, targetPos) { }
+        public UseAction(Actor actor, GameItem item, Vector2Int? targetPos = null) : base(actor, item, targetPos) { }
 
         public override ActionResult Perform()
         {
@@ -67,7 +62,7 @@ namespace Ventura.GameLogic.Actions
 
     public class EquipAction : ItemAction
     {
-        public EquipAction(Orchestrator orch, Actor actor, GameItem item, Vector2Int? targetPos) : base(orch, actor, item, targetPos) { }
+        public EquipAction(Actor actor, GameItem item, Vector2Int? targetPos) : base(actor, item, targetPos) { }
 
         public override ActionResult Perform()
         {
@@ -94,11 +89,13 @@ namespace Ventura.GameLogic.Actions
      */
     public class PickupAction : GameAction
     {
-        public PickupAction(Orchestrator orch, Actor actor) : base(orch, actor) { }
+        public PickupAction(Actor actor) : base(actor) { }
 
         public override ActionResult Perform()
         {
-            var items = _orch.CurrMap.GetAllEntitiesAt<GameItem>(_actor.x, _actor.y);
+            var gameState = Orchestrator.Instance.GameState;
+
+            var items = gameState.CurrMap.GetAllEntitiesAt<GameItem>(_actor.x, _actor.y);
             if (items.Count == 0)
                 return new ActionResult(false, "There is nothing here to pick up");
 
@@ -107,7 +104,7 @@ namespace Ventura.GameLogic.Actions
 
             var targetItem = items[0]; //TODO: properly support the case of multiple items on the same tile
 
-            _orch.MoveItemTo(targetItem, _actor.Inventory);
+            gameState.MoveItemTo(targetItem, _actor.Inventory);
             return new ActionResult(true, $"{_actor.Name} picks up the ${targetItem.Name}");
         }
     }
@@ -118,7 +115,7 @@ namespace Ventura.GameLogic.Actions
         private GameItem _item1;
         private GameItem _item2;
 
-        public CombineAction(Orchestrator _orch, Actor actor, GameItem item1, GameItem item2) : base(_orch, actor)
+        public CombineAction(Actor actor, GameItem item1, GameItem item2) : base(actor)
         {
             this._item1 = item1;
             this._item2 = item2;

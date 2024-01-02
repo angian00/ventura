@@ -18,9 +18,6 @@ namespace Ventura.GameLogic
 
     public class PendingUpdates
     {
-        private static PendingUpdates _instance = new PendingUpdates();
-        public static PendingUpdates Instance { get => _instance; }
-
         private SortedSet<PendingUpdateId> _data = new();
 
         public ReadOnlyCollection<PendingUpdateId> GetAll()
