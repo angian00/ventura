@@ -3,38 +3,39 @@ using System;
 using TMPro;
 using UnityEngine;
 using Ventura.GameLogic;
+using Ventura.GameLogic.Components;
+using Ventura.Unity.Events;
 using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
 
-    public class SkillsUIManager : MonoBehaviour, SecondaryUIManager
+    public class SkillsUIManager : MonoBehaviour
     {
-        [NonSerialized]
-        private Player _playerData;
-        public Player PlayerData { set => _playerData = value; }
-
         public TextMeshProUGUI _debugText;
 
-
-        void Start()
+        private void OnEnable()
         {
-            updateView();
+            EventManager.SkillsUpdateEvent.AddListener(onSkillsChanged);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.SkillsUpdateEvent.RemoveListener(onSkillsChanged);
         }
 
 
-        void Update()
+        private void onSkillsChanged(Skills skillsData)
         {
-            //if (Orchestrator.Instance.PendingUpdates.Contains(PendingUpdateId.Inventory))
-            //    updateView();
+            if (!(skillsData.Parent is Player))
+                return;
+
+            updateView(skillsData);
         }
 
 
-        private void updateView()
+        private void updateView(Skills skillsData)
         {
-            var skillsData = _playerData.Skills;
-            Debug.Assert(skillsData != null);
-
             var msg = "";
             foreach (var skillId in skillsData.SkillIds)
             {

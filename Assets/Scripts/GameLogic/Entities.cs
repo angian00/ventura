@@ -3,6 +3,7 @@ using Ventura.GameLogic.Components;
 using Ventura.Util;
 using UnityEngine;
 using System;
+using Ventura.Unity.Events;
 
 namespace Ventura.GameLogic
 {
@@ -95,6 +96,11 @@ namespace Ventura.GameLogic
 
         // -------------------------------------------------
 
+        public override void MoveTo(int x, int y)
+        {
+            base.MoveTo(x, y);
+            EventManager.ActorUpdateEvent.Invoke(this);
+        }
 
         public void Act()
         {
@@ -152,12 +158,6 @@ namespace Ventura.GameLogic
             _inventory = new Inventory(this, 999);
             _skills = new Skills(this);
         }
-
-        public override void MoveTo(int x, int y)
-        {
-            base.MoveTo(x, y);
-            Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.MapPlayerPos);
-        }
     }
 
     [Serializable]
@@ -195,6 +195,15 @@ namespace Ventura.GameLogic
             if (_consumable != null)
                 DebugUtils.Log($"has consumable");
         }
+
+        public void TransferTo(Container targetContainer)
+        {
+            if (_parent != null)
+                _parent.RemoveItem(this);
+
+            targetContainer.AddItem(this);
+        }
+
     }
 
     [Serializable]

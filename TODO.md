@@ -1,25 +1,28 @@
 # TODO
 
 ## Current sprint
-- refactoring orchestrator
 - dialog scelta nome savefile
+- ripensare scheduler con classi Unity
+- pensare se organizzazione view, layer etc va bene
 
 ## Bugfixing
+- troubleshooting setLastSibling per Skills
 
 
 ## Improvements
-- non elaborare input se ci sono pending updates
-- valutare architettura a messaggi per pending updates
+- ridurre al minimo l'uso di Behaviour.Instance
+- aggiunger placeholder per character creation scene?
+- controllare se/quando si possono svuotare i campi aux per la de/serializzazione
 - pensare logica nomi univoci per Entities
+
+- refactoring UIManager (unire a MapManager)
+- non elaborare input se ci sono pending updates
 - azioni che non consumano il turno (es. Look)
 + irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
-- key handler per inventory view (focus su item)
++ key handler per inventory view (focus su item)
 - grafica base per skills view
-- refactoring UIManager (unire a MapManager)
 - verificare funzionamento scheduling con altri Actor presenti oltre Player
-- ridurre al minimo l'uso di Behaviour.Instance
-- rimuovere MouseInputHandler
-- controllare se/quando si possono svuotare i campi aux per la de/serializzazione
+
 
 ## Minutiae
 - padding in popup text inventory item
@@ -28,6 +31,7 @@
 
 ## Errands
 - creare progetto github
+- commit trigger per organize usings/code formatting
 - scegliere e documentare key bindings
 - provare onGUI
 - ui design con figma

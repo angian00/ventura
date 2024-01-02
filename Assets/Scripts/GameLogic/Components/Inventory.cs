@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using Ventura.Unity.Events;
 using Ventura.Util;
 
 namespace Ventura.GameLogic.Components
@@ -52,24 +53,19 @@ namespace Ventura.GameLogic.Components
         public void AddItem(GameItem item)
         {
             _items.Add(item);
-
-            var oldParent = item.Parent;
-            if (oldParent != null)
-                oldParent.RemoveItem(item);
-
             item.Parent = this;
-            if (_parent is Player)
-                Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.Inventory);
+
+            EventManager.ContainerUpdateEvent.Invoke(this);
         }
 
         public void RemoveItem(GameItem item)
         {
-            if (_parent is Player)
-                Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.Inventory);
-
             _items.Remove(item);
             item.Parent = null;
+
+            EventManager.ContainerUpdateEvent.Invoke(this);
         }
+
 
         public void Dump()
         {

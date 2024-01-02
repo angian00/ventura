@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Ventura.Generators;
+using Ventura.Unity.Events;
 using Ventura.Util;
 
 
@@ -87,13 +89,14 @@ namespace Ventura.GameLogic
             var startMap = MapGenerator.GenerateWildernessMap(WORLD_MAP_WIDTH, WORLD_MAP_HEIGHT);
             _currMap = startMap;
 
-            _player = PlayerGenerator.GeneratePlayerWithBooks();
-            _currMap.Entities.Add(_player);
-            MoveActorTo(_player, _currMap.StartingPos.x, _currMap.StartingPos.y);
-
             _allMaps[startMap.Name] = startMap;
             _currMapStack = new MapStack();
             _currMapStack.PushMap(startMap.Name);
+            EventManager.MapChangeEvent.Invoke(_currMap, _currMapStack.StackMapNames);
+
+            _player = PlayerGenerator.GeneratePlayerWithBooks();
+            _currMap.Entities.Add(_player);
+            MoveActorTo(_player, _currMap.StartingPos.x, _currMap.StartingPos.y);
 
 
             Orchestrator.Instance.ActivateActors(_currMap.GetAllEntities<Actor>());
@@ -109,20 +112,15 @@ namespace Ventura.GameLogic
             if (_currMap.IsWalkable(targetX, targetY))
             {
                 a.MoveTo(targetX, targetY);
+
                 if (a is Player)
                 {
+                    DebugUtils.Log("MoveActorTo");
                     _currMap.UpdateExploration(targetX, targetY);
-                    Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.MapPlayerPos);
                 }
             }
 
             return new Vector2Int(a.x, a.y);
-        }
-
-        public void MoveItemTo(GameItem item, Container targetContainer)
-        {
-            targetContainer.AddItem(item);
-            item.Parent = targetContainer;
         }
 
 
@@ -148,9 +146,7 @@ namespace Ventura.GameLogic
             _currMap = newMap;
 
             _currMap.Entities.Add(_player);
-            orch.PendingUpdates.Add(PendingUpdateId.MapTerrain);
-            orch.PendingUpdates.Add(PendingUpdateId.MapItems);
-            orch.PendingUpdates.Add(PendingUpdateId.MapPlayerPos);
+
 
             var startPos = _currMap.StartingPos;
             DebugUtils.Log($"EnterMap; startPos={startPos}");
@@ -174,10 +170,6 @@ namespace Ventura.GameLogic
             Debug.Assert(_currMap != null);
 
             _currMap.Entities.Add(_player);
-
-            orch.PendingUpdates.Add(PendingUpdateId.MapTerrain);
-            orch.PendingUpdates.Add(PendingUpdateId.MapItems);
-            orch.PendingUpdates.Add(PendingUpdateId.MapPlayerPos);
 
             MoveActorTo(_player, previousMapPos.x, previousMapPos.y);
 

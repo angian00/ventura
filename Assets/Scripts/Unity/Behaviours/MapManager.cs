@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using TMPro;
 using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
+using Ventura.Unity.Events;
 using Ventura.Unity.Graphics;
 using Ventura.Util;
 
@@ -35,23 +37,49 @@ namespace Ventura.Unity.Behaviours
         private GameObject[,] _fogTiles;
 
 
-        void Update()
+        void Start()
         {
-            foreach (var pendingType in Orchestrator.Instance.PendingUpdates.GetAll())
-            {
-                switch (pendingType)
-                {
-                    case PendingUpdateId.MapTerrain:
-                        updateTerrain();
-                        break;
-
-                    case PendingUpdateId.MapPlayerPos:
-                        updatePlayer();
-                        break;
-                }
-            }
+            //FUTURE: use a character creation scene
+            SystemManager.Instance.ExecuteCommand(SystemManager.Command.New);
+            StatusLineManager.Instance.Display("Welcome, adventurer!");
+            //
         }
 
+        private void OnEnable()
+        {
+            EventManager.MapChangeEvent.AddListener(onMapChange);
+            EventManager.MapUpdateEvent.AddListener(onMapDataUpdate);
+            EventManager.ActorUpdateEvent.AddListener(onPlayerDataUpdate);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.MapChangeEvent.RemoveListener(onMapChange);
+            EventManager.MapUpdateEvent.RemoveListener(onMapDataUpdate);
+            EventManager.ActorUpdateEvent.RemoveListener(onPlayerDataUpdate);
+        }
+
+
+        private void onMapChange(GameMap mapData, ReadOnlyCollection<string> mapStackNames)
+        {
+            updateTiles(mapData);
+            updateLocationInfo(mapStackNames);
+        }
+
+        private void onMapDataUpdate(GameMap mapData)
+        {
+            updateFog(mapData);
+        }
+
+        private void onPlayerDataUpdate(Actor a)
+        {
+            if (!(a is Player))
+                return;
+
+            updatePlayer((Player)a);
+        }
+
+        // ------ mouse input handlers -------------------------
         public void OnTileClick(Vector2Int tilePos)
         {
             //FUTURE: OnTileClick
@@ -69,23 +97,15 @@ namespace Ventura.Unity.Behaviours
             orch.EnqueuePlayerAction(new LookAction(orch.GameState.Player, null));
         }
 
+        // -----------------------------------------------------
 
-        private void updateTerrain()
-        {
-            DebugUtils.Log("MapManager.updateTerrain()");
 
-            buildTiles(Orchestrator.Instance.GameState.CurrMap);
-            updateLocationInfo(Orchestrator.Instance.GameState.CurrMapStack.StackMapNames);
-        }
-
-        private void updatePlayer()
+        private void updatePlayer(Player playerData)
         {
             //GameDebugging.Log("MapManager.updatePlayer()");
 
-            var gameState = Orchestrator.Instance.GameState;
-
-            var playerX = gameState.Player.x;
-            var playerY = gameState.Player.y;
+            var playerX = playerData.x;
+            var playerY = playerData.y;
 
             var targetObjPos = playerObj.transform.position;
             targetObjPos.x = playerX;
@@ -97,13 +117,13 @@ namespace Ventura.Unity.Behaviours
             targetObjPos.y = playerY;
             cameraObj.transform.position = targetObjPos;
 
-            updateFog(gameState.CurrMap);
+            //updateFog(gameState.CurrMap); //FIXME
         }
 
 
-        private void buildTiles(GameMap gameMap)
+        private void updateTiles(GameMap gameMap)
         {
-            //DebugUtils.Log("MapManager.buildTiles()");
+            //DebugUtils.Log("MapManager.updateTiles()");
 
             UnityUtils.RemoveAllChildren(terrainLayer);
             UnityUtils.RemoveAllChildren(sitesLayer);
@@ -133,7 +153,6 @@ namespace Ventura.Unity.Behaviours
 
             buildSites(gameMap);
 
-            //updateCollider(gameMap);
             updateFog(gameMap);
         }
 
@@ -158,12 +177,6 @@ namespace Ventura.Unity.Behaviours
                 newEntity.GetComponent<SpriteRenderer>().sprite = sprite;
                 newEntity.transform.SetParent(sitesLayer);
             }
-        }
-
-        private void updateCollider(GameMap gameMap)
-        {
-            mapCollider.size = new Vector2Int(gameMap.Width, gameMap.Height);
-            mapCollider.offset = new Vector2Int(gameMap.Width / 2, gameMap.Height / 2); //needed for some reason
         }
 
 
@@ -192,7 +205,7 @@ namespace Ventura.Unity.Behaviours
             }
         }
 
-        private void updateLocationInfo(List<string> mapStackNames)
+        private void updateLocationInfo(ReadOnlyCollection<string> mapStackNames)
         {
             //update ui location info
             string locationInfoStr = "";

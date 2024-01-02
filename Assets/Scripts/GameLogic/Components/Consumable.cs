@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Ventura.GameLogic.Actions;
-
+using Ventura.Unity.Events;
 
 namespace Ventura.GameLogic.Components
 {

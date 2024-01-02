@@ -4,7 +4,7 @@ using UnityEngine;
 using Ventura.Util;
 using Ventura.Unity.Input;
 using UnityEngine.UI;
-using Ventura.GameLogic;
+
 
 namespace Ventura.Unity.Behaviours
 {
@@ -64,8 +64,24 @@ namespace Ventura.Unity.Behaviours
         void Start()
         {
             popupManager.viewManager = this;
+            buildSecondaryUIs();
             Reset();
         }
+
+
+        private void buildSecondaryUIs()
+        {
+            var contentRoot = secondaryUICanvas.transform.Find("Content Root");
+            UnityUtils.RemoveAllChildren(contentRoot);
+
+            foreach (var viewId in _secondaryUITemplates.Keys)
+            {
+                var secondaryUIObj = Instantiate(_secondaryUITemplates[ViewId.Inventory]);
+                secondaryUIObj.name = DataUtils.EnumToStr(viewId);
+                secondaryUIObj.transform.SetParent(contentRoot, false);
+            }
+        }
+
 
         public void Reset()
         {
@@ -134,17 +150,10 @@ namespace Ventura.Unity.Behaviours
                 secondaryUICamera.enabled = true;
                 secondaryUICanvas.GetComponent<GraphicRaycaster>().enabled = true;
 
-                //instantiate specific secondary ui
-                //FUTURE: reuse old _playerUIObjs
-
-                var contentRoot = secondaryUICanvas.transform.Find("Content Root");
-                UnityUtils.RemoveAllChildren(contentRoot);
-
-                var secondaryUIObj = Instantiate(_secondaryUITemplates[viewId]);
-                secondaryUIObj.GetComponent<SecondaryUIManager>().PlayerData = Orchestrator.Instance.GameState.Player;
-                secondaryUIObj.transform.SetParent(contentRoot, false);
+                var uiObjName = DataUtils.EnumToStr(viewId);
+                var uiObj = secondaryUICanvas.transform.Find($"Content Root/{uiObjName}");
+                uiObj.SetAsLastSibling();
             }
-
         }
 
         private void hideView(ViewId viewId)

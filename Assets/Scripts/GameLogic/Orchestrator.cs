@@ -17,9 +17,6 @@ namespace Ventura.GameLogic
         private GameState _gameState;
         public GameState GameState { get => _gameState; set => _gameState = value; }
 
-        private PendingUpdates _pendingUpdates = new PendingUpdates();
-        public PendingUpdates PendingUpdates { get => _pendingUpdates; }
-
 
         public void Suspend()
         {
@@ -31,7 +28,6 @@ namespace Ventura.GameLogic
         {
             ActivateActors(_gameState.CurrMap.GetAllEntities<Actor>());
         }
-
 
         public void EnqueuePlayerAction(GameAction a)
         {

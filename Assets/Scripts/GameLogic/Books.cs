@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using Ventura.GameLogic.Actions;
 using Ventura.GameLogic.Components;
+using Ventura.Unity.Events;
 using Ventura.Util;
 
 namespace Ventura.GameLogic
@@ -60,6 +61,7 @@ namespace Ventura.GameLogic
             consumer.Skills.AddToSkillValue(_skill, _amount);
 
             Consume();
+
             return new ActionResult(true, $"You read [{_parent.Name}], and gain {_amount} points in the skill [{DataUtils.EnumToStr<SkillId>(_skill)}]");
         }
     }

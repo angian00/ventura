@@ -59,7 +59,6 @@ namespace Ventura.Unity
                 Orchestrator.Instance.GameState = gameState;
 
                 ViewManager.Instance.Reset();
-                Orchestrator.Instance.PendingUpdates.AddAll();
                 DebugUtils.Log($"Game initialized");
             }
         }
@@ -88,7 +87,6 @@ namespace Ventura.Unity
             orch.GameState = JsonUtility.FromJson<GameState>(jsonStr);
             orch.Resume();
 
-            orch.PendingUpdates.AddAll();
             ViewManager.Instance.Reset();
 
             DebugUtils.Log($"Game loaded");

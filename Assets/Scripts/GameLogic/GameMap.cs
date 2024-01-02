@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using Ventura.Unity.Events;
 using Ventura.Util;
 using Random = UnityEngine.Random;
 
@@ -285,6 +286,8 @@ namespace Ventura.GameLogic
                     _explored[x, y] = true;
                 }
             }
+
+            EventManager.MapUpdateEvent.Invoke(this);
         }
 
 
@@ -314,13 +317,11 @@ namespace Ventura.GameLogic
         public void AddItem(GameItem item)
         {
             _entities.Add(item);
-            Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.MapItems);
         }
 
         public void RemoveItem(GameItem item)
         {
             _entities.Remove(item);
-            Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.MapItems);
         }
     }
 }

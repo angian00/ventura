@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 
@@ -40,7 +41,7 @@ namespace Ventura.GameLogic
         /**
          * From widest scale to finest scale
          */
-        public List<string> StackMapNames
+        public ReadOnlyCollection<string> StackMapNames
         {
             get {
                 var res = new List<string>();
@@ -52,7 +53,7 @@ namespace Ventura.GameLogic
                 }
 
                 res.Reverse();
-                return res;
+                return new ReadOnlyCollection<string>(res);
             }
         }
 
@@ -87,8 +88,6 @@ namespace Ventura.GameLogic
                 _data.Peek().lastPos = currPos;
 
             this._data.Push(new MapStackItem(newMapName));
-
-            Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.MapTerrain); //CHECK: where to put pendingupdates writes
         }
 
 
@@ -111,8 +110,6 @@ namespace Ventura.GameLogic
                     "currPos is valid",
                     "currPos is uninitialized");
             }
-
-            Orchestrator.Instance.PendingUpdates.Add(PendingUpdateId.MapTerrain); //CHECK: where to put pendingupdates writes
 
             return currPos;
         }

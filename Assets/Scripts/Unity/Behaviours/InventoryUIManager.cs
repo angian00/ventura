@@ -2,35 +2,40 @@ using System;
 using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
+using Ventura.GameLogic.Components;
+using Ventura.Unity.Events;
 using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
-    public interface SecondaryUIManager
+    public class InventoryUIManager : MonoBehaviour
     {
-        public Player PlayerData { set; }
-    }
-
-    public class InventoryUIManager : MonoBehaviour, SecondaryUIManager
-    {
-        [NonSerialized]
-        private Player _playerData;
-        public Player PlayerData { set => _playerData = value; }
-
         public GameObject inventoryItemTemplate;
         public Transform _contentRoot;
 
 
-        void Start()
+        private void OnEnable()
         {
-            updateView();
+            EventManager.ContainerUpdateEvent.AddListener(onInventoryChanged);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.ContainerUpdateEvent.RemoveListener(onInventoryChanged);
         }
 
 
-        void Update()
+        private void onInventoryChanged(Container c)
         {
-            if (Orchestrator.Instance.PendingUpdates.Contains(PendingUpdateId.Inventory))
-                updateView();
+            if (!(c is Inventory))
+                return;
+
+            var inv = (Inventory)c;
+
+            if (!(inv.Parent is Player))
+                return;
+
+            updateView(inv);
         }
 
         public void OnItemClick(GameItem gameItem)
@@ -41,12 +46,10 @@ namespace Ventura.Unity.Behaviours
         }
 
 
-        public void updateView()
+        public void updateView(Inventory inv)
         {
-            Debug.Assert(_playerData.Inventory != null);
-
             UnityUtils.RemoveAllChildren(_contentRoot);
-            foreach (var invItem in _playerData.Inventory.Items)
+            foreach (var invItem in inv.Items)
             {
                 DebugUtils.Log($"Found in inventory: {invItem.Name}");
 

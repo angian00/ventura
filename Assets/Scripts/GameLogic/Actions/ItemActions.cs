@@ -104,7 +104,7 @@ namespace Ventura.GameLogic.Actions
 
             var targetItem = items[0]; //TODO: properly support the case of multiple items on the same tile
 
-            gameState.MoveItemTo(targetItem, _actor.Inventory);
+            targetItem.TransferTo(_actor.Inventory);
             return new ActionResult(true, $"{_actor.Name} picks up the ${targetItem.Name}");
         }
     }
