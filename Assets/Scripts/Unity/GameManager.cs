@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Ventura.Unity.Behaviours
 {
 
-    public class GameStateManager : MonoBehaviour
+    public class GameManager : MonoBehaviour
     {
         [NonSerialized]
         private GameState _gameState;
@@ -50,12 +50,8 @@ namespace Ventura.Unity.Behaviours
 
         public void NewGame()
         {
-            Suspend();
-
             _gameState = new GameState();
             _gameState.NewGame();
-
-            Resume();
         }
 
 

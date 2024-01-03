@@ -6,7 +6,7 @@ using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
-    public class StatusLineManager : MonoBehaviour
+    public class StatusLineBehaviour : MonoBehaviour
     {
         public TextMeshProUGUI statusLine;
 

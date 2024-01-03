@@ -6,9 +6,9 @@ namespace Ventura.Unity.Input
 {
     public class PopupInputHandler : AbstractViewInputHandler
     {
-        private PopupManager _popupManager;
+        private PopupBehaviour _popupManager;
 
-        public PopupInputHandler(ViewManager viewManager, PopupManager popupManager) : base(viewManager)
+        public PopupInputHandler(ViewManager viewManager, PopupBehaviour popupManager) : base(viewManager)
         {
             this._popupManager = popupManager;
         }

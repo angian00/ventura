@@ -27,7 +27,7 @@ namespace Ventura.Unity.Behaviours
         public Camera popupCamera;
         public Canvas popupCanvas;
 
-        public PopupManager popupManager;
+        public PopupBehaviour popupManager;
 
         private ViewId? _activeView;
         private ViewId? _mainView;

@@ -8,7 +8,7 @@ using Ventura.Unity.Events;
 namespace Ventura.Unity.Behaviours
 {
 
-    public class InfoPanelManager : MonoBehaviour
+    public class InfoPanelBehaviour : MonoBehaviour
     {
         public TextMeshProUGUI tileInfo;
         public TextMeshProUGUI entityInfo;

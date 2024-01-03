@@ -12,7 +12,7 @@ namespace Ventura.Unity.Behaviours
         public const string GAME_SCENE_NAME = "Game Scene";
         private const string savegameFile = "testSave.json";
 
-        public GameStateManager gameStateManager;
+        public GameManager gameStateManager;
 
 
         private void OnEnable()
@@ -54,7 +54,9 @@ namespace Ventura.Unity.Behaviours
             }
             else
             {
+                gameStateManager.Suspend();
                 gameStateManager.NewGame();
+                gameStateManager.Resume();
 
                 EventManager.UIRequestEvent.Invoke(new ViewResetRequest());
                 DebugUtils.Log($"Game initialized");

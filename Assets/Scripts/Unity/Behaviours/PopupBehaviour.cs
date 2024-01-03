@@ -6,7 +6,7 @@ using Ventura.Unity.Events;
 namespace Ventura.Unity.Behaviours
 {
 
-    public class PopupManager : MonoBehaviour
+    public class PopupBehaviour : MonoBehaviour
     {
         private SystemCommand _command;
         public SystemCommand Command { set { _command = value; } }
@@ -39,7 +39,7 @@ namespace Ventura.Unity.Behaviours
 
         public void OnYes()
         {
-            Debug.Log($"PopupManager.OnYes()");
+            Debug.Log($"PopupBehaviour.OnYes()");
             viewManager.HidePopup();
 
             EventManager.SystemCommandRequestEvent.Invoke(_command);
@@ -48,7 +48,7 @@ namespace Ventura.Unity.Behaviours
 
         public void OnNo()
         {
-            Debug.Log($"PopupManager.OnNo()");
+            Debug.Log($"PopupBehaviour.OnNo()");
             viewManager.HidePopup();
         }
 

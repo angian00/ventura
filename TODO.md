@@ -2,7 +2,7 @@
 
 ## Current sprint
 - dialog scelta nome savefile
-- cambiare nomi classi
+- dare nomi significativi a classi Behaviour
 
 
 ## Bugfixing

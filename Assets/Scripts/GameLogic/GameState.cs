@@ -111,7 +111,7 @@ namespace Ventura.GameLogic
 
                 if (a is Player)
                 {
-                    DebugUtils.Log($"MoveActorTo {targetX}, {targetY}");
+                    //DebugUtils.Log($"MoveActorTo {targetX}, {targetY}");
                     _currMap.UpdateExploration(targetX, targetY);
                 }
             }

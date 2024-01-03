@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace Ventura.Unity.Behaviours
 {
 
-    public class StartScreenManager : MonoBehaviour
+    public class StartScreenBehaviour : MonoBehaviour
     {
         public Image SplashImage;
         public float SplashFadeOutDuration;

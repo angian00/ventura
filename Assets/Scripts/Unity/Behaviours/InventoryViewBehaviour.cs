@@ -7,7 +7,7 @@ using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
-    public class InventoryUIManager : MonoBehaviour
+    public class InventoryViewBehaviour : MonoBehaviour
     {
         public GameObject inventoryItemTemplate;
         public Transform _contentRoot;
@@ -52,8 +52,8 @@ namespace Ventura.Unity.Behaviours
             foreach (var invItem in inv.Items)
             {
                 var newItemObj = Instantiate(inventoryItemTemplate);
-                newItemObj.GetComponent<InventoryItemManager>().inventoryManager = this;
-                newItemObj.GetComponent<InventoryItemManager>().GameItem = invItem;
+                newItemObj.GetComponent<InventoryItemBehaviour>().inventoryManager = this;
+                newItemObj.GetComponent<InventoryItemBehaviour>().GameItem = invItem;
                 newItemObj.transform.SetParent(_contentRoot, false);
             }
         }

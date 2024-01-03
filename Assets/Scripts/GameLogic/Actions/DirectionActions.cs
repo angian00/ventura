@@ -78,11 +78,6 @@ namespace Ventura.GameLogic.Actions
 
             var targetPos = GetTargetPos(actor, actionData);
 
-            DebugUtils.Log($"MovementAction.Perform; currMap: {currMap.Name}; targetPos: {targetPos}");
-            DebugUtils.Log($"actionData.DeltaPos: {actionData.DeltaPos}");
-            DebugUtils.Log($"actor:");
-            actor.Dump();
-
             if (!currMap.IsInBounds(targetPos.x, targetPos.y))
             {
                 actionData.ActionType = GameActionType.ExitMapAction;

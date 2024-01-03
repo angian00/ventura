@@ -5,18 +5,18 @@ using UnityEngine.EventSystems;
 namespace Ventura.Unity.Behaviours
 {
 
-    public class MapTileManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class MapTileBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [NonSerialized]
         private Vector2Int _mapPos;
         public Vector2Int MapPos { set { _mapPos = value; } }
 
-        public MapManager mapManager;
+        public MainViewBehaviour mapManager;
 
 
         public void OnButtonClick()
         {
-            //Debug.Log($"InventoryItemManager.OnButtonClick; gameItem.Name: {gameItem.Name}");
+            //Debug.Log($"InventoryItemBehaviour.OnButtonClick; gameItem.Name: {gameItem.Name}");
 
             mapManager.OnTileClick(_mapPos);
         }

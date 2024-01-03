@@ -9,7 +9,7 @@ using Ventura.Util;
 namespace Ventura.Unity.Behaviours
 {
 
-    public class MapManager : MonoBehaviour
+    public class MainViewBehaviour : MonoBehaviour
     {
         public GameObject terrainTileTemplate;
         public GameObject fogTileTemplate;
@@ -94,7 +94,7 @@ namespace Ventura.Unity.Behaviours
 
     private void updatePlayer(Player playerData)
         {
-            //GameDebugging.Log("MapManager.updatePlayer()");
+            //GameDebugging.Log("MainViewBehaviour.updatePlayer()");
 
             var playerX = playerData.x;
             var playerY = playerData.y;
@@ -115,7 +115,7 @@ namespace Ventura.Unity.Behaviours
 
         private void updateTiles(GameMap gameMap)
         {
-            //DebugUtils.Log("MapManager.updateTiles()");
+            //DebugUtils.Log("MainViewBehaviour.updateTiles()");
 
             UnityUtils.RemoveAllChildren(terrainLayer);
             UnityUtils.RemoveAllChildren(sitesLayer);
@@ -130,8 +130,8 @@ namespace Ventura.Unity.Behaviours
                     TerrainType terrainType = gameMap.Terrain[x, y];
 
                     var newMapTile = Instantiate(terrainTileTemplate, new Vector3(x, y), Quaternion.identity);
-                    newMapTile.GetComponent<MapTileManager>().mapManager = this;
-                    newMapTile.GetComponent<MapTileManager>().MapPos = new Vector2Int(x, y);
+                    newMapTile.GetComponent<MapTileBehaviour>().mapManager = this;
+                    newMapTile.GetComponent<MapTileBehaviour>().MapPos = new Vector2Int(x, y);
                     newMapTile.GetComponent<SpriteRenderer>().color = GraphicsConfig.TerrainColors[terrainType];
                     newMapTile.transform.SetParent(terrainLayer);
 
@@ -174,7 +174,7 @@ namespace Ventura.Unity.Behaviours
 
         private void updateFog(GameMap gameMap)
         {
-            //GameDebugging.Log("MapManager.UpdateFog()");
+            //GameDebugging.Log("MainViewBehaviour.UpdateFog()");
 
             for (int x = 0; x < gameMap.Width; x++)
             {

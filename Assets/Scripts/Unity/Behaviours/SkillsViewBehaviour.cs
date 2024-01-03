@@ -8,7 +8,7 @@ using Ventura.Util;
 namespace Ventura.Unity.Behaviours
 {
 
-    public class SkillsUIManager : MonoBehaviour
+    public class SkillsViewBehaviour : MonoBehaviour
     {
         public TextMeshProUGUI _debugText;
 
