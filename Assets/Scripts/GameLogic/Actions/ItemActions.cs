@@ -1,71 +1,50 @@
-﻿
-using UnityEngine;
-
-
-namespace Ventura.GameLogic.Actions
+﻿namespace Ventura.GameLogic.Actions
 {
     public abstract class ItemAction : GameAction
     {
-        protected GameItem _item;
-        protected Vector2Int? _targetPos;
+        //protected GameItem _item;
+        //protected Vector2Int? _targetPos;
 
-        public ItemAction(Actor actor, GameItem item, Vector2Int? targetPos) : base(actor)
-        {
-            this._item = item;
-
-            if (targetPos != null)
-                this._targetPos = targetPos;
-            else
-                this._targetPos = new Vector2Int(actor.x, actor.y);
-        }
-
-        public Actor? TargetActor
-        {
-            get => _targetPos == null ? null : Orchestrator.Instance.GameState.CurrMap.GetAnyEntityAt<Actor>((Vector2Int)_targetPos);
-        }
     }
 
 
-    public class DropAction : ItemAction
+    public class DropItemAction : ItemAction
     {
-        public DropAction(Actor actor, GameItem item, Vector2Int? targetPos) : base(actor, item, targetPos) { }
-
-        public override ActionResult Perform()
+        public override ActionResult Perform(Actor actor, ActionData actionData, GameState _)
         {
-            if (_actor.Inventory.ContainsItem(_item))
+            actionData.CheckActionType(GameActionType.DropItemAction);
+            var item = actionData.TargetItem;
+
+            if (actor.Inventory.ContainsItem(item))
             {
-                _actor.Inventory.RemoveItem(_item);
-                return new ActionResult(true, $"{_actor.Name} drops the {_item.Name}");
+                actor.Inventory.RemoveItem(item);
+                return new ActionResult(true, $"{actor.Name} drops the {item.Name}");
             }
             else
-            {
-                return new ActionResult(false, $"{_actor.Name} doesn't have that item");
-            }
+                return new ActionResult(false, $"{actor.Name} doesn't have that item");
         }
     }
 
-    public class UseAction : ItemAction
+    public class UseItemAction : ItemAction
     {
-        public UseAction(Actor actor, GameItem item, Vector2Int? targetPos = null) : base(actor, item, targetPos) { }
-
-        public override ActionResult Perform()
+        public override ActionResult Perform(Actor actor, ActionData actionData, GameState _)
         {
-            if (_item.Consumable != null)
-                return _item.Consumable.Use(this);
+            actionData.CheckActionType(GameActionType.UseItemAction);
+            var item = actionData.TargetItem;
+
+            if (item.Consumable != null)
+                return item.Consumable.Use(actor, this);
 
             else
-            {
-                return new ActionResult(false, $"the {_item.Name} cannot be used");
-            }
+                return new ActionResult(false, $"the {item.Name} cannot be used");
         }
     }
 
-    public class EquipAction : ItemAction
+    public class EquipItemAction : ItemAction
     {
-        public EquipAction(Actor actor, GameItem item, Vector2Int? targetPos) : base(actor, item, targetPos) { }
-
-        public override ActionResult Perform()
+        public override ActionResult Perform(Actor actor, ActionData actionData, GameState _)
         {
+            actionData.CheckActionType(GameActionType.EquipItemAction);
             //if (_item.Equippable != null)
             //{
             //    _actor.Equipment.Toggle(_item);
@@ -89,46 +68,35 @@ namespace Ventura.GameLogic.Actions
      */
     public class PickupAction : GameAction
     {
-        public PickupAction(Actor actor) : base(actor) { }
-
-        public override ActionResult Perform()
+        public override ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
         {
-            var gameState = Orchestrator.Instance.GameState;
+            actionData.CheckActionType(GameActionType.PickupItemAction);
 
-            var items = gameState.CurrMap.GetAllEntitiesAt<GameItem>(_actor.x, _actor.y);
-            if (items.Count == 0)
+            var tileItems = gameState.CurrMap.GetAllEntitiesAt<GameItem>(actor.x, actor.y);
+            if (tileItems.Count == 0)
                 return new ActionResult(false, "There is nothing here to pick up");
 
-            if (_actor.Inventory.IsFull)
-                return new ActionResult(false, $"{_actor.Name} inventory is full");
+            if (actor.Inventory.IsFull)
+                return new ActionResult(false, $"{actor.Name} inventory is full");
 
-            var targetItem = items[0]; //TODO: properly support the case of multiple items on the same tile
+            var targetItem = tileItems[0]; //FUTURE: properly support the case of multiple tileItems on the same tile
 
-            targetItem.TransferTo(_actor.Inventory);
-            return new ActionResult(true, $"{_actor.Name} picks up the ${targetItem.Name}");
+            targetItem.TransferTo(actor.Inventory);
+            return new ActionResult(true, $"{actor.Name} picks up the ${targetItem.Name}");
         }
     }
 
 
     public class CombineAction : GameAction
     {
-        private GameItem _item1;
-        private GameItem _item2;
-
-        public CombineAction(Actor actor, GameItem item1, GameItem item2) : base(actor)
+        public override ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
         {
-            this._item1 = item1;
-            this._item2 = item2;
-        }
-
-        public override ActionResult Perform()
-        {
+            actionData.CheckActionType(GameActionType.CombineItemsAction);
             //if (_item1.Combinable != null && _item2.Combinable != null)
             //    return _item1.Combinable.combine(_item2.Combinable);
             //else
             //    return new ActionResult(false, $"the {_item1.Name} and {_item2.Name} cannot be combined");
             return new ActionResult(false, "TODO: implement CombineAction");
-
         }
     }
 }

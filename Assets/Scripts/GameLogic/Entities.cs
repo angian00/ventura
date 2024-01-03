@@ -1,9 +1,9 @@
-﻿using Ventura.Unity.Behaviours;
-using Ventura.GameLogic.Components;
+﻿using Ventura.GameLogic.Components;
 using Ventura.Util;
 using UnityEngine;
 using System;
 using Ventura.Unity.Events;
+using Ventura.GameLogic.Actions;
 
 namespace Ventura.GameLogic
 {
@@ -81,8 +81,8 @@ namespace Ventura.GameLogic
         {
             DebugUtils.Log($"Actor {_name}.OnAfterDeserialize()");
 
-            if (this is Player)
-                _ai = new PlayerAI(this);
+            //if (this is Player)
+            //    _ai = new PlayerAI(this);
 
             if (_ai != null)
                 _ai.Parent = this;
@@ -102,28 +102,9 @@ namespace Ventura.GameLogic
             EventManager.ActorUpdateEvent.Invoke(this);
         }
 
-        public void Act()
+        public ActionData? ChooseAction()
         {
-            if (_ai != null)
-            {
-                var a = _ai.ChooseAction();
-                if (a == null)
-                    return;
-                DebugUtils.Log($"Performing ${a.GetType().Name}");
-
-                var actionResult = a.Perform();
-
-                if (actionResult.Success)
-                {
-                    if (actionResult.Reason != null)
-                        EventManager.StatusNotificationEvent.Invoke(actionResult.Reason, StatusSeverity.Normal);
-                }
-                else
-                {
-                    EventManager.StatusNotificationEvent.Invoke(actionResult.Reason, StatusSeverity.Warning);
-                    DebugUtils.Error($"Cannot perform {a.GetType()}: {actionResult.Reason}");
-                }
-            }
+            return _ai?.ChooseAction();
         }
 
         //public void Die()
@@ -132,18 +113,18 @@ namespace Ventura.GameLogic
 
         public override void Dump()
         {
-            DebugUtils.Log($"Actor {_name}");
-            //DebugUtils.Log($"_orch is {(_orch == null ? "" : "NOT")} null");
+            DebugUtils.Log($"Actor {_name}; x={_x}, y={_y}");
+            
             if (_inventory != null)
             {
-                DebugUtils.Log($"has inventory:");
-                _inventory.Dump();
+                //DebugUtils.Log($"has inventory:");
+                //_inventory.Dump();
             }
 
             if (_skills != null)
             {
-                DebugUtils.Log($"has skills:");
-                _skills.Dump();
+                //DebugUtils.Log($"has skills:");
+                //_skills.Dump();
             }
         }
     }
@@ -154,7 +135,7 @@ namespace Ventura.GameLogic
     {
         public Player(string name) : base(name)
         {
-            _ai = new PlayerAI(this);
+            //_ai = new PlayerAI(this);
             _inventory = new Inventory(this, 999);
             _skills = new Skills(this);
         }

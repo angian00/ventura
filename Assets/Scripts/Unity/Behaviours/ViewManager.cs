@@ -10,10 +10,6 @@ namespace Ventura.Unity.Behaviours
 {
     public class ViewManager : MonoBehaviour
     {
-        private static ViewManager _instance;
-        public static ViewManager Instance { get => _instance; }
-
-
         public GameObject inventoryUITemplate;
         public GameObject skillsUITemplate;
 
@@ -33,8 +29,6 @@ namespace Ventura.Unity.Behaviours
 
         public PopupManager popupManager;
 
-        private Dictionary<ViewId, GameObject> _secondaryUITemplates;
-
         private ViewId? _activeView;
         private ViewId? _mainView;
 
@@ -44,31 +38,42 @@ namespace Ventura.Unity.Behaviours
         public AbstractViewInputHandler? CurrInputHandler { get => _activeView == null ? null : _inputHandlers[(ViewId)_activeView]; }
 
 
+        private void OnEnable()
+        {
+            EventManager.UIRequestEvent.AddListener(onUIEvent);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.UIRequestEvent.RemoveListener(onUIEvent);
+        }
+
+
         void Awake()
         {
-            _instance = this;
-
             _inputHandlers.Add(ViewId.Map, new MapInputHandler(this));
             _inputHandlers.Add(ViewId.Inventory, new InventoryInputHandler(this));
             _inputHandlers.Add(ViewId.Skills, new SkillsInputHandler(this));
             _inputHandlers.Add(ViewId.Popup, new PopupInputHandler(this, popupManager));
-
-            _secondaryUITemplates = new()
-            {
-                { ViewId.Inventory, inventoryUITemplate },
-                { ViewId.Skills,    skillsUITemplate    },
-            };
         }
 
 
         void Start()
         {
             popupManager.viewManager = this;
-            Reset();
+            resetDefaultView();
         }
 
 
-        public void Reset()
+
+        private void onUIEvent(UIRequest uiRequest)
+        {
+            if (uiRequest is ViewResetRequest)
+                resetDefaultView();
+        }
+
+
+        private void resetDefaultView()
         {
             foreach (var viewId in DataUtils.EnumValues<ViewId>())
                 hideView(viewId);

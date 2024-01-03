@@ -1,9 +1,10 @@
 
 using System.Collections.ObjectModel;
+using UnityEngine;
 using UnityEngine.Events;
 using Ventura.GameLogic;
+using Ventura.GameLogic.Actions;
 using Ventura.GameLogic.Components;
-using Ventura.Unity.Behaviours;
 
 namespace Ventura.Unity.Events
 {
@@ -15,7 +16,7 @@ namespace Ventura.Unity.Events
     public class ContainerUpdateEvent : UnityEvent<Container> { }
 
     public class MapInfoUpdateEvent : UnityEvent<string, string> { }
-    
+
     //
 
     public class StatusNotificationEvent : UnityEvent<string, StatusSeverity> {
@@ -48,6 +49,41 @@ namespace Ventura.Unity.Events
     }
 
     //
+    //public class ActionRequestEvent : UnityEvent<PlayerActionRequest> { }
+
+    //public class PlayerActionRequest { }
+    //public class UseItemActionRequest: PlayerActionRequest
+    //{
+    //    protected GameItem _gameItem;
+    //    public GameItem GameItem { get => _gameItem; }
+
+    //    public UseItemActionRequest(GameItem gameItem)
+    //    {
+    //        _gameItem = gameItem;
+    //    }
+    //}
+
+    public class ActionRequestEvent : UnityEvent<ActionData> { }
+
+    //
+    public class UIRequestEvent : UnityEvent<UIRequest> { }
+
+    public class UIRequest { }
+
+    public class MapTileInfoRequest: UIRequest {
+        protected Vector2Int? _tilePos;
+        public Vector2Int? TilePos { get => _tilePos; }
+
+        public MapTileInfoRequest(Vector2Int? tilePos)
+        {
+            _tilePos = tilePos;
+        }
+    }
+
+    public class ViewResetRequest : UIRequest { }
+
+    //
+
 
     public class EventManager
     {
@@ -61,6 +97,10 @@ namespace Ventura.Unity.Events
         public static MapInfoUpdateEvent MapInfoUpdateEvent = new();
 
         public static StatusNotificationEvent StatusNotificationEvent = new();
+
         public static SystemCommandRequestEvent SystemCommandRequestEvent = new();
+        public static ActionRequestEvent ActionRequestEvent = new();
+        public static UIRequestEvent UIRequestEvent = new();
+
     }
 }

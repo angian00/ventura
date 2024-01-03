@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
@@ -40,9 +39,10 @@ namespace Ventura.Unity.Behaviours
 
         public void OnItemClick(GameItem gameItem)
         {
-            var orch = Orchestrator.Instance;
-            var newAction = new UseAction(orch.GameState.Player, gameItem);
-            orch.EnqueuePlayerAction(newAction);
+            var actionRequestData = new ActionData(GameActionType.UseItemAction);
+            actionRequestData.TargetItem = gameItem;
+
+            EventManager.ActionRequestEvent.Invoke(actionRequestData);
         }
 
 

@@ -1,91 +1,99 @@
 ﻿using UnityEngine;
+using Ventura.Util;
 
 namespace Ventura.GameLogic.Actions
 {
     public abstract class DirectionAction : GameAction
     {
-        protected int _dx;
-        protected int _dy;
-
-        public Vector2Int TargetXY { get => new Vector2Int(_actor.x + _dx, _actor.y + _dy); }
-        public Actor? TargetActor
+        public static Vector2Int GetTargetPos(Actor actor, ActionData actionData)
         {
-            get
-            {
-                var currMap = Orchestrator.Instance.GameState.CurrMap;
-                if (currMap == null)
-                    return null;
+            Debug.Assert(actionData.DeltaPos != null);
+            var deltaPos = (Vector2Int)actionData.DeltaPos;
 
-                return currMap.GetAnyEntityAt<Actor>(TargetXY);
-            }
+            return new Vector2Int(actor.x + deltaPos.x, actor.y + deltaPos.y);
         }
 
-        public Site? TargetSite
+        public static Actor? GetTargetActor(Actor actor, ActionData actionData, GameState gameState)
         {
-            get
-            {
-                var currMap = Orchestrator.Instance.GameState.CurrMap;
-                if (currMap == null)
-                    return null;
+            var currMap = gameState.CurrMap;
+            if (currMap == null)
+                return null;
 
-                return currMap.GetAnyEntityAt<Site>(TargetXY);
-            }
+            return currMap.GetAnyEntityAt<Actor>(GetTargetPos(actor, actionData));
         }
 
-        public DirectionAction(Actor actor, int dx, int dy) : base(actor)
+        public static Site? GetTargetSite(Actor actor, ActionData actionData, GameState gameState)
         {
-            this._dx = dx;
-            this._dy = dy;
+            var currMap = gameState.CurrMap;
+            if (currMap == null)
+                return null;
+
+            return currMap.GetAnyEntityAt<Site>(GetTargetPos(actor, actionData));
         }
     }
 
 
     public class BumpAction : DirectionAction
     {
-        public BumpAction(Actor actor, int dx, int dy) : base(actor, dx, dy) { }
-
-        public override ActionResult Perform()
+        public override ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
         {
-            if (TargetActor != null)
-                return (new MeleeAction(_actor, _dx, _dy)).Perform();
+            actionData.CheckActionType(GameActionType.BumpAction);
 
-            else if (TargetSite != null)
-                return (new EnterMapAction(_actor, _dx, _dy)).Perform();
-
+            if (GetTargetActor(actor, actionData, gameState) != null)
+            {
+                actionData.ActionType = GameActionType.MeleeAction;
+                return (new MeleeAction()).Perform(actor, actionData, gameState);
+            }
+            else if (GetTargetSite(actor, actionData, gameState) != null)
+            {
+                actionData.ActionType = GameActionType.EnterMapAction;
+                return (new EnterMapAction()).Perform(actor, actionData, gameState);
+            }
             else
-                return (new MovementAction(_actor, _dx, _dy)).Perform();
+            {
+                actionData.ActionType = GameActionType.MovementAction;
+                return (new MovementAction()).Perform(actor, actionData, gameState);
+            }
         }
     }
 
     public class MeleeAction : DirectionAction
     {
-        public MeleeAction(Actor actor, int dx, int dy) : base(actor, dx, dy) { }
-
-        public override ActionResult Perform()
+        public override ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
         {
+            actionData.CheckActionType(GameActionType.MeleeAction);
             return new ActionResult(false, "TODO: implement MeleeAction");
         }
     }
 
     public class MovementAction : DirectionAction
     {
-        public MovementAction(Actor actor, int dx, int dy) : base(actor, dx, dy) { }
-
-        public override ActionResult Perform()
+        public override ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
         {
-            var gameState = Orchestrator.Instance.GameState;
-            var currMap = gameState.CurrMap;
+            actionData.CheckActionType(GameActionType.MovementAction);
 
+            var currMap = gameState.CurrMap;
             if (currMap == null)
                 return new ActionResult(false, "Invalid map");
 
-            if (!currMap.IsInBounds(TargetXY.x, TargetXY.y))
-                return (new ExitMapAction(_actor, _dx, _dy)).Perform();
+            var targetPos = GetTargetPos(actor, actionData);
 
-            if (!currMap.IsWalkable(TargetXY.x, TargetXY.y))
+            DebugUtils.Log($"MovementAction.Perform; currMap: {currMap.Name}; targetPos: {targetPos}");
+            DebugUtils.Log($"actionData.DeltaPos: {actionData.DeltaPos}");
+            DebugUtils.Log($"actor:");
+            actor.Dump();
+
+            if (!currMap.IsInBounds(targetPos.x, targetPos.y))
+            {
+                actionData.ActionType = GameActionType.ExitMapAction;
+                return (new ExitMapAction()).Perform(actor, actionData, gameState);
+            }
+
+            if (!currMap.IsWalkable(targetPos.x, targetPos.y))
                 return new ActionResult(false, "That way is blocked");
 
-            gameState.MoveActorTo(_actor, TargetXY.x, TargetXY.y);
+
+            gameState.MoveActorTo(actor, targetPos.x, targetPos.y);
 
             return new ActionResult(true);
         }
@@ -93,35 +101,33 @@ namespace Ventura.GameLogic.Actions
 
     public class EnterMapAction : DirectionAction
     {
-        public EnterMapAction(Actor actor, int dx, int dy) : base(actor, dx, dy) { }
-
-        public override ActionResult Perform()
+        public override ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
         {
-            var gameState = Orchestrator.Instance.GameState;
+            actionData.CheckActionType(GameActionType.EnterMapAction);
 
-            var targetSite = this.TargetSite;
+            var targetPos = GetTargetPos(actor, actionData);
+            var targetSite = GetTargetSite(actor, actionData, gameState);
             if (targetSite == null)
                 return new ActionResult(false, "No site to enter");
 
-            gameState.MoveActorTo(_actor, TargetXY.x, TargetXY.y);
+            gameState.MoveActorTo(actor, targetPos.x, targetPos.y);
             gameState.EnterMap(targetSite.Name);
 
-            return new ActionResult(true, $"Entering {targetSite.Name}"); //FUTURE: improve message in case _actor != player
+            return new ActionResult(true, $"{actor.Name} enters {targetSite.Name}");
         }
     }
 
     public class ExitMapAction : DirectionAction
     {
-        public ExitMapAction(Actor actor, int dx, int dy) : base(actor, dx, dy) { }
-
-        public override ActionResult Perform()
+        public override ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
         {
-            var gameState = Orchestrator.Instance.GameState;
+            actionData.CheckActionType(GameActionType.ExitMapAction);
+
             if (gameState.CurrMapStack.Count > 1)
             {
                 gameState.ExitMap();
 
-                return new ActionResult(true, $"Returning to {gameState.CurrMapStack.CurrMapName}"); //FUTURE: improve message in case _actor != player
+                return new ActionResult(true, $"{actor.Name} returns to {gameState.CurrMapStack.CurrMapName}");
             }
             else
             {

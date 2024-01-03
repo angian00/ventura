@@ -8,14 +8,14 @@ namespace Ventura.GameLogic
 {
     public class Orchestrator
     {
-        private static Orchestrator _instance = new Orchestrator();
-        public static Orchestrator Instance { get => _instance; }
+        //private static Orchestrator _instance = new Orchestrator();
+        //public static Orchestrator Instance { get => _instance; }
 
         private CircularList<Actor> _scheduler = new();
-        private Queue<GameAction> _playerActionQueue = new();
+        private Queue<ActionData> _playerActionQueue = new();
 
-        private GameState _gameState;
-        public GameState GameState { get => _gameState; set => _gameState = value; }
+        //private GameState _gameState;
+        //public GameState GameState { get => _gameState; set => _gameState = value; }
 
 
         public void Suspend()
@@ -24,19 +24,19 @@ namespace Ventura.GameLogic
             _playerActionQueue.Clear();
         }
 
-        public void Resume()
-        {
-            ActivateActors(_gameState.CurrMap.GetAllEntities<Actor>());
-        }
+        //public void Resume()
+        //{
+        //    ActivateActors(_gameState.CurrMap.GetAllEntities<Actor>());
+        //}
 
-        public void EnqueuePlayerAction(GameAction a)
+        public void EnqueuePlayerAction(ActionData a)
         {
             DebugUtils.Log("EnqueuePlayerAction");
             _playerActionQueue.Enqueue(a);
         }
 
 
-        public GameAction? DequeuePlayerAction()
+        public ActionData? DequeuePlayerAction()
         {
             if (_playerActionQueue.Count > 0)
                 return _playerActionQueue.Dequeue();
@@ -63,9 +63,9 @@ namespace Ventura.GameLogic
 
         public void ProcessTurn()
         {
-            var currActor = _scheduler.Next();
-            if (currActor != null)
-                currActor.Act();
+            //var currActor = _scheduler.Next();
+            //if (currActor != null)
+            //    currActor.Act();
         }
     }
 }

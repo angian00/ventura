@@ -1,15 +1,9 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Ventura.GameLogic;
-using Ventura.GameLogic.Actions;
 using Ventura.Unity.Events;
 using Ventura.Unity.Graphics;
 using Ventura.Util;
-using static UnityEditor.PlayerSettings;
 
 
 namespace Ventura.Unity.Behaviours
@@ -39,14 +33,6 @@ namespace Ventura.Unity.Behaviours
 
         private GameObject[,] _fogTiles;
 
-
-        void Start()
-        {
-            //FUTURE: use a character creation scene
-            EventManager.SystemCommandRequestEvent.Invoke(SystemCommand.New);
-            EventManager.StatusNotificationEvent.Invoke("Welcome, adventurer!");
-            //
-        }
 
         private void OnEnable()
         {
@@ -97,54 +83,11 @@ namespace Ventura.Unity.Behaviours
             sendTileInfo(null);
         }
 
-        private void sendTileInfo(Vector2Int? pos)
+        private void sendTileInfo(Vector2Int? tilePos)
         {
-            //TODO: move to input controller
-            string tileInfo;
-            string entityInfo;
-
-            var gameMap = Orchestrator.Instance.GameState.CurrMap;
-
-            if (pos == null || !gameMap.IsInBounds(((Vector2Int)pos).x, ((Vector2Int)pos).y))
-            {
-                tileInfo = "";
-                entityInfo = "";
-                return;
-            }
-            else
-            {
-                tileInfo = getTileInfo(gameMap, (Vector2Int)pos);
-                entityInfo = getEntityInfo(gameMap, (Vector2Int)pos);
-            }
+            EventManager.UIRequestEvent.Invoke(new MapTileInfoRequest(tilePos));
         }
 
-
-        private string getTileInfo(GameMap gameMap, Vector2Int pos)
-        {
-            var res = $"x: {pos.x}, y: {pos.y}";
-
-            if (gameMap.Explored[pos.x, pos.y])
-                res += $" - {gameMap.Terrain[pos.x, pos.y].Label}";
-
-            return res;
-        }
-
-
-        private string getEntityInfo(GameMap gameMap, Vector2Int pos)
-        {
-            if (!gameMap.Visible[pos.x, pos.y])
-                return "";
-
-            var a = gameMap.GetAnyEntityAt<Actor>(pos);
-            if (a != null)
-                return a.Name;
-
-            var s = gameMap.GetAnyEntityAt<Site>(pos.x, pos.y);
-            if (s != null)
-                return s.Name;
-
-            return "";
-        }
 
     // -----------------------------------------------------
 

@@ -3,15 +3,16 @@ using UnityEngine.SceneManagement;
 using Ventura.Util;
 using System.IO;
 using UnityEngine;
-using Ventura.Unity.Behaviours;
 using Ventura.Unity.Events;
 
-namespace Ventura.Unity
+namespace Ventura.Unity.Behaviours
 {
     public class SystemCommandManager: MonoBehaviour
     {
         public const string GAME_SCENE_NAME = "Game Scene";
         private const string savegameFile = "testSave.json";
+
+        public GameStateManager gameStateManager;
 
 
         private void OnEnable()
@@ -53,11 +54,9 @@ namespace Ventura.Unity
             }
             else
             {
-                var gameState = new GameState();
-                gameState.NewGame();
-                Orchestrator.Instance.GameState = gameState;
+                gameStateManager.NewGame();
 
-                ViewManager.Instance.Reset();
+                EventManager.UIRequestEvent.Invoke(new ViewResetRequest());
                 DebugUtils.Log($"Game initialized");
             }
         }
@@ -79,14 +78,15 @@ namespace Ventura.Unity
             var fullPath = Application.persistentDataPath + "/" + savegameFile;
             DebugUtils.Log($"Loading game from {fullPath}");
 
-            var orch = Orchestrator.Instance;
-            orch.Suspend();
+            gameStateManager.Suspend();
 
             var jsonStr = File.ReadAllText(fullPath);
-            orch.GameState = JsonUtility.FromJson<GameState>(jsonStr);
-            orch.Resume();
+            var gameState = JsonUtility.FromJson<GameState>(jsonStr);
+            gameStateManager.GameState = gameState;
 
-            ViewManager.Instance.Reset();
+            gameStateManager.Resume();
+
+            EventManager.UIRequestEvent.Invoke(new ViewResetRequest());
 
             DebugUtils.Log($"Game loaded");
         }
@@ -96,9 +96,13 @@ namespace Ventura.Unity
             var fullPath = Application.persistentDataPath + "/" + savegameFile;
             DebugUtils.Log($"Saving game to {fullPath}");
 
-            var gameState = Orchestrator.Instance.GameState;
+            gameStateManager.Suspend();
+
+            var gameState = gameStateManager.GameState;
             string jsonStr = JsonUtility.ToJson(gameState);
             File.WriteAllText(fullPath, jsonStr);
+
+            gameStateManager.Resume();
 
             DebugUtils.Log("Game saved");
         }

@@ -4,7 +4,6 @@ using System;
 using UnityEngine;
 using Ventura.GameLogic.Actions;
 using Ventura.GameLogic.Components;
-using Ventura.Unity.Events;
 using Ventura.Util;
 
 namespace Ventura.GameLogic
@@ -51,10 +50,8 @@ namespace Ventura.GameLogic
             this._amount = amount;
         }
 
-        public override ActionResult Use(ItemAction action)
+        public override ActionResult Use(Actor consumer, ItemAction action)
         {
-            var consumer = action.Actor;
-
             if (consumer.Skills == null)
                 return new ActionResult(false, $"{consumer.Name} cannot use [{_parent.Name}]");
 

@@ -18,7 +18,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Refactored input handlers to be more selective
 - Used camera stack to switch between views, popup
 - Extracted GameState from Orchestrator
-- Switched to EventSystem events for propagating game state changes to views
+- Switched to EventSystem for decoupling game state, views, inputs, system commands
+- Refactored Actions architecture with EventSystem
 
 ### Fixed
 - game exit on Q keypress

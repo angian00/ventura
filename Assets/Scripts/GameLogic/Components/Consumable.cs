@@ -1,7 +1,5 @@
 ﻿using System;
-using UnityEngine;
 using Ventura.GameLogic.Actions;
-using Ventura.Unity.Events;
 
 namespace Ventura.GameLogic.Components
 {
@@ -24,7 +22,7 @@ namespace Ventura.GameLogic.Components
             container.RemoveItem(item);
         }
 
-        public abstract ActionResult Use(ItemAction action);
+        public abstract ActionResult Use(Actor actor, ItemAction action);
 
     }
 }

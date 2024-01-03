@@ -1,8 +1,8 @@
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
-using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
 using Ventura.Unity.Behaviours;
+using Ventura.Unity.Events;
 
 namespace Ventura.Unity.Input
 {
@@ -19,8 +19,7 @@ namespace Ventura.Unity.Input
                 return;
 
             var keyboard = Keyboard.current;
-            var orch = Orchestrator.Instance;
-            GameAction? newAction = null;
+            ActionData? newActionData = null;
 
             if (key == keyboard.escapeKey)
             {
@@ -35,9 +34,8 @@ namespace Ventura.Unity.Input
                 //ignore keyPressed
             }
 
-
-            if (newAction != null)
-                orch.EnqueuePlayerAction(newAction);
+            if (newActionData != null)
+                EventManager.ActionRequestEvent.Invoke(newActionData);
         }
     }
 }

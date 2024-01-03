@@ -1,24 +1,20 @@
 # TODO
 
 ## Current sprint
-- create input controller
 - dialog scelta nome savefile
-- ripensare scheduler con classi Unity
-- pensare se organizzazione view, layer etc va bene
+- cambiare nomi classi
+
 
 ## Bugfixing
 - loadgame from start screen
 
 
 ## Improvements
-- ridurre al minimo l'uso di Behaviour.Instance
-- aggiunger placeholder per character creation scene?
+- aggiungere placeholder per character creation scene?
 - controllare se/quando si possono svuotare i campi aux per la de/serializzazione
 - pensare logica nomi univoci per Entities
 
-- refactoring UIManager (unire a MapManager)
 - non elaborare input se ci sono pending updates
-- azioni che non consumano il turno (es. Look)
 + irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 + key handler per inventory view (focus su item)
 - grafica base per skills view
@@ -26,6 +22,7 @@
 
 
 ## Minutiae
+- introdurre livello di log "warning"
 - padding in popup text inventory item
 + Use some texture/shader for fog
 - uniformare messaggi azioni (player vs other actor); grammar?
@@ -53,6 +50,10 @@
 
 ### 0.6
 - procedural generation books
+
+### 0.7
+- butterflies
+- some ui features
 
 
 ### 0.x

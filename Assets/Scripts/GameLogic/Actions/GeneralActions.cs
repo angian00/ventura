@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Ventura.Unity.Behaviours;
+using Ventura.Util;
 
 namespace Ventura.GameLogic.Actions
 {
@@ -20,28 +20,73 @@ namespace Ventura.GameLogic.Actions
     }
 
 
-    public abstract class GameAction
+    public enum GameActionType
     {
-        protected Actor _actor;
-        public Actor Actor { get => _actor; }
+        WaitAction,
+        BumpAction,
+        MovementAction,
+        MeleeAction,
+        EnterMapAction,
+        ExitMapAction,
 
-        protected GameAction(Actor actor)
+        DropItemAction,
+        UseItemAction,
+        EquipItemAction,
+        PickupItemAction,
+        CombineItemsAction,
+    }
+
+
+    public class ActionData
+    {
+        protected GameActionType _actionType;
+        public GameActionType ActionType { get => _actionType; set => _actionType = value;  }
+
+        private Vector2Int? _deltaPos;
+        public Vector2Int? DeltaPos { get => _deltaPos; set => _deltaPos = value; }
+
+        private GameItem? _targetItem;
+        public GameItem? TargetItem { get => _targetItem; set => _targetItem = value; }
+
+
+        public ActionData(GameActionType actionType)
         {
-            this._actor = actor;
+            this._actionType = actionType;
         }
 
-        public abstract ActionResult Perform();
+        public void CheckActionType(GameActionType targetType)
+        {
+            if (_actionType != targetType)
+                throw new GameException("Inconsistency in Action Type",
+                    DataUtils.EnumToStr(targetType),
+                    DataUtils.EnumToStr(_actionType));
+        }
+    }
+
+
+    public abstract class GameAction
+    {
+        //protected Actor _actor;
+        //public Actor Actor { get => _actor; }
+
+        //protected GameAction(Actor actor)
+        //{
+        //    this._actor = actor;
+        //}
+
+        public abstract ActionResult Perform(Actor actor, ActionData actionData, GameState gameState);
     }
 
 
     public class WaitAction : GameAction
     {
-        public WaitAction(Actor actor) : base(actor) { }
+        //public WaitAction(Actor actor) : base(actor) { }
 
-        public override ActionResult Perform()
+        public override ActionResult Perform(Actor actor, ActionData actionData, GameState _)
         {
+            Debug.Assert(actionData.ActionType == GameActionType.WaitAction);
             //do nothing, spend a turn
-            return new ActionResult(true, $"{_actor.Name} is waiting... ");
+            return new ActionResult(true, $"{actor.Name} is waiting... ");
         }
     }
 

@@ -76,7 +76,7 @@ namespace Ventura.Unity.Input
                 processed = true;
             }
 
-
+            
             return processed;
         }
 

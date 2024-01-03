@@ -254,8 +254,6 @@ namespace Ventura.GameLogic
                 if (_terrain[x, y].Walkable && (GetBlockingEntityAt(x, y) == null))
                     return new Vector2Int(x, y);
             }
-
-            return null;
         }
 
 
@@ -272,7 +270,7 @@ namespace Ventura.GameLogic
                     _visible[x, y] = false;
 
 
-            //TODO: use Unity line-of-sight algorithm
+            //FUTURE: use Unity line-of-sight algorithm
             var startX = (int)Math.Max(targetX - r, 0);
             var endX = (int)Math.Min(targetX + r, _width - 1);
             var startY = (int)Math.Max(targetY - r, 0);

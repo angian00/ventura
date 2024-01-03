@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Ventura.GameLogic.Actions;
-using Ventura.Util;
 
 namespace Ventura.GameLogic.Components
 {
@@ -41,7 +39,7 @@ namespace Ventura.GameLogic.Components
                     ;
             }
 
-            //TODO: use Unity pathfinding algorithm
+            //FUTURE: use Unity pathfinding algorithm
 
             //        let passableDelegate = function(x: number, y: number): boolean
             //        {
@@ -70,80 +68,65 @@ namespace Ventura.GameLogic.Components
             return outputPath;
         }
 
-        public abstract GameAction? ChooseAction();
-        //public abstract AI Clone(Actor newParent);
-        //public abstract ToObject()
-
-        //static fromObject(obj: any): AI
-        //{
-        //    if (obj == "EnemyAI")
-        //        return new EnemyAI(null, null)
-
-        //        else if (obj == "PlayerAI")
-        //        return new PlayerAI(null, null)
-
-        //        else
-        //    return null
-
-        //}
+        public abstract ActionData? ChooseAction();
     }
 
 
-    public class EnemyAI : AI
-    {
-        private List<Vector2Int> _path = new();
+    //public class EnemyAI : AI
+    //{
+    //    private List<Vector2Int> _path = new();
 
-        public EnemyAI(Actor parent) : base(parent) { }
-
-
-        public override GameAction? ChooseAction()
-        {
-            DebugUtils.Log("EnemyAI.chooseAction");
-
-            var gameState = Orchestrator.Instance.GameState;
-
-            var target = gameState.Player;
-            var gameMap = gameState.CurrMap;
-
-            var dx = target.x - _parent.y;
-            var dy = target.y - _parent.y;
-
-            var distance = Math.Max(Math.Abs(dx), Math.Abs(dy));
+    //    public EnemyAI(Actor parent) : base(parent) { }
 
 
-            if (gameMap.Visible[_parent.x, _parent.y])
-            {
-                //if monster is visible to player, 
-                //then player is visible to monster
-                if (distance <= 1)
-                    return new MeleeAction(_parent, dx, dy);
+    //    public override GameAction? ChooseAction()
+    //    {
+    //        DebugUtils.Log("EnemyAI.chooseAction");
+
+    //        //var gameState = Orchestrator.Instance.GameState; //FIXME
+
+    //        var target = gameState.Player;
+    //        var gameMap = gameState.CurrMap;
+
+    //        var dx = target.x - _parent.y;
+    //        var dy = target.y - _parent.y;
+
+    //        var distance = Math.Max(Math.Abs(dx), Math.Abs(dy));
 
 
-                _path = GetPathTo(gameMap, target.x, target.y);
-            }
-
-            if (_path.Count > 0)
-            {
-                var dest = _path[0];
-                _path.RemoveAt(0);
-
-                DebugUtils.Log("EnemyAI chose MovementAction");
-                return new MovementAction(_parent, dest.x - _parent.x, dest.y - _parent.y);
-            }
-
-            return new WaitAction(_parent);
-        }
-    }
+    //        if (gameMap.Visible[_parent.x, _parent.y])
+    //        {
+    //            //if monster is visible to player, 
+    //            //then player is visible to monster
+    //            if (distance <= 1)
+    //                return new MeleeAction(_parent, dx, dy);
 
 
-    public class PlayerAI : AI
-    {
-        public PlayerAI(Actor parent) : base(parent) { }
+    //            _path = GetPathTo(gameMap, target.x, target.y);
+    //        }
 
-        public override GameAction? ChooseAction()
-        {
-            return Orchestrator.Instance.DequeuePlayerAction();
-        }
+    //        if (_path.Count > 0)
+    //        {
+    //            var dest = _path[0];
+    //            _path.RemoveAt(0);
 
-    }
+    //            DebugUtils.Log("EnemyAI chose MovementAction");
+    //            return new MovementAction(_parent, dest.x - _parent.x, dest.y - _parent.y);
+    //        }
+
+    //        return new WaitAction(_parent);
+    //    }
+    //}
+
+
+    //public class PlayerAI : AI
+    //{
+    //    public PlayerAI(Actor parent) : base(parent) { }
+
+    //    public override ActionData? ChooseAction()
+    //    {
+    //        return Orchestrator.Instance.DequeuePlayerAction();
+    //    }
+
+    //}
 }

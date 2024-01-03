@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Ventura.Generators;
 using Ventura.Unity.Events;
 using Ventura.Util;
@@ -97,17 +96,14 @@ namespace Ventura.GameLogic
             _player = PlayerGenerator.GeneratePlayerWithBooks();
             _currMap.Entities.Add(_player);
             MoveActorTo(_player, _currMap.StartingPos.x, _currMap.StartingPos.y);
-
-
-            Orchestrator.Instance.ActivateActors(_currMap.GetAllEntities<Actor>());
         }
 
 
 
         public Vector2Int MoveActorTo(Actor a, int targetX, int targetY)
         {
-            //CHECK: is it allowable for this to fail?
-            //Debug.Assert(_currMap.IsWalkable(targetX, targetY));
+            if (!_currMap.IsWalkable(targetX, targetY))
+                throw new GameException($"Target tile {targetX}, {targetY} is not walkable");
 
             if (_currMap.IsWalkable(targetX, targetY))
             {
@@ -115,7 +111,7 @@ namespace Ventura.GameLogic
 
                 if (a is Player)
                 {
-                    DebugUtils.Log("MoveActorTo");
+                    DebugUtils.Log($"MoveActorTo {targetX}, {targetY}");
                     _currMap.UpdateExploration(targetX, targetY);
                 }
             }
@@ -126,8 +122,7 @@ namespace Ventura.GameLogic
 
         public void EnterMap(string mapName)
         {
-            var orch = Orchestrator.Instance;
-            orch.DeactivateAllActors();
+            //Orchestrator.Instance.DeactivateAllActors(); //FIXME
 
             _currMap.Entities.Remove(_player);
 
@@ -156,13 +151,12 @@ namespace Ventura.GameLogic
 
             MoveActorTo(_player, startPos.x, startPos.y);
 
-            orch.ActivateActors(_currMap.GetAllEntities<Actor>());
+            //Orchestrator.Instance.ActivateActors(_currMap.GetAllEntities<Actor>()); //FIXME
         }
 
         public void ExitMap()
         {
-            var orch = Orchestrator.Instance;
-            orch.DeactivateAllActors();
+            //Orchestrator.Instance.DeactivateAllActors(); //FIXME
 
             _currMap.Entities.Remove(_player);
 
@@ -175,7 +169,7 @@ namespace Ventura.GameLogic
 
             MoveActorTo(_player, previousMapPos.x, previousMapPos.y);
 
-            orch.ActivateActors(_currMap.GetAllEntities<Actor>());
+            //Orchestrator.Instance.ActivateActors(_currMap.GetAllEntities<Actor>()); //FIXME
         }
     }
 }
