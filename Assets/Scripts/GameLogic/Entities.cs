@@ -116,11 +116,11 @@ namespace Ventura.GameLogic
                 if (actionResult.Success)
                 {
                     if (actionResult.Reason != null)
-                        StatusLineManager.Instance.Display(actionResult.Reason, StatusSeverity.Normal);
+                        EventManager.StatusNotificationEvent.Invoke(actionResult.Reason, StatusSeverity.Normal);
                 }
                 else
                 {
-                    StatusLineManager.Instance.Display(actionResult.Reason, StatusSeverity.Warning);
+                    EventManager.StatusNotificationEvent.Invoke(actionResult.Reason, StatusSeverity.Warning);
                     DebugUtils.Error($"Cannot perform {a.GetType()}: {actionResult.Reason}");
                 }
             }

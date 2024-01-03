@@ -1,39 +1,33 @@
 using TMPro;
 using UnityEngine;
+using Ventura.Unity.Events;
 using Ventura.Unity.Graphics;
 using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
-    public enum StatusSeverity
-    {
-        Normal,
-        Warning,
-        Critical,
-    }
-
-
     public class StatusLineManager : MonoBehaviour
     {
-        private static StatusLineManager _instance;
-        public static StatusLineManager Instance { get => _instance; }
-
         public TextMeshProUGUI statusLine;
 
-
-        void Awake()
+        private void OnEnable()
         {
-            _instance = this;
+            EventManager.StatusNotificationEvent.AddListener(onStatusNotification);
         }
+
+        private void OnDisable()
+        {
+            EventManager.StatusNotificationEvent.RemoveListener(onStatusNotification);
+        }
+
 
         public void Clear()
         {
             statusLine.text = "";
         }
 
-        public void Display(string msg, StatusSeverity severity = StatusSeverity.Normal)
+        private void onStatusNotification(string msg, StatusSeverity severity)
         {
-            DebugUtils.Log("Display");
             DebugUtils.Log(msg);
             statusLine.color = GraphicsConfig.StatusLineColors[severity];
             statusLine.text = msg;

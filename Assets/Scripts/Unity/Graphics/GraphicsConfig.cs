@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Ventura.Unity.Behaviours;
 using Ventura.GameLogic;
+using Ventura.Unity.Events;
 
 namespace Ventura.Unity.Graphics
 {

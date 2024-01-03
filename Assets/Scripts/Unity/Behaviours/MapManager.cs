@@ -41,7 +41,7 @@ namespace Ventura.Unity.Behaviours
         {
             //FUTURE: use a character creation scene
             SystemManager.Instance.ExecuteCommand(SystemManager.Command.New);
-            StatusLineManager.Instance.Display("Welcome, adventurer!");
+            EventManager.StatusNotificationEvent.Invoke("Welcome, adventurer!");
             //
         }
 

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using UnityEngine.Events;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Components;
+using Ventura.Unity.Behaviours;
 
 namespace Ventura.Unity.Events
 {
@@ -13,6 +14,24 @@ namespace Ventura.Unity.Events
     public class SkillsUpdateEvent : UnityEvent<Skills> { }
     public class ContainerUpdateEvent : UnityEvent<Container> { }
 
+    public class StatusNotificationEvent : UnityEvent<string, StatusSeverity> {
+        public void Invoke(string msg) {
+            Invoke(msg, StatusSeverity.Normal);
+        }
+
+        public void Invoke()
+        {
+            Invoke("", StatusSeverity.Normal);
+        }
+    }
+
+    public enum StatusSeverity
+    {
+        Normal,
+        Warning,
+        Critical,
+    }
+
 
     public class EventManager
     {
@@ -22,5 +41,6 @@ namespace Ventura.Unity.Events
 
         public static ContainerUpdateEvent ContainerUpdateEvent = new();
         public static SkillsUpdateEvent SkillsUpdateEvent = new();
+        public static StatusNotificationEvent StatusNotificationEvent = new();
     }
 }

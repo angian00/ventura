@@ -4,7 +4,7 @@ using UnityEngine;
 using Ventura.Util;
 using Ventura.Unity.Input;
 using UnityEngine.UI;
-
+using Ventura.Unity.Events;
 
 namespace Ventura.Unity.Behaviours
 {
@@ -73,7 +73,7 @@ namespace Ventura.Unity.Behaviours
             foreach (var viewId in DataUtils.EnumValues<ViewId>())
                 hideView(viewId);
 
-            StatusLineManager.Instance.Clear();
+            EventManager.StatusNotificationEvent.Invoke();
             _activeView = ViewId.Map;
             _mainView = ViewId.Map;
         }
@@ -89,7 +89,7 @@ namespace Ventura.Unity.Behaviours
 
             showView(targetView);
 
-            StatusLineManager.Instance.Clear();
+            EventManager.StatusNotificationEvent.Invoke();
             _activeView = targetView;
             _mainView = targetView;
         }
