@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
-using Ventura.Util;
 
 namespace Ventura.GameLogic.Actions
 {
     public abstract class DirectionAction : GameAction
     {
-        public static Vector2Int GetTargetPos(Actor actor, ActionData actionData)
+        public abstract ActionResult Perform(Actor actor, ActionData actionData, GameState gameState);
+
+        protected static Vector2Int GetTargetPos(Actor actor, ActionData actionData)
         {
             Debug.Assert(actionData.DeltaPos != null);
             var deltaPos = (Vector2Int)actionData.DeltaPos;
@@ -13,7 +14,7 @@ namespace Ventura.GameLogic.Actions
             return new Vector2Int(actor.x + deltaPos.x, actor.y + deltaPos.y);
         }
 
-        public static Actor? GetTargetActor(Actor actor, ActionData actionData, GameState gameState)
+        protected static Actor? GetTargetActor(Actor actor, ActionData actionData, GameState gameState)
         {
             var currMap = gameState.CurrMap;
             if (currMap == null)
@@ -22,7 +23,7 @@ namespace Ventura.GameLogic.Actions
             return currMap.GetAnyEntityAt<Actor>(GetTargetPos(actor, actionData));
         }
 
-        public static Site? GetTargetSite(Actor actor, ActionData actionData, GameState gameState)
+        protected static Site? GetTargetSite(Actor actor, ActionData actionData, GameState gameState)
         {
             var currMap = gameState.CurrMap;
             if (currMap == null)

@@ -94,7 +94,6 @@ Keybindings (so far):
 |    S      | Save Game        |
 |    L      | Load Game        |
 |           |                  |
-|   ...     | ...              |
 | --------- | ---------------- |
 
 

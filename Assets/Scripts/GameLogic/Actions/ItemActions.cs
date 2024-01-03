@@ -2,9 +2,7 @@
 {
     public abstract class ItemAction : GameAction
     {
-        //protected GameItem _item;
-        //protected Vector2Int? _targetPos;
-
+        public abstract ActionResult Perform(Actor actor, ActionData actionData, GameState _);
     }
 
 
@@ -68,7 +66,7 @@
      */
     public class PickupAction : GameAction
     {
-        public override ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
+        public ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
         {
             actionData.CheckActionType(GameActionType.PickupItemAction);
 
@@ -89,7 +87,7 @@
 
     public class CombineAction : GameAction
     {
-        public override ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
+        public ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
         {
             actionData.CheckActionType(GameActionType.CombineItemsAction);
             //if (_item1.Combinable != null && _item2.Combinable != null)

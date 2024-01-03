@@ -19,7 +19,6 @@
 ## Minutiae
 + key handler per inventory view (focus su item)
 - grafica base per skills view
-- aggiungere placeholder per character creation scene?
 - padding in popup text inventory item
 + Use some texture/shader for fog
 

@@ -40,7 +40,7 @@ namespace Ventura.GameLogic.Actions
     public class ActionData
     {
         protected GameActionType _actionType;
-        public GameActionType ActionType { get => _actionType; set => _actionType = value;  }
+        public GameActionType ActionType { get => _actionType; set => _actionType = value; }
 
         private Vector2Int? _deltaPos;
         public Vector2Int? DeltaPos { get => _deltaPos; set => _deltaPos = value; }
@@ -64,7 +64,7 @@ namespace Ventura.GameLogic.Actions
     }
 
 
-    public abstract class GameAction
+    public interface GameAction
     {
         //protected Actor _actor;
         //public Actor Actor { get => _actor; }
@@ -74,7 +74,7 @@ namespace Ventura.GameLogic.Actions
         //    this._actor = actor;
         //}
 
-        public abstract ActionResult Perform(Actor actor, ActionData actionData, GameState gameState);
+        public ActionResult Perform(Actor actor, ActionData actionData, GameState gameState);
     }
 
 
@@ -82,7 +82,7 @@ namespace Ventura.GameLogic.Actions
     {
         //public WaitAction(Actor actor) : base(actor) { }
 
-        public override ActionResult Perform(Actor actor, ActionData actionData, GameState _)
+        public ActionResult Perform(Actor actor, ActionData actionData, GameState _)
         {
             Debug.Assert(actionData.ActionType == GameActionType.WaitAction);
             //do nothing, spend a turn
