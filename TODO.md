@@ -1,11 +1,13 @@
 # TODO
 
 ## Current sprint
+- create input controller
 - dialog scelta nome savefile
 - ripensare scheduler con classi Unity
 - pensare se organizzazione view, layer etc va bene
 
 ## Bugfixing
+- loadgame from start screen
 
 
 ## Improvements

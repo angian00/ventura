@@ -102,7 +102,7 @@ namespace Ventura.Unity.Behaviours
                 SwitchTo(targetView);
         }
 
-        public void ShowPopup(string title, SystemManager.Command command)
+        public void ShowPopup(string title, SystemCommand command)
         {
             popupManager.Title = title;
             popupManager.Command = command;

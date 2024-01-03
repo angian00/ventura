@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using Ventura.Unity.Behaviours;
+using Ventura.Unity.Events;
 
 namespace Ventura.Unity.Input
 {
@@ -37,22 +38,22 @@ namespace Ventura.Unity.Input
             //------------------- system commands -------------------
             if (key == keyboard.nKey)
             {
-                _viewManager.ShowPopup("New Game", SystemManager.Command.New);
+                _viewManager.ShowPopup("New Game", SystemCommand.New);
                 processed = true;
             }
             else if (key == keyboard.qKey)
             {
-                _viewManager.ShowPopup("Exit Game", SystemManager.Command.Exit);
+                _viewManager.ShowPopup("Exit Game", SystemCommand.Exit);
                 processed = true;
             }
             else if (key == keyboard.sKey)
             {
-                _viewManager.ShowPopup("Save Game", SystemManager.Command.Save);
+                _viewManager.ShowPopup("Save Game", SystemCommand.Save);
                 processed = true;
             }
             else if (key == keyboard.lKey)
             {
-                _viewManager.ShowPopup("Load Game", SystemManager.Command.Load);
+                _viewManager.ShowPopup("Load Game", SystemCommand.Load);
                 processed = true;
             }
 

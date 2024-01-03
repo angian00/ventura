@@ -4,42 +4,41 @@ using Ventura.Util;
 using System.IO;
 using UnityEngine;
 using Ventura.Unity.Behaviours;
+using Ventura.Unity.Events;
 
 namespace Ventura.Unity
 {
-    public class SystemManager
+    public class SystemCommandManager: MonoBehaviour
     {
-        public enum Command
-        {
-            New,
-            Exit,
-            Load,
-            Save,
-        }
-
-        private static SystemManager _instance = new SystemManager();
-        public static SystemManager Instance { get => _instance; }
-
         public const string GAME_SCENE_NAME = "Game Scene";
         private const string savegameFile = "testSave.json";
 
 
-        private SystemManager() { }
+        private void OnEnable()
+        {
+            EventManager.SystemCommandRequestEvent.AddListener(onSystemCommand);
+        }
 
-        public void ExecuteCommand(Command command)
+        private void OnDisable()
+        {
+            EventManager.SystemCommandRequestEvent.RemoveListener(onSystemCommand);
+        }
+
+
+        private void onSystemCommand(SystemCommand command)
         {
             switch (command)
             {
-                case Command.New:
+                case SystemCommand.New:
                     newGame();
                     break;
-                case Command.Exit:
+                case SystemCommand.Exit:
                     exitGame();
                     break;
-                case Command.Load:
+                case SystemCommand.Load:
                     loadGame();
                     break;
-                case Command.Save:
+                case SystemCommand.Save:
                     saveGame();
                     break;
             }
@@ -47,7 +46,7 @@ namespace Ventura.Unity
 
         private void newGame()
         {
-            DebugUtils.Log("SystemManager.newGame()");
+            DebugUtils.Log("SystemCommandManager.newGame()");
             if (SceneManager.GetActiveScene().name != GAME_SCENE_NAME)
             {
                 SceneManager.LoadScene(GAME_SCENE_NAME);

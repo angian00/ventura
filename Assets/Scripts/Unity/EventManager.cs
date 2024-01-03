@@ -15,6 +15,8 @@ namespace Ventura.Unity.Events
     public class ContainerUpdateEvent : UnityEvent<Container> { }
 
     public class MapInfoUpdateEvent : UnityEvent<string, string> { }
+    
+    //
 
     public class StatusNotificationEvent : UnityEvent<string, StatusSeverity> {
         public void Invoke(string msg) {
@@ -34,6 +36,18 @@ namespace Ventura.Unity.Events
         Critical,
     }
 
+    //
+    public class SystemCommandRequestEvent : UnityEvent<SystemCommand> { }
+
+    public enum SystemCommand
+    {
+        New,
+        Exit,
+        Load,
+        Save,
+    }
+
+    //
 
     public class EventManager
     {
@@ -43,8 +57,10 @@ namespace Ventura.Unity.Events
 
         public static ContainerUpdateEvent ContainerUpdateEvent = new();
         public static SkillsUpdateEvent SkillsUpdateEvent = new();
-        public static StatusNotificationEvent StatusNotificationEvent = new();
 
         public static MapInfoUpdateEvent MapInfoUpdateEvent = new();
+
+        public static StatusNotificationEvent StatusNotificationEvent = new();
+        public static SystemCommandRequestEvent SystemCommandRequestEvent = new();
     }
 }

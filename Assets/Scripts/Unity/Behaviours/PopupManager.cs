@@ -1,14 +1,15 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Ventura.Unity.Events;
 
 namespace Ventura.Unity.Behaviours
 {
 
     public class PopupManager : MonoBehaviour
     {
-        private SystemManager.Command _command;
-        public SystemManager.Command Command { set { _command = value; } }
+        private SystemCommand _command;
+        public SystemCommand Command { set { _command = value; } }
 
         public ViewManager viewManager;
         public TextMeshProUGUI titleObj;
@@ -23,7 +24,7 @@ namespace Ventura.Unity.Behaviours
         //    hide();
         //}
 
-        //public void Show(string title, SystemManager.Command _command)
+        //public void Show(string title, SystemCommandManager.Command _command)
         //{
         //    titleObj.text = title;
         //    _command = _command;
@@ -41,7 +42,8 @@ namespace Ventura.Unity.Behaviours
             Debug.Log($"PopupManager.OnYes()");
             viewManager.HidePopup();
 
-            SystemManager.Instance.ExecuteCommand(_command);
+            EventManager.SystemCommandRequestEvent.Invoke(_command);
+
         }
 
         public void OnNo()

@@ -1,17 +1,18 @@
 using UnityEngine;
+using Ventura.Unity.Events;
 
 namespace Ventura.Unity.Behaviours
 {
 
     public class StartMenuButton : MonoBehaviour
     {
-        public SystemManager.Command command;
+        public SystemCommand command;
 
 
         public void OnButtonClick()
         {
             Debug.Log($"StartMenuButton.OnButtonClick; gameObject: {gameObject}");
-            SystemManager.Instance.ExecuteCommand(command);
+            EventManager.SystemCommandRequestEvent.Invoke(command);
         }
     }
 }
