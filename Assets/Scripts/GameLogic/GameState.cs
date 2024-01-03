@@ -92,7 +92,7 @@ namespace Ventura.GameLogic
             _allMaps[startMap.Name] = startMap;
             _currMapStack = new MapStack();
             _currMapStack.PushMap(startMap.Name);
-            EventManager.MapChangeEvent.Invoke(_currMap, _currMapStack.StackMapNames);
+            EventManager.LocationChangeEvent.Invoke(_currMap, _currMapStack.StackMapNames);
 
             _player = PlayerGenerator.GeneratePlayerWithBooks();
             _currMap.Entities.Add(_player);
@@ -145,8 +145,9 @@ namespace Ventura.GameLogic
             _currMapStack.PushMap(mapName, new Vector2Int(_player.x, _player.y));
             _currMap = newMap;
 
-            _currMap.Entities.Add(_player);
+            EventManager.LocationChangeEvent.Invoke(_currMap, _currMapStack.StackMapNames);
 
+            _currMap.Entities.Add(_player);
 
             var startPos = _currMap.StartingPos;
             DebugUtils.Log($"EnterMap; startPos={startPos}");
@@ -168,6 +169,7 @@ namespace Ventura.GameLogic
             var previousMapPos = _currMapStack.PopMap();
             _currMap = _allMaps[_currMapStack.CurrMapName];
             Debug.Assert(_currMap != null);
+            EventManager.LocationChangeEvent.Invoke(_currMap, _currMapStack.StackMapNames);
 
             _currMap.Entities.Add(_player);
 

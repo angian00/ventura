@@ -7,12 +7,14 @@ using Ventura.Unity.Behaviours;
 
 namespace Ventura.Unity.Events
 {
-    public class MapChangeEvent : UnityEvent<GameMap, ReadOnlyCollection<string>> { }
+    public class LocationChangeEvent : UnityEvent<GameMap, ReadOnlyCollection<string>> { }
     public class MapUpdateEvent : UnityEvent<GameMap> { }
     public class ActorUpdateEvent : UnityEvent<Actor> { }
 
     public class SkillsUpdateEvent : UnityEvent<Skills> { }
     public class ContainerUpdateEvent : UnityEvent<Container> { }
+
+    public class MapInfoUpdateEvent : UnityEvent<string, string> { }
 
     public class StatusNotificationEvent : UnityEvent<string, StatusSeverity> {
         public void Invoke(string msg) {
@@ -35,12 +37,14 @@ namespace Ventura.Unity.Events
 
     public class EventManager
     {
-        public static MapChangeEvent MapChangeEvent = new();
+        public static LocationChangeEvent LocationChangeEvent = new();
         public static MapUpdateEvent MapUpdateEvent = new();
         public static ActorUpdateEvent ActorUpdateEvent = new();
 
         public static ContainerUpdateEvent ContainerUpdateEvent = new();
         public static SkillsUpdateEvent SkillsUpdateEvent = new();
         public static StatusNotificationEvent StatusNotificationEvent = new();
+
+        public static MapInfoUpdateEvent MapInfoUpdateEvent = new();
     }
 }

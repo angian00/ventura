@@ -51,8 +51,6 @@ namespace Ventura.Unity.Behaviours
             UnityUtils.RemoveAllChildren(_contentRoot);
             foreach (var invItem in inv.Items)
             {
-                DebugUtils.Log($"Found in inventory: {invItem.Name}");
-
                 var newItemObj = Instantiate(inventoryItemTemplate);
                 newItemObj.GetComponent<InventoryItemManager>().inventoryManager = this;
                 newItemObj.GetComponent<InventoryItemManager>().GameItem = invItem;

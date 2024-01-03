@@ -21,11 +21,6 @@ namespace Ventura.Unity.Behaviours
         }
 
 
-        public void Clear()
-        {
-            statusLine.text = "";
-        }
-
         private void onStatusNotification(string msg, StatusSeverity severity)
         {
             DebugUtils.Log(msg);

@@ -45,21 +45,4 @@ namespace Ventura.GameLogic.Actions
         }
     }
 
-    public class LookAction : GameAction
-    {
-        protected Vector2Int? _tilePos;
-
-        //CHECK if it can merged with DirectionAction
-        public LookAction(Actor actor, Vector2Int? tilePos) : base(actor) 
-        {
-            _tilePos = tilePos;
-        }
-
-        public override ActionResult Perform()
-        {
-            UIManager.Instance.UpdateTileInfo(Orchestrator.Instance.GameState.CurrMap, _tilePos); //FIXME: refactor
-
-            return new ActionResult(true);
-        }
-    }
 }

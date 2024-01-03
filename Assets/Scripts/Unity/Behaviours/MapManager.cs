@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
 using Ventura.Unity.Events;
 using Ventura.Unity.Graphics;
 using Ventura.Util;
+using static UnityEditor.PlayerSettings;
 
 
 namespace Ventura.Unity.Behaviours
@@ -47,23 +50,22 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.MapChangeEvent.AddListener(onMapChange);
+            EventManager.LocationChangeEvent.AddListener(onLocationChange);
             EventManager.MapUpdateEvent.AddListener(onMapDataUpdate);
             EventManager.ActorUpdateEvent.AddListener(onPlayerDataUpdate);
         }
 
         private void OnDisable()
         {
-            EventManager.MapChangeEvent.RemoveListener(onMapChange);
+            EventManager.LocationChangeEvent.RemoveListener(onLocationChange);
             EventManager.MapUpdateEvent.RemoveListener(onMapDataUpdate);
             EventManager.ActorUpdateEvent.RemoveListener(onPlayerDataUpdate);
         }
 
 
-        private void onMapChange(GameMap mapData, ReadOnlyCollection<string> mapStackNames)
+        private void onLocationChange(GameMap mapData, ReadOnlyCollection<string> mapStackNames)
         {
             updateTiles(mapData);
-            updateLocationInfo(mapStackNames);
         }
 
         private void onMapDataUpdate(GameMap mapData)
@@ -87,20 +89,67 @@ namespace Ventura.Unity.Behaviours
         
         public void OnTileMouseEnter(Vector2Int tilePos)
         {
-            var orch = Orchestrator.Instance;
-            orch.EnqueuePlayerAction(new LookAction(orch.GameState.Player, null));
+            sendTileInfo(tilePos);
         }
 
         public void OnTileMouseExit(Vector2Int tilePos)
         {
-            var orch = Orchestrator.Instance;
-            orch.EnqueuePlayerAction(new LookAction(orch.GameState.Player, null));
+            sendTileInfo(null);
         }
 
-        // -----------------------------------------------------
+        private void sendTileInfo(Vector2Int? pos)
+        {
+            //TODO: move to input controller
+            string tileInfo;
+            string entityInfo;
+
+            var gameMap = Orchestrator.Instance.GameState.CurrMap;
+
+            if (pos == null || !gameMap.IsInBounds(((Vector2Int)pos).x, ((Vector2Int)pos).y))
+            {
+                tileInfo = "";
+                entityInfo = "";
+                return;
+            }
+            else
+            {
+                tileInfo = getTileInfo(gameMap, (Vector2Int)pos);
+                entityInfo = getEntityInfo(gameMap, (Vector2Int)pos);
+            }
+        }
 
 
-        private void updatePlayer(Player playerData)
+        private string getTileInfo(GameMap gameMap, Vector2Int pos)
+        {
+            var res = $"x: {pos.x}, y: {pos.y}";
+
+            if (gameMap.Explored[pos.x, pos.y])
+                res += $" - {gameMap.Terrain[pos.x, pos.y].Label}";
+
+            return res;
+        }
+
+
+        private string getEntityInfo(GameMap gameMap, Vector2Int pos)
+        {
+            if (!gameMap.Visible[pos.x, pos.y])
+                return "";
+
+            var a = gameMap.GetAnyEntityAt<Actor>(pos);
+            if (a != null)
+                return a.Name;
+
+            var s = gameMap.GetAnyEntityAt<Site>(pos.x, pos.y);
+            if (s != null)
+                return s.Name;
+
+            return "";
+        }
+
+    // -----------------------------------------------------
+
+
+    private void updatePlayer(Player playerData)
         {
             //GameDebugging.Log("MapManager.updatePlayer()");
 
@@ -204,24 +253,5 @@ namespace Ventura.Unity.Behaviours
                 }
             }
         }
-
-        private void updateLocationInfo(ReadOnlyCollection<string> mapStackNames)
-        {
-            //update ui location info
-            string locationInfoStr = "";
-
-            for (int i = 0; i < mapStackNames.Count; i++)
-            {
-                locationInfoStr += mapStackNames[i];
-
-                if (i < mapStackNames.Count - 1)
-                    locationInfoStr += " > ";
-            }
-
-            //FIXME: choose if this goes to UI Manager or UIManager.UpdateTileInfo goes here
-            var textObj = GameObject.Find("Location Info");
-            textObj.GetComponent<TextMeshProUGUI>().text = locationInfoStr;
-        }
-
     }
 }
