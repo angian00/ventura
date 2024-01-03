@@ -2,7 +2,8 @@
 
 ## Current sprint
 - dialog scelta nome savefile
-
+- esc in main view
+- convert Action.Perform to static method
 
 ## Bugfixing
 - loadgame from start screen
@@ -19,13 +20,11 @@
 + key handler per inventory view (focus su item)
 - grafica base per skills view
 - aggiungere placeholder per character creation scene?
-- introdurre livello di log "warning"
 - padding in popup text inventory item
 + Use some texture/shader for fog
 
 
 ## Errands
-- scegliere e documentare key bindings
 - provare onGUI
 - ui design con figma
 ? scouting musica

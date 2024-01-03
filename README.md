@@ -1,8 +1,11 @@
 # Ventura
 
-## Main Concept
 Ventura is a planet exploration game.
 The player has been deployed on an unknown planet with the task of accumulating as much knowledge as possible about its geography and its inhabitants.
+
+## Introduction
+
+### Main Concept
 
 The gameplay resembles a classic roguelike: movement is controlled with the keyboard, and is performed in discrete steps, on a rectangular grid.
 The map is on a multiple scale, i.e. when the player encounters a place of interest he/she jumps to a higher-resolution map.
@@ -19,11 +22,8 @@ The focus is on the exploration and collection process itself, with minimal micr
 
 
 
-## Acknowledgements
-Concept art created with [Deep Dream Generator](https://deepdreamgenerator.com/).
 
-
-## Gameplay Messages Examples
+### Gameplay Messages Examples
 You have discovered a new city [Aelirun]!
 
 You have discovered a new civilization [Green Insectoids of Rhun]!
@@ -34,7 +34,7 @@ You have got more familiar with [Green Insectoids of Rhun]
 
 
 
-## Feature Brainstorming
+### Feature Brainstorming
 - map generator
 
 - risorse/strutture/item
@@ -57,7 +57,7 @@ You have got more familiar with [Green Insectoids of Rhun]
 + pathfinding
 
 
-## Other Ideas
+### Other Ideas
 il protagonista è un costrutto artificiale con un’anima umana. non ha bisogno di mangiare.
 ogni tanto avvengono frammenti di dialogo tra lui e il suo super-io artificiale.
 la missione è esplorare il mondo per capire cosa è successo, dopo millenni?.
@@ -71,4 +71,33 @@ il protagonista dice frasi pessimistiche, sempre più spesso mano a mano che il 
 al livello massimo di ansia, game over. sconfiggere i demoni riduce molto l’ansia. leggere libri riduce un pochino l’ansia. 
 
 ci si può trasferire (teletrasportare) vicino a un sito noto anche solo digitandone il nome.
+
+
+## How to Play
+
+Keybindings (so far):
+
+|    Key    | Action           |
+| --------- | ---------------- |
+| Numpad 8  | Move Up          |
+| Numpad 2  | Move Down        |
+| Numpad 4  | Move Left        |
+| Numpad 6  | Move Right       |
+| Numpad 5  | Wait             |
+|           |                  |
+|    I      | Inventory View   |
+|    K      | sKills View      |
+|    M      | Main View        |
+|           |                  |
+|    Q      | Quit Game        |
+|    N      | New Game         |
+|    S      | Save Game        |
+|    L      | Load Game        |
+|           |                  |
+|   ...     | ...              |
+| --------- | ---------------- |
+
+
+## Acknowledgements
+Concept art created with [Deep Dream Generator](https://deepdreamgenerator.com/).
 

@@ -27,7 +27,7 @@ namespace Ventura.Unity.Input
             }
             else if (key == keyboard.uKey)
             {
-                //newAction = new UseAction(orch, orch.MapPlayerPos, orch.MapPlayerPos.Inventory.Items[0]); //DEBUG
+                //FUTURE: use focused object
             }
             else
             {
