@@ -64,22 +64,7 @@ namespace Ventura.Unity.Behaviours
         void Start()
         {
             popupManager.viewManager = this;
-            buildSecondaryUIs();
             Reset();
-        }
-
-
-        private void buildSecondaryUIs()
-        {
-            var contentRoot = secondaryUICanvas.transform.Find("Content Root");
-            UnityUtils.RemoveAllChildren(contentRoot);
-
-            foreach (var viewId in _secondaryUITemplates.Keys)
-            {
-                var secondaryUIObj = Instantiate(_secondaryUITemplates[ViewId.Inventory]);
-                secondaryUIObj.name = DataUtils.EnumToStr(viewId);
-                secondaryUIObj.transform.SetParent(contentRoot, false);
-            }
         }
 
 
@@ -151,10 +136,11 @@ namespace Ventura.Unity.Behaviours
                 secondaryUICanvas.GetComponent<GraphicRaycaster>().enabled = true;
 
                 var uiObjName = DataUtils.EnumToStr(viewId);
-                var uiObj = secondaryUICanvas.transform.Find($"Content Root/{uiObjName}");
+                var uiObj = secondaryUICanvas.transform.Find(uiObjName);
                 uiObj.SetAsLastSibling();
             }
         }
+
 
         private void hideView(ViewId viewId)
         {

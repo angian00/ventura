@@ -6,7 +6,6 @@
 - pensare se organizzazione view, layer etc va bene
 
 ## Bugfixing
-- troubleshooting setLastSibling per Skills
 
 
 ## Improvements

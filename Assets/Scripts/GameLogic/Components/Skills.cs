@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
+using Ventura.Unity.Events;
 using Ventura.Util;
 
 namespace Ventura.GameLogic.Components
@@ -70,6 +71,7 @@ namespace Ventura.GameLogic.Components
         public void AddToSkillValue(SkillId skillId, int deltaValue)
         {
             _skillValues[skillId] = GetSkillValue(skillId) + deltaValue;
+            EventManager.SkillsUpdateEvent.Invoke(this);
         }
 
 
