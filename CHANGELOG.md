@@ -20,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Extracted GameState from Orchestrator
 - Switched to EventSystem for decoupling game state, views, inputs, system commands
 - Refactored Actions architecture with EventSystem
+- Given more significant names to Behaviour classes
+
 
 ### Fixed
 - game exit on Q keypress

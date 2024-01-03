@@ -2,7 +2,6 @@
 
 ## Current sprint
 - dialog scelta nome savefile
-- dare nomi significativi a classi Behaviour
 
 
 ## Bugfixing
@@ -10,26 +9,22 @@
 
 
 ## Improvements
-- aggiungere placeholder per character creation scene?
 - controllare se/quando si possono svuotare i campi aux per la de/serializzazione
 - pensare logica nomi univoci per Entities
 
-- non elaborare input se ci sono pending updates
 + irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
-+ key handler per inventory view (focus su item)
-- grafica base per skills view
-- verificare funzionamento scheduling con altri Actor presenti oltre Player
 
 
 ## Minutiae
++ key handler per inventory view (focus su item)
+- grafica base per skills view
+- aggiungere placeholder per character creation scene?
 - introdurre livello di log "warning"
 - padding in popup text inventory item
 + Use some texture/shader for fog
-- uniformare messaggi azioni (player vs other actor); grammar?
+
 
 ## Errands
-- creare progetto github
-- commit trigger per organize usings/code formatting
 - scegliere e documentare key bindings
 - provare onGUI
 - ui design con figma
