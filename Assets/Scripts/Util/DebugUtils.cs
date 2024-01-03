@@ -11,7 +11,7 @@ namespace Ventura.Util
 
         public static void Warning(string msg)
         {
-            UnityEngine.Debug.Log("!!! " + msg);
+            UnityEngine.Debug.LogWarning(msg);
         }
 
         public static void Error(string msg)
