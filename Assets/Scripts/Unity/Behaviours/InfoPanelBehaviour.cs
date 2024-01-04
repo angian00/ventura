@@ -17,13 +17,13 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.MapInfoUpdateEvent.AddListener(onMapInfoUpdated);
+            EventManager.TileInfoUpdateEvent.AddListener(onMapInfoUpdated);
             EventManager.LocationChangeEvent.AddListener(onLocationChanged);
         }
 
         private void OnDisable()
         {
-            EventManager.MapInfoUpdateEvent.RemoveListener(onMapInfoUpdated);
+            EventManager.TileInfoUpdateEvent.RemoveListener(onMapInfoUpdated);
             EventManager.LocationChangeEvent.RemoveListener(onLocationChanged);
         }
 

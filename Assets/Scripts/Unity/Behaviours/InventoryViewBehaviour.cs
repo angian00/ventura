@@ -10,7 +10,7 @@ namespace Ventura.Unity.Behaviours
     public class InventoryViewBehaviour : MonoBehaviour
     {
         public GameObject inventoryItemTemplate;
-        public Transform _contentRoot;
+        public Transform contentRoot;
 
 
         private void OnEnable()
@@ -48,13 +48,13 @@ namespace Ventura.Unity.Behaviours
 
         public void updateView(Inventory inv)
         {
-            UnityUtils.RemoveAllChildren(_contentRoot);
+            UnityUtils.RemoveAllChildren(contentRoot);
             foreach (var invItem in inv.Items)
             {
                 var newItemObj = Instantiate(inventoryItemTemplate);
                 newItemObj.GetComponent<InventoryItemBehaviour>().inventoryManager = this;
                 newItemObj.GetComponent<InventoryItemBehaviour>().GameItem = invItem;
-                newItemObj.transform.SetParent(_contentRoot, false);
+                newItemObj.transform.SetParent(contentRoot, false);
             }
         }
 

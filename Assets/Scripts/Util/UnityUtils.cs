@@ -6,6 +6,8 @@ namespace Ventura.Util
 {
     public class UnityUtils
     {
+        public const string GAME_SCENE_NAME = "Game Scene";
+
         public static void RemoveAllChildren(Transform parent)
         {
             foreach (Transform child in parent)

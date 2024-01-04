@@ -1,10 +1,10 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using Ventura.Util;
-using Ventura.Unity.Input;
 using UnityEngine.UI;
 using Ventura.Unity.Events;
+using Ventura.Unity.Input;
+using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
@@ -18,6 +18,7 @@ namespace Ventura.Unity.Behaviours
             Map,
             Inventory,
             Skills,
+            System,
             Popup,
         }
 
@@ -54,6 +55,7 @@ namespace Ventura.Unity.Behaviours
             _inputHandlers.Add(ViewId.Map, new MapInputHandler(this));
             _inputHandlers.Add(ViewId.Inventory, new InventoryInputHandler(this));
             _inputHandlers.Add(ViewId.Skills, new SkillsInputHandler(this));
+            _inputHandlers.Add(ViewId.System, new SystemMenuInputHandler(this));
             _inputHandlers.Add(ViewId.Popup, new PopupInputHandler(this, popupManager));
         }
 
@@ -61,15 +63,22 @@ namespace Ventura.Unity.Behaviours
         void Start()
         {
             popupManager.viewManager = this;
+
             resetDefaultView();
         }
 
 
-
-        private void onUIEvent(UIRequest uiRequest)
+        private void onUIEvent(UIRequestData uiRequest)
         {
-            if (uiRequest is ViewResetRequest)
+            if (uiRequest is ResetViewRequest)
+            {
                 resetDefaultView();
+            }
+            else if (uiRequest is AskConfirmationRequest)
+            {
+                var popupRequest = (AskConfirmationRequest)uiRequest;
+                ShowPopup(popupRequest.Title, popupRequest.Command);
+            }
         }
 
 
@@ -78,7 +87,7 @@ namespace Ventura.Unity.Behaviours
             foreach (var viewId in DataUtils.EnumValues<ViewId>())
                 hideView(viewId);
 
-            EventManager.StatusNotificationEvent.Invoke();
+            EventManager.StatusNotificationEvent.Invoke(null);
             _activeView = ViewId.Map;
             _mainView = ViewId.Map;
         }
@@ -94,7 +103,8 @@ namespace Ventura.Unity.Behaviours
 
             showView(targetView);
 
-            EventManager.StatusNotificationEvent.Invoke();
+            EventManager.StatusNotificationEvent.Invoke(null);
+
             _activeView = targetView;
             _mainView = targetView;
         }

@@ -1,10 +1,10 @@
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using Ventura.GameLogic.Actions;
 using Ventura.Unity.Behaviours;
-using UnityEngine;
-using Ventura.Util;
 using Ventura.Unity.Events;
+using Ventura.Util;
 
 namespace Ventura.Unity.Input
 {
@@ -70,10 +70,10 @@ namespace Ventura.Unity.Input
             {
                 newActionData = new ActionData(GameActionType.PickupItemAction);
             }
-            //else if (key == keyboard.escapeKey)
-            //{
-            //    //TODO: open system _command menu
-            //}
+            else if (key == keyboard.escapeKey)
+            {
+                _viewManager.Toggle(ViewManager.ViewId.System);
+            }
 
             else
             {

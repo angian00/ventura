@@ -72,11 +72,11 @@ namespace Ventura.Unity.Input
             {
                 //NB: map view doesn't have a toggle behaviour,
                 //    it is the default view
-                _viewManager.SwitchTo(ViewManager.ViewId.Map); 
+                _viewManager.SwitchTo(ViewManager.ViewId.Map);
                 processed = true;
             }
 
-            
+
             return processed;
         }
 

@@ -1,15 +1,14 @@
-using Ventura.GameLogic;
-using UnityEngine.SceneManagement;
-using Ventura.Util;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Ventura.GameLogic;
 using Ventura.Unity.Events;
+using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
-    public class SystemCommandManager: MonoBehaviour
+    public class SystemCommandManager : MonoBehaviour
     {
-        public const string GAME_SCENE_NAME = "Game Scene";
         private const string savegameFile = "testSave.json";
 
         public GameManager gameStateManager;
@@ -17,12 +16,12 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.SystemCommandRequestEvent.AddListener(onSystemCommand);
+            EventManager.SystemCommandEvent.AddListener(onSystemCommand);
         }
 
         private void OnDisable()
         {
-            EventManager.SystemCommandRequestEvent.RemoveListener(onSystemCommand);
+            EventManager.SystemCommandEvent.RemoveListener(onSystemCommand);
         }
 
 
@@ -48,9 +47,9 @@ namespace Ventura.Unity.Behaviours
         private void newGame()
         {
             DebugUtils.Log("SystemCommandManager.newGame()");
-            if (SceneManager.GetActiveScene().name != GAME_SCENE_NAME)
+            if (SceneManager.GetActiveScene().name != UnityUtils.GAME_SCENE_NAME)
             {
-                SceneManager.LoadScene(GAME_SCENE_NAME);
+                SceneManager.LoadScene(UnityUtils.GAME_SCENE_NAME);
             }
             else
             {
@@ -58,7 +57,7 @@ namespace Ventura.Unity.Behaviours
                 gameStateManager.NewGame();
                 gameStateManager.Resume();
 
-                EventManager.UIRequestEvent.Invoke(new ViewResetRequest());
+                EventManager.UIRequestEvent.Invoke(new ResetViewRequest());
                 DebugUtils.Log($"Game initialized");
             }
         }
@@ -88,7 +87,7 @@ namespace Ventura.Unity.Behaviours
 
             gameStateManager.Resume();
 
-            EventManager.UIRequestEvent.Invoke(new ViewResetRequest());
+            EventManager.UIRequestEvent.Invoke(new ResetViewRequest());
 
             DebugUtils.Log($"Game loaded");
         }

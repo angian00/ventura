@@ -1,10 +1,10 @@
-using Ventura.GameLogic;
-using Ventura.Util;
-using UnityEngine;
-using Ventura.Unity.Events;
 using System;
-using Ventura.GameLogic.Actions;
 using System.Collections.Generic;
+using UnityEngine;
+using Ventura.GameLogic;
+using Ventura.GameLogic.Actions;
+using Ventura.Unity.Events;
+using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
@@ -23,7 +23,7 @@ namespace Ventura.Unity.Behaviours
         void Start()
         {
             //FUTURE: use a character creation scene
-            EventManager.SystemCommandRequestEvent.Invoke(SystemCommand.New);
+            EventManager.SystemCommandEvent.Invoke(SystemCommand.New);
             EventManager.StatusNotificationEvent.Invoke("Welcome, adventurer!");
             //
         }
@@ -129,16 +129,16 @@ namespace Ventura.Unity.Behaviours
             _playerActionQueue.Enqueue(actionRequest);
         }
 
-        private void onUIRequest(UIRequest uiRequest)
+        private void onUIRequest(UIRequestData uiRequest)
         {
             //UnityEvents do not automatically handle derived classes for its invocation arguments
             var reqType = uiRequest.GetType();
-            if (reqType == typeof(MapTileInfoRequest))
-                onInputFeedbackRequest((MapTileInfoRequest)uiRequest);
+            if (reqType == typeof(MapTilePointerRequest))
+                onInputFeedbackRequest((MapTilePointerRequest)uiRequest);
         }
 
 
-        private void onInputFeedbackRequest(MapTileInfoRequest uiRequest)
+        private void onInputFeedbackRequest(MapTilePointerRequest uiRequest)
         {
             string tileInfo;
             string entityInfo;
@@ -157,7 +157,7 @@ namespace Ventura.Unity.Behaviours
                 entityInfo = getEntityInfo(gameMap, (Vector2Int)pos);
             }
 
-            EventManager.MapInfoUpdateEvent.Invoke(tileInfo, entityInfo);
+            EventManager.TileInfoUpdateEvent.Invoke(tileInfo, entityInfo);
         }
 
         //---------------------------------------------------------------------

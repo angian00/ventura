@@ -85,7 +85,7 @@ namespace Ventura.Unity.Behaviours
 
         private void sendTileInfo(Vector2Int? tilePos)
         {
-            EventManager.UIRequestEvent.Invoke(new MapTileInfoRequest(tilePos));
+            EventManager.UIRequestEvent.Invoke(new MapTilePointerRequest(tilePos));
         }
 
 

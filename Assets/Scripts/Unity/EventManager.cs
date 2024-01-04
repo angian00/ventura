@@ -15,18 +15,17 @@ namespace Ventura.Unity.Events
     public class SkillsUpdateEvent : UnityEvent<Skills> { }
     public class ContainerUpdateEvent : UnityEvent<Container> { }
 
-    public class MapInfoUpdateEvent : UnityEvent<string, string> { }
+    public class TileInfoUpdateEvent : UnityEvent<string, string> { }
 
     //
 
-    public class StatusNotificationEvent : UnityEvent<string, StatusSeverity> {
-        public void Invoke(string msg) {
-            Invoke(msg, StatusSeverity.Normal);
-        }
-
-        public void Invoke()
+    public class StatusNotificationEvent : UnityEvent<string, StatusSeverity>
+    {
+        public void Invoke(string msg)
         {
-            Invoke("", StatusSeverity.Normal);
+            if (msg == null)
+                msg = "";
+            Invoke(msg, StatusSeverity.Normal);
         }
     }
 
@@ -38,7 +37,7 @@ namespace Ventura.Unity.Events
     }
 
     //
-    public class SystemCommandRequestEvent : UnityEvent<SystemCommand> { }
+    public class SystemCommandEvent : UnityEvent<SystemCommand> { }
 
     public enum SystemCommand
     {
@@ -48,39 +47,41 @@ namespace Ventura.Unity.Events
         Save,
     }
 
-    //
-    //public class ActionRequestEvent : UnityEvent<PlayerActionRequest> { }
-
-    //public class PlayerActionRequest { }
-    //public class UseItemActionRequest: PlayerActionRequest
-    //{
-    //    protected GameItem _gameItem;
-    //    public GameItem GameItem { get => _gameItem; }
-
-    //    public UseItemActionRequest(GameItem gameItem)
-    //    {
-    //        _gameItem = gameItem;
-    //    }
-    //}
-
     public class ActionRequestEvent : UnityEvent<ActionData> { }
 
     //
-    public class UIRequestEvent : UnityEvent<UIRequest> { }
+    public class UIRequestEvent : UnityEvent<UIRequestData> { }
 
-    public class UIRequest { }
+    public class UIRequestData { }
 
-    public class MapTileInfoRequest: UIRequest {
+    public class MapTilePointerRequest : UIRequestData
+    {
         protected Vector2Int? _tilePos;
         public Vector2Int? TilePos { get => _tilePos; }
 
-        public MapTileInfoRequest(Vector2Int? tilePos)
+        public MapTilePointerRequest(Vector2Int? tilePos)
         {
             _tilePos = tilePos;
         }
     }
 
-    public class ViewResetRequest : UIRequest { }
+
+    public class AskConfirmationRequest : UIRequestData
+    {
+        protected string _title;
+        public string Title { get => _title; }
+
+        protected SystemCommand _command;
+        public SystemCommand Command { get => _command; }
+
+        public AskConfirmationRequest(string title, SystemCommand command)
+        {
+            _title = title;
+            _command = command;
+        }
+    }
+
+    public class ResetViewRequest : UIRequestData { }
 
     //
 
@@ -90,17 +91,15 @@ namespace Ventura.Unity.Events
         public static LocationChangeEvent LocationChangeEvent = new();
         public static MapUpdateEvent MapUpdateEvent = new();
         public static ActorUpdateEvent ActorUpdateEvent = new();
+        public static TileInfoUpdateEvent TileInfoUpdateEvent = new();
 
         public static ContainerUpdateEvent ContainerUpdateEvent = new();
         public static SkillsUpdateEvent SkillsUpdateEvent = new();
 
-        public static MapInfoUpdateEvent MapInfoUpdateEvent = new();
-
         public static StatusNotificationEvent StatusNotificationEvent = new();
 
-        public static SystemCommandRequestEvent SystemCommandRequestEvent = new();
+        public static SystemCommandEvent SystemCommandEvent = new();
         public static ActionRequestEvent ActionRequestEvent = new();
         public static UIRequestEvent UIRequestEvent = new();
-
     }
 }

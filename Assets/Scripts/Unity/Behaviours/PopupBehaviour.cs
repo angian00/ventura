@@ -14,7 +14,7 @@ namespace Ventura.Unity.Behaviours
         public ViewManager viewManager;
         public TextMeshProUGUI titleObj;
 
-        public Camera popupCamera;
+        //public Camera popupCamera;
         public GraphicRaycaster raycaster;
 
         public string Title { set => titleObj.text = value; }
@@ -42,7 +42,7 @@ namespace Ventura.Unity.Behaviours
             Debug.Log($"PopupBehaviour.OnYes()");
             viewManager.HidePopup();
 
-            EventManager.SystemCommandRequestEvent.Invoke(_command);
+            EventManager.SystemCommandEvent.Invoke(_command);
 
         }
 

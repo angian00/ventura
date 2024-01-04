@@ -1,15 +1,13 @@
 # TODO
 
 ## Current sprint
-- dialog scelta nome savefile
-- esc in main view
-- convert Action.Perform to static method
+- wiring GameManager with start screen
 
 ## Bugfixing
-- loadgame from start screen
 
 
 ## Improvements
+- dialog scelta nome savefile
 - controllare se/quando si possono svuotare i campi aux per la de/serializzazione
 - pensare logica nomi univoci per Entities
 
