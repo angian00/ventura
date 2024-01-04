@@ -15,12 +15,30 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.ContainerUpdateEvent.AddListener(onInventoryChanged);
+            EventManager.GameStateUpdateEvent.AddListener(onGameStateUpdated);
         }
 
         private void OnDisable()
         {
-            EventManager.ContainerUpdateEvent.RemoveListener(onInventoryChanged);
+            EventManager.GameStateUpdateEvent.RemoveListener(onGameStateUpdated);
+        }
+
+        public void OnItemClick(GameItem gameItem)
+        {
+            var actionRequestData = new ActionData(GameActionType.UseItemAction);
+            actionRequestData.TargetItem = gameItem;
+
+            EventManager.ActionRequestEvent.Invoke(actionRequestData);
+        }
+
+
+
+        private void onGameStateUpdated(GameStateUpdateData updateData)
+        {
+            if (!(updateData is ContainerUpdateData))
+                return;
+
+            onInventoryChanged(((ContainerUpdateData)updateData).Container);
         }
 
 
@@ -35,14 +53,6 @@ namespace Ventura.Unity.Behaviours
                 return;
 
             updateView(inv);
-        }
-
-        public void OnItemClick(GameItem gameItem)
-        {
-            var actionRequestData = new ActionData(GameActionType.UseItemAction);
-            actionRequestData.TargetItem = gameItem;
-
-            EventManager.ActionRequestEvent.Invoke(actionRequestData);
         }
 
 

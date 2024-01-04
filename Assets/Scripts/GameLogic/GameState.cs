@@ -10,7 +10,7 @@ using Ventura.Util;
 namespace Ventura.GameLogic
 {
     [Serializable]
-    public class GameState: ISerializationCallbackReceiver
+    public class GameState : ISerializationCallbackReceiver
     {
         private Dictionary<string, GameMap> _allMaps;
 
@@ -22,7 +22,7 @@ namespace Ventura.GameLogic
         public GameMap CurrMap { get => _currMap; set => _currMap = value; }
 
         private Player _player;
-        public Player Player { get => _player; set => _player = value;  }
+        public Player Player { get => _player; set => _player = value; }
 
 
 
@@ -44,8 +44,8 @@ namespace Ventura.GameLogic
         {
             Debug.Log($"GameState.OnBeforeSerialize");
 
-            __auxAllMapsKeys = new ();
-            __auxAllMapsValues = new ();
+            __auxAllMapsKeys = new();
+            __auxAllMapsValues = new();
 
             foreach (var mapName in _allMaps.Keys)
             {
@@ -91,13 +91,35 @@ namespace Ventura.GameLogic
             _allMaps[startMap.Name] = startMap;
             _currMapStack = new MapStack();
             _currMapStack.PushMap(startMap.Name);
-            EventManager.LocationChangeEvent.Invoke(_currMap, _currMapStack.StackMapNames);
+            EventManager.GameStateUpdateEvent.Invoke(new LocationUpdateData(_currMapStack.StackMapNames));
+            EventManager.GameStateUpdateEvent.Invoke(new MapUpdateData(_currMap));
+            //EventManager.GameStateUpdateEvent.Invoke(new MapVisibilityUpdateData(_currMap));
 
             _player = PlayerGenerator.GeneratePlayerWithBooks();
             _currMap.Entities.Add(_player);
             MoveActorTo(_player, _currMap.StartingPos.x, _currMap.StartingPos.y);
         }
 
+        public void NotifyAllEvents()
+        {
+            EventManager.GameStateUpdateEvent.Invoke(new LocationUpdateData(_currMapStack.StackMapNames));
+            EventManager.GameStateUpdateEvent.Invoke(new MapUpdateData(_currMap));
+
+            //TODO: provide a compact version of the event
+            foreach (var e in _currMap.Entities)
+            {
+                if (e is Actor)
+                {
+                    var a = (Actor)e;
+                    EventManager.GameStateUpdateEvent.Invoke(new ActorUpdateData(a));
+                    if (a.Inventory != null)
+                        EventManager.GameStateUpdateEvent.Invoke(new ContainerUpdateData(a.Inventory));
+
+                    if (a.Skills != null)
+                        EventManager.GameStateUpdateEvent.Invoke(new SkillsUpdateData(a.Skills));
+                }
+            }
+        }
 
 
         public Vector2Int MoveActorTo(Actor a, int targetX, int targetY)
@@ -140,7 +162,8 @@ namespace Ventura.GameLogic
             _currMapStack.PushMap(mapName, new Vector2Int(_player.x, _player.y));
             _currMap = newMap;
 
-            EventManager.LocationChangeEvent.Invoke(_currMap, _currMapStack.StackMapNames);
+            EventManager.GameStateUpdateEvent.Invoke(new LocationUpdateData(_currMapStack.StackMapNames));
+            EventManager.GameStateUpdateEvent.Invoke(new MapUpdateData(_currMap));
 
             _currMap.Entities.Add(_player);
 
@@ -163,7 +186,8 @@ namespace Ventura.GameLogic
             var previousMapPos = _currMapStack.PopMap();
             _currMap = _allMaps[_currMapStack.CurrMapName];
             Debug.Assert(_currMap != null);
-            EventManager.LocationChangeEvent.Invoke(_currMap, _currMapStack.StackMapNames);
+            EventManager.GameStateUpdateEvent.Invoke(new LocationUpdateData(_currMapStack.StackMapNames));
+            EventManager.GameStateUpdateEvent.Invoke(new MapUpdateData(_currMap));
 
             _currMap.Entities.Add(_player);
 

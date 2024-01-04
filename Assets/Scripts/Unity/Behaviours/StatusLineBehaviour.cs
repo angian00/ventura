@@ -23,7 +23,9 @@ namespace Ventura.Unity.Behaviours
 
         private void onStatusNotification(string msg, StatusSeverity severity)
         {
-            DebugUtils.Log(msg);
+            if (msg != null && msg != "")
+                DebugUtils.Log(msg);
+
             statusLine.color = GraphicsConfig.StatusLineColors[severity];
             statusLine.text = msg;
 

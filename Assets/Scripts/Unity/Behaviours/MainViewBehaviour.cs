@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.Unity.Events;
@@ -36,43 +35,44 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.LocationChangeEvent.AddListener(onLocationChange);
-            EventManager.MapUpdateEvent.AddListener(onMapDataUpdate);
-            EventManager.ActorUpdateEvent.AddListener(onPlayerDataUpdate);
+            EventManager.GameStateUpdateEvent.AddListener(onGameStateUpdated);
         }
 
         private void OnDisable()
         {
-            EventManager.LocationChangeEvent.RemoveListener(onLocationChange);
-            EventManager.MapUpdateEvent.RemoveListener(onMapDataUpdate);
-            EventManager.ActorUpdateEvent.RemoveListener(onPlayerDataUpdate);
+            EventManager.GameStateUpdateEvent.RemoveListener(onGameStateUpdated);
         }
 
+        //----------------- EventSystem notification listeners -----------------
 
-        private void onLocationChange(GameMap mapData, ReadOnlyCollection<string> mapStackNames)
+        public void onGameStateUpdated(GameStateUpdateData updateData)
         {
-            updateTiles(mapData);
+            if (updateData is MapUpdateData)
+            {
+                updateMap(((MapUpdateData)updateData).GameMap);
+            }
+            else if (updateData is MapVisibilityUpdateData)
+            {
+                updateFog(((MapVisibilityUpdateData)updateData).GameMap);
+            }
+            else if (updateData is ActorUpdateData)
+            {
+                var a = ((ActorUpdateData)updateData).Actor;
+                if (!(a is Player))
+                    return;
+
+                updatePlayer((Player)a);
+            }
         }
 
-        private void onMapDataUpdate(GameMap mapData)
-        {
-            updateFog(mapData);
-        }
 
-        private void onPlayerDataUpdate(Actor a)
-        {
-            if (!(a is Player))
-                return;
-
-            updatePlayer((Player)a);
-        }
 
         // ------ mouse input handlers -------------------------
         public void OnTileClick(Vector2Int tilePos)
         {
             //FUTURE: OnTileClick
         }
-        
+
         public void OnTileMouseEnter(Vector2Int tilePos)
         {
             sendTileInfo(tilePos);
@@ -85,16 +85,16 @@ namespace Ventura.Unity.Behaviours
 
         private void sendTileInfo(Vector2Int? tilePos)
         {
-            EventManager.UIRequestEvent.Invoke(new MapTilePointerRequest(tilePos));
+            EventManager.UIRequestEvent.Invoke(new MapTileInfoRequest(tilePos));
         }
 
 
-    // -----------------------------------------------------
+        // -----------------------------------------------------
 
 
-    private void updatePlayer(Player playerData)
+        private void updatePlayer(Player playerData)
         {
-            //GameDebugging.Log("MainViewBehaviour.updatePlayer()");
+            DebugUtils.Log("MainViewBehaviour.updatePlayer()");
 
             var playerX = playerData.x;
             var playerY = playerData.y;
@@ -108,14 +108,12 @@ namespace Ventura.Unity.Behaviours
             targetObjPos.x = playerX;
             targetObjPos.y = playerY;
             cameraObj.transform.position = targetObjPos;
-
-            //updateFog(gameState.CurrMap); //FIXME
         }
 
 
-        private void updateTiles(GameMap gameMap)
+        private void updateMap(GameMap gameMap)
         {
-            //DebugUtils.Log("MainViewBehaviour.updateTiles()");
+            DebugUtils.Log($"MainViewBehaviour.updateMap(); mapName: {gameMap.Name}");
 
             UnityUtils.RemoveAllChildren(terrainLayer);
             UnityUtils.RemoveAllChildren(sitesLayer);
@@ -143,14 +141,15 @@ namespace Ventura.Unity.Behaviours
                 }
             }
 
-            buildSites(gameMap);
-
+            updateSites(gameMap);
             updateFog(gameMap);
         }
 
 
-        private void buildSites(GameMap gameMap)
+        private void updateSites(GameMap gameMap)
         {
+            DebugUtils.Log("MainViewBehaviour.updateSites()");
+
             foreach (var e in gameMap.Entities)
             {
                 if (!(e is Site))
@@ -174,7 +173,7 @@ namespace Ventura.Unity.Behaviours
 
         private void updateFog(GameMap gameMap)
         {
-            //GameDebugging.Log("MainViewBehaviour.UpdateFog()");
+            DebugUtils.Log("MainViewBehaviour.UpdateFog()");
 
             for (int x = 0; x < gameMap.Width; x++)
             {

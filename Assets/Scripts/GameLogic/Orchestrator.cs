@@ -24,7 +24,7 @@ namespace Ventura.GameLogic
             _playerActionQueue.Clear();
         }
 
-        //public void Resume()
+        //public void resumeActors()
         //{
         //    ActivateActors(_gameState.CurrMap.GetAllEntities<Actor>());
         //}

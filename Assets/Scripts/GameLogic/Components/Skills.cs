@@ -9,7 +9,7 @@ using Ventura.Util;
 namespace Ventura.GameLogic.Components
 {
     [Serializable]
-    public class Skills: ISerializationCallbackReceiver
+    public class Skills : ISerializationCallbackReceiver
     {
         protected Actor _parent;
         public Actor Parent { get => _parent; set => _parent = value; }
@@ -23,7 +23,7 @@ namespace Ventura.GameLogic.Components
         }
 
         // -------- Custom Serialization -------------------
-        
+
         [SerializeField]
         private List<SkillId> __auxSkillKeys;
         [SerializeField]
@@ -47,7 +47,7 @@ namespace Ventura.GameLogic.Components
             Debug.Assert(__auxSkillKeys.Count == __auxSkillValues.Count);
 
             _skillValues = new();
-            for (var i=0; i < __auxSkillKeys.Count; i++)
+            for (var i = 0; i < __auxSkillKeys.Count; i++)
                 _skillValues.Add(__auxSkillKeys[i], __auxSkillValues[i]);
         }
 
@@ -71,7 +71,7 @@ namespace Ventura.GameLogic.Components
         public void AddToSkillValue(SkillId skillId, int deltaValue)
         {
             _skillValues[skillId] = GetSkillValue(skillId) + deltaValue;
-            EventManager.SkillsUpdateEvent.Invoke(this);
+            EventManager.GameStateUpdateEvent.Invoke(new SkillsUpdateData(this));
         }
 
 

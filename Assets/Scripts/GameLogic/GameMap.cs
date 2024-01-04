@@ -132,12 +132,12 @@ namespace Ventura.GameLogic
             {
                 if (e is GameItem)
                     ((GameItem)e).Parent = this;
-            }    
+            }
         }
 
         /// ------------------------------------------------------
-        
-        
+
+
         public void DumpEntities()
         {
             foreach (var e in _entities)
@@ -174,7 +174,7 @@ namespace Ventura.GameLogic
             return (IsInBounds(x, y) && Terrain[x, y].Walkable && GetBlockingEntityAt(x, y) == null);
         }
 
-        public T? GetAnyEntityAt<T>(int x, int y) where T: Entity
+        public T? GetAnyEntityAt<T>(int x, int y) where T : Entity
         {
             foreach (var e in _entities)
             {
@@ -185,13 +185,13 @@ namespace Ventura.GameLogic
             return null;
         }
 
-        public T? GetAnyEntityAt<T>(Vector2Int pos) where T: Entity
+        public T? GetAnyEntityAt<T>(Vector2Int pos) where T : Entity
         {
             return GetAnyEntityAt<T>(pos.x, pos.y);
         }
 
 
-        public ReadOnlyCollection<T> GetAllEntitiesAt<T>(int x, int y) where T: Entity
+        public ReadOnlyCollection<T> GetAllEntitiesAt<T>(int x, int y) where T : Entity
         {
             var result = new List<T>();
 
@@ -285,7 +285,7 @@ namespace Ventura.GameLogic
                 }
             }
 
-            EventManager.MapUpdateEvent.Invoke(this);
+            EventManager.GameStateUpdateEvent.Invoke(new MapVisibilityUpdateData(this));
         }
 
 

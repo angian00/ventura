@@ -1,9 +1,9 @@
-﻿using Ventura.GameLogic.Components;
-using Ventura.Util;
+﻿using System;
 using UnityEngine;
-using System;
-using Ventura.Unity.Events;
 using Ventura.GameLogic.Actions;
+using Ventura.GameLogic.Components;
+using Ventura.Unity.Events;
+using Ventura.Util;
 
 namespace Ventura.GameLogic
 {
@@ -14,11 +14,11 @@ namespace Ventura.GameLogic
         protected string _name;
         public string Name { get => _name; }
 
-        [SerializeField] 
+        [SerializeField]
         protected int _x;
         public int x { get => _x; }
 
-        [SerializeField] 
+        [SerializeField]
         protected int _y;
         public int y { get => _y; }
 
@@ -89,7 +89,7 @@ namespace Ventura.GameLogic
 
             if (_inventory != null)
                 _inventory.Parent = this;
-            
+
             if (_skills != null)
                 _skills.Parent = this;
         }
@@ -99,7 +99,7 @@ namespace Ventura.GameLogic
         public override void MoveTo(int x, int y)
         {
             base.MoveTo(x, y);
-            EventManager.ActorUpdateEvent.Invoke(this);
+            EventManager.GameStateUpdateEvent.Invoke(new ActorUpdateData(this));
         }
 
         public ActionData? ChooseAction()
@@ -114,7 +114,7 @@ namespace Ventura.GameLogic
         public override void Dump()
         {
             DebugUtils.Log($"Actor {_name}; x={_x}, y={_y}");
-            
+
             if (_inventory != null)
             {
                 //DebugUtils.Log($"has inventory:");

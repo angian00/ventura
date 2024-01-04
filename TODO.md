@@ -1,15 +1,15 @@
 # TODO
 
 ## Current sprint
-- wiring GameManager with start screen
 
 ## Bugfixing
-
+- suspend/resume su enter/exit map actions
 
 ## Improvements
 - dialog scelta nome savefile
 - controllare se/quando si possono svuotare i campi aux per la de/serializzazione
 - pensare logica nomi univoci per Entities
++ ottimizzare la mole di eventi circolanti
 
 + irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 

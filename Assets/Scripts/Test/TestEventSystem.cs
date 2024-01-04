@@ -1,7 +1,6 @@
 using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Components;
-using Ventura.Unity.Events;
 using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
@@ -10,12 +9,12 @@ namespace Ventura.Unity.Behaviours
     {
         private void OnEnable()
         {
-            EventManager.ContainerUpdateEvent.AddListener(dumpContainer);
+            //EventManager.GameStateUpdateEvent.AddListener(dumpContainer);
         }
 
         private void OnDisable()
         {
-            EventManager.ContainerUpdateEvent.RemoveListener(dumpContainer);
+            //EventManager.GameStateUpdateEvent.RemoveListener(dumpContainer);
 
         }
 

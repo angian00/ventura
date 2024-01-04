@@ -33,7 +33,7 @@ namespace Ventura.Unity.Behaviours
         public List<string> activeOnlyNames;
 
         private Dictionary<string, GameObject> _buttonObjs = new();
-        private bool _isGameActive = false;
+        private bool _isGameScene = false;
 
 
         void Awake()
@@ -55,8 +55,8 @@ namespace Ventura.Unity.Behaviours
                 _buttonObjs.Add(buttonNames[i], newButton);
             }
 
-            _isGameActive = (SceneManager.GetActiveScene().name == UnityUtils.GAME_SCENE_NAME);
-            toggleActiveButtons(_isGameActive);
+            _isGameScene = (SceneManager.GetActiveScene().name == UnityUtils.GAME_SCENE_NAME);
+            toggleActiveButtons(_isGameScene);
         }
 
 
@@ -97,18 +97,21 @@ namespace Ventura.Unity.Behaviours
             switch (command)
             {
                 case SystemMenuCommand.New:
-                    if (_isGameActive)
+                    if (_isGameScene)
                         EventManager.UIRequestEvent.Invoke(new AskConfirmationRequest("New Game", SystemCommand.New));
                     else
                         EventManager.SystemCommandEvent.Invoke(SystemCommand.New);
                     break;
 
                 case SystemMenuCommand.Exit:
-                    EventManager.UIRequestEvent.Invoke(new AskConfirmationRequest("Exit", SystemCommand.Exit));
+                    if (_isGameScene)
+                        EventManager.UIRequestEvent.Invoke(new AskConfirmationRequest("Exit", SystemCommand.Exit));
+                    else
+                        EventManager.SystemCommandEvent.Invoke(SystemCommand.Exit);
                     break;
 
                 case SystemMenuCommand.Load:
-                    if (_isGameActive)
+                    if (_isGameScene)
                         EventManager.UIRequestEvent.Invoke(new AskConfirmationRequest("Load Game", SystemCommand.Load));
                     else
                         EventManager.SystemCommandEvent.Invoke(SystemCommand.Load);
@@ -116,6 +119,7 @@ namespace Ventura.Unity.Behaviours
 
                 case SystemMenuCommand.Save:
                     EventManager.SystemCommandEvent.Invoke(SystemCommand.Save);
+                    EventManager.UIRequestEvent.Invoke(new ResetViewRequest());
                     break;
 
                 case SystemMenuCommand.Resume:

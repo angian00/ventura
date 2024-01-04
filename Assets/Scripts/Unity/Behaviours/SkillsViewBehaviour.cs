@@ -14,17 +14,21 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.SkillsUpdateEvent.AddListener(onSkillsChanged);
+            EventManager.GameStateUpdateEvent.AddListener(onGameStateUpdate);
         }
 
         private void OnDisable()
         {
-            EventManager.SkillsUpdateEvent.RemoveListener(onSkillsChanged);
+            EventManager.GameStateUpdateEvent.RemoveListener(onGameStateUpdate);
         }
 
 
-        private void onSkillsChanged(Skills skillsData)
+        private void onGameStateUpdate(GameStateUpdateData updateData)
         {
+            if (!(updateData is SkillsUpdateData))
+                return;
+
+            var skillsData = ((SkillsUpdateData)updateData).Skills;
             if (!(skillsData.Parent is Player))
                 return;
 

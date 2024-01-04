@@ -55,7 +55,7 @@ namespace Ventura.GameLogic.Components
             _items.Add(item);
             item.Parent = this;
 
-            EventManager.ContainerUpdateEvent.Invoke(this);
+            EventManager.GameStateUpdateEvent.Invoke(new ContainerUpdateData(this));
         }
 
         public void RemoveItem(GameItem item)
@@ -63,7 +63,7 @@ namespace Ventura.GameLogic.Components
             _items.Remove(item);
             item.Parent = null;
 
-            EventManager.ContainerUpdateEvent.Invoke(this);
+            EventManager.GameStateUpdateEvent.Invoke(new ContainerUpdateData(this));
         }
 
 
