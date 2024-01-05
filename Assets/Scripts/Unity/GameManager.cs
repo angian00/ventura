@@ -214,11 +214,17 @@ namespace Ventura.Unity.Behaviours
 
             switch (actionData.ActionType)
             {
+                case GameActionType.WaitAction:
+                    action = new WaitAction();
+                    break;
                 case GameActionType.BumpAction:
                     action = new BumpAction();
                     break;
                 case GameActionType.UseItemAction:
                     action = new UseItemAction();
+                    break;
+                case GameActionType.PickupItemAction:
+                    action = new PickupItemAction();
                     break;
                 default:
                     throw new GameException($"Unsupported ActionType: {DataUtils.EnumToStr(actionData.ActionType)}");

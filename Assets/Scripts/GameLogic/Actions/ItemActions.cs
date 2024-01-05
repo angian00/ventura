@@ -64,9 +64,9 @@
     /** 
      * Pickup an item and add it to the inventory, if there is room for it 
      */
-    public class PickupAction : GameAction
+    public class PickupItemAction : ItemAction
     {
-        public ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
+        public override ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
         {
             actionData.CheckActionType(GameActionType.PickupItemAction);
 
@@ -80,7 +80,7 @@
             var targetItem = tileItems[0]; //FUTURE: properly support the case of multiple tileItems on the same tile
 
             targetItem.TransferTo(actor.Inventory);
-            return new ActionResult(true, $"{actor.Name} picks up the ${targetItem.Name}");
+            return new ActionResult(true, $"{actor.Name} picks up the {targetItem.Label}");
         }
     }
 

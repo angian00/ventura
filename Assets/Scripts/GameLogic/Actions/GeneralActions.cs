@@ -80,8 +80,6 @@ namespace Ventura.GameLogic.Actions
 
     public class WaitAction : GameAction
     {
-        //public WaitAction(Actor actor) : base(actor) { }
-
         public ActionResult Perform(Actor actor, ActionData actionData, GameState _)
         {
             Debug.Assert(actionData.ActionType == GameActionType.WaitAction);

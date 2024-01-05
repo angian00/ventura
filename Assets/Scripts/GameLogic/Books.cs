@@ -23,7 +23,20 @@ namespace Ventura.GameLogic
         [SerializeField]
         protected string _author;
 
-        public override string Label { get => _author == null ? _title : $"{_author} - '{_title}'"; }
+        public override string Label
+        {
+            get
+            {
+                var res = "book";
+
+                if (_author != null)
+                    res += $" by {_author}";
+                res += $" - '{_title}'";
+
+                return res;
+            }
+        }
+
 
         public BookItem(string name, string title, string? author, SkillId skill, int amount) : base(name)
         {

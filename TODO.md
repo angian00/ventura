@@ -1,6 +1,8 @@
 # TODO
 
 ## Current sprint
+- controllare se/quando si possono svuotare i campi aux per la de/serializzazione
+- pensare logica nomi univoci per Entities
 - informarsi esempi Entity-Component
 - arricchire stats player
 - pathfinding on tile click
@@ -9,11 +11,11 @@
 - theme previewer
 
 ## Bugfixing
+- aggiungere a GameItem.MoveTo la notifica EventManager.GameStateUpdateEvent.Invoke(...);
 
 
 ## Improvements
-- controllare se/quando si possono svuotare i campi aux per la de/serializzazione
-- pensare logica nomi univoci per Entities
+- informarsi mipmapping sprites
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - dialog scelta nome savefile
 - aggiungere bitfield updatedFields agli EventData

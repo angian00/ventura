@@ -320,11 +320,17 @@ namespace Ventura.GameLogic
         public void AddItem(GameItem item)
         {
             _entities.Add(item);
+            item.Parent = this;
+
+            EventManager.GameStateUpdateEvent.Invoke(new ContainerUpdateData(this));
         }
 
         public void RemoveItem(GameItem item)
         {
             _entities.Remove(item);
+            item.Parent = null;
+
+            EventManager.GameStateUpdateEvent.Invoke(new ContainerUpdateData(this));
         }
     }
 }

@@ -141,10 +141,10 @@ namespace Ventura.Generators
 
             foreach (var book in books)
             {
-                targetMap.Entities.Add(book);
                 var pos = DataUtils.RandomWalkablePos(targetMap);
                 book.MoveTo(pos.x, pos.y);
-                //FIXME: add to GameItem.MoveTo EventManager.GameStateUpdateEvent.Invoke(new ActorUpdateData(this));
+
+                book.TransferTo(targetMap);
             }
         }
     }

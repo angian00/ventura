@@ -85,14 +85,19 @@ Keybindings (so far):
 | Numpad 6  | Move Right       |
 | Numpad 5  | Wait             |
 |           |                  |
+|    G      | Pickup Item      |
+|           |                  |
 |    I      | Inventory View   |
 |    K      | sKills View      |
 |    M      | Main View        |
+|    =      | Zoom In          |
+|    -      | Zoom Out         |
 |           |                  |
 |    Q      | Quit Game        |
 |    N      | New Game         |
 |    S      | Save Game        |
 |    L      | Load Game        |
+|  <Esc>    | System Menu      |
 |           |                  |
 | --------- | ---------------- |
 
