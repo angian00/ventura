@@ -1,0 +1,19 @@
+{
+	"previewScreenNames": [ "Inventory", "Settings" ],
+	"themes": [ 
+		{
+	 		"name": "Old Book",
+	 		"url": "https://www.color-hex.com/color-palette/29709",
+	 		"colors": [ "#f2dcb1", "#be8f3c", "#8da683" ],
+	 		"fontName": "boh",
+	 		"fontSizes": { "Title": 100, "Subtitle": 70 }
+		},
+		{
+	 		"name": "Fairy tales old book cover",
+	 		"url": "https://www.color-hex.com/color-palette/104097",
+	 		"colors": [ "#cab891", "#2b2c1e", "#81231e" ],
+	 		"fontName": "boh",
+	 		"fontSizes": { "Title": 100, "Subtitle": 80 }
+		}
+	]
+}

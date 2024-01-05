@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - azione PickupItem
 - zoom in/out in map
 - A* pathfinding implementation
+- theme previewer (first draft)
 
 ### Changed
 - Extracted SystemManager from GameManager to remove dirty DontDestroyOnLoad hack

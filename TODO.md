@@ -2,13 +2,17 @@
 
 ## Current sprint
 - pathfinding on tile click
+	- testare con ostacoli (terrain acqua)
 	- feedback click
 	- scheduling turni movimento
 	- animazione e sleep turni movimento
 - generazione actors in mappa (butterflies)
 - arricchire stats player
 
+
 - theme previewer
+	- impacchettare font resources
+	- bitmap di sfondo
 
 
 ## Bugfixing
@@ -92,6 +96,6 @@ https://github.com/GrandPiaf/Biome-and-Vegetation-PCG
 
 ### Visual Design
 - https://www.gameuidatabase.com/
-- Screenshot gioco erboristeria
+- Screenshot Strange Horticulture
 - https://www.color-hex.com/color-palettes/?keyword=Book
 ? informarsi mipmapping sprites

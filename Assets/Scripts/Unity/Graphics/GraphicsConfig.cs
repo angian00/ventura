@@ -18,11 +18,11 @@ namespace Ventura.Unity.Graphics
 
         public static readonly Dictionary<TerrainType, Color> TerrainColors = new()
         {
-            { TerrainType.Plains1, fromHex("#A5A58D") },
-            { TerrainType.Plains2, fromHex("#B7B7A4") },
-            { TerrainType.Hills1, fromHex("#6B705C") },
-            { TerrainType.Hills2, fromHex("#CB997E") },
-            { TerrainType.Mountains, fromHex("#DDBEA9") },
+            { TerrainType.Plains1, FromHex("#A5A58D") },
+            { TerrainType.Plains2, FromHex("#B7B7A4") },
+            { TerrainType.Hills1, FromHex("#6B705C") },
+            { TerrainType.Hills2, FromHex("#CB997E") },
+            { TerrainType.Mountains, FromHex("#DDBEA9") },
         };
 
         //darkTile: TerrainAspect
@@ -33,13 +33,13 @@ namespace Ventura.Unity.Graphics
         public static readonly Dictionary<StatusSeverity, Color> StatusLineColors = new()
         {
             { StatusSeverity.Normal, Color.white },
-            { StatusSeverity.Warning, fromHex("#FFA500") },
+            { StatusSeverity.Warning, FromHex("#FFA500") },
             { StatusSeverity.Critical, Color.red },
         };
 
 
 
-        private static Color fromHex(string hexStr)
+        public static Color FromHex(string hexStr)
         {
             Color res;
             if (ColorUtility.TryParseHtmlString(hexStr, out res))
