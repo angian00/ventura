@@ -17,76 +17,36 @@ namespace Ventura.Unity.Behaviours
         private GameState _gameState;
         public GameState GameState { get => _gameState; }
 
-        private static GameManager _instance;
-
         private CircularList<Actor> _actorScheduler = new();
         private Queue<ActionData> _playerActionQueue = new();
 
-        private const string savegameFile = "testSave.json";
-
-        private bool _gameScenePresent = false;
-        private SystemCommand? _pendingCommand = null;
+        private static string? _startStateFile = null;
+        public static string StartStateFile { set => _startStateFile = value; }
 
 
         //----------------- Unity Lifecycle Callbacks -----------------
 
-        void Awake()
-        {
-            DebugUtils.Log($"GameManager.Awake(); HashCode: {GetHashCode()}; active scene: {SceneManager.GetActiveScene().name} ");
-
-            _gameScenePresent = (SceneManager.GetActiveScene().name == UnityUtils.GAME_SCENE_NAME);
-        }
-
-
         void Start()
         {
-            DebugUtils.Log($"GameManager.Start(); HashCode: {GetHashCode()}; active scene: {SceneManager.GetActiveScene().name}");
+            DebugUtils.Log($"GameManager.Start(); active scene: {SceneManager.GetActiveScene().name}");
 
-            if (_instance != null)
-            {
-                DebugUtils.Log($"Destroying gameObject for HashCode: {GetHashCode()}");
 
-                Destroy(gameObject);
-                return;
-            }
-
-            //Unity "singleton" (DontDestroyOnLoad) pattern
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            if (_gameScenePresent)
-            {
-                //GameScene is run standalone: trigger a new game
-                EventManager.SystemCommandEvent.Invoke(SystemCommand.New);
-            }
+            if (_startStateFile == null)
+                newGame();
             else
-            {
-                SceneManager.sceneLoaded += onSceneLoaded;
-            }
+                loadGame(_startStateFile);
         }
 
         private void OnEnable()
         {
-            EventManager.SystemCommandEvent.AddListener(onSystemCommand);
             EventManager.ActionRequestEvent.AddListener(onActionRequest);
             EventManager.UIRequestEvent.AddListener(onUIRequest);
         }
 
         private void OnDisable()
         {
-            EventManager.SystemCommandEvent.RemoveListener(onSystemCommand);
             EventManager.ActionRequestEvent.RemoveListener(onActionRequest);
             EventManager.UIRequestEvent.RemoveListener(onUIRequest);
-        }
-
-        private void onSceneLoaded(Scene scene, LoadSceneMode sceneMode)
-        {
-            if (scene.name == UnityUtils.GAME_SCENE_NAME)
-                _gameScenePresent = true;
-
-            DebugUtils.Log($"GameManager.onSceneLoaded(); HashCode: {GetHashCode()}");
-            completeCommand((SystemCommand)_pendingCommand);
-            _pendingCommand = null;
         }
 
         void Update()
@@ -96,27 +56,6 @@ namespace Ventura.Unity.Behaviours
 
 
         //----------------- EventSystem notification listeners -----------------
-
-        private void onSystemCommand(SystemCommand command)
-        {
-            DebugUtils.Log($"GameManager.onSystemCommand(); HashCode: {GetHashCode()}; command: {DataUtils.EnumToStr(command)}");
-
-            switch (command)
-            {
-                case SystemCommand.New:
-                    executeNewGame();
-                    break;
-                case SystemCommand.Exit:
-                    executeExitGame();
-                    break;
-                case SystemCommand.Load:
-                    executeLoadGame();
-                    break;
-                case SystemCommand.Save:
-                    executeSaveGame();
-                    break;
-            }
-        }
 
         private void onActionRequest(ActionData actionRequest)
         {
@@ -162,88 +101,39 @@ namespace Ventura.Unity.Behaviours
             EventManager.GameStateUpdateEvent.Invoke(tileInfo);
         }
 
-        //------------------------ System Commands ------------------------------------------
-
-        private void completeCommand(SystemCommand command)
+        //------------------------ System Command Execution ------------------------------------------
+        private void newGame()
         {
-            DebugUtils.Log($"GameManager.completeCommand(); HashCode: {GetHashCode()}; command: {DataUtils.EnumToStr(command)}");
+            DebugUtils.Log($"Starting New Game");
 
-            if (command == SystemCommand.New)
-            {
-                _gameState = new GameState();
-                _gameState.NewGame();
+            _gameState = new GameState();
+            _gameState.NewGame();
 
-                DebugUtils.Log($"Game initialized");
-                EventManager.StatusNotificationEvent.Invoke("Welcome, adventurer!");
-            }
-            else if (command == SystemCommand.Load)
-            {
-                var fullPath = Application.persistentDataPath + "/" + savegameFile;
-                DebugUtils.Log($"Loading game from {fullPath}");
-
-                var jsonStr = File.ReadAllText(fullPath);
-                _gameState = JsonUtility.FromJson<GameState>(jsonStr);
-
-                _gameState.NotifyAllEvents();
-                EventManager.StatusNotificationEvent.Invoke("Game loaded");
-            }
-            else
-            {
-                throw new GameException($"System Command {DataUtils.EnumToStr(command)} needs no differed completion");
-            }
+            DebugUtils.Log($"Game initialized");
 
             resumeActors();
-            EventManager.UIRequestEvent.Invoke(new ResetViewRequest());
+
+            EventManager.StatusNotificationEvent.Invoke("Welcome, adventurer!");
+        }
+
+        private void loadGame(string filename)
+        {
+            var fullPath = Application.persistentDataPath + "/" + filename;
+            DebugUtils.Log($"Loading game from {fullPath}");
+
+            var jsonStr = File.ReadAllText(fullPath);
+            _gameState = JsonUtility.FromJson<GameState>(jsonStr);
+
+            resumeActors();
+            _gameState.NotifyAllEvents();
+
+            EventManager.StatusNotificationEvent.Invoke("Game loaded");
         }
 
 
-        private void executeNewGame()
+        public void SaveGame(string filename)
         {
-            DebugUtils.Log("Creating New Game");
-
-            if (_gameScenePresent)
-            {
-                suspendActors();
-                completeCommand(SystemCommand.New);
-            }
-            else
-            {
-                _pendingCommand = SystemCommand.New;
-                SceneManager.LoadScene(UnityUtils.GAME_SCENE_NAME);
-            }
-        }
-
-
-        private void executeExitGame()
-        {
-            DebugUtils.Log("Exiting Game");
-
-            //different calls needed if application is run in Unity editor or as a standalone application
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
-        }
-
-        private void executeLoadGame()
-        {
-            if (_gameScenePresent)
-            {
-                suspendActors();
-                completeCommand(SystemCommand.Load);
-            }
-            else
-            {
-                _pendingCommand = SystemCommand.Load;
-                SceneManager.LoadScene(UnityUtils.GAME_SCENE_NAME);
-            }
-        }
-
-
-        private void executeSaveGame()
-        {
-            var fullPath = Application.persistentDataPath + "/" + savegameFile;
+            var fullPath = Application.persistentDataPath + "/" + filename;
             DebugUtils.Log($"Saving game to {fullPath}");
 
             suspendActors();

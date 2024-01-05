@@ -1,30 +1,40 @@
 # TODO
 
 ## Current sprint
+- generazione items in mappa
+- arricchire stats player
+- pathfinding on tile click
+- generazione actors in mappa (butterflies)
+
+- theme previewer
 
 ## Bugfixing
-- suspend/resume su enter/exit map actions
+
 
 ## Improvements
-- dialog scelta nome savefile
 - controllare se/quando si possono svuotare i campi aux per la de/serializzazione
 - pensare logica nomi univoci per Entities
-+ ottimizzare la mole di eventi circolanti
+- irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
+- dialog scelta nome savefile
 
-+ irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
++ ottimizzare la mole di eventi circolanti
 
 
 ## Minutiae
 + key handler per inventory view (focus su item)
 - grafica base per skills view
 - padding in popup text inventory item
-+ Use some texture/shader for fog
++ Use some texture/shader for fog e terrain
 
 
 ## Errands
+- informarsi ScriptableObjects
+- raccogliere file utili sapientia*
+- raccogliere txt Poliziano
+
 - provare onGUI
-- ui design con figma
-? scouting musica
+? scouting musica (https://www.freesoundtrackmusic.com/)
+? suoni ambientali
 
 ## Brainstorming
 - Familiarity feedback
@@ -34,18 +44,11 @@
 
 ## Milestones
 
-
-### 0.5
-- savegame
-
-
-### 0.6
-- procedural generation books
-
 ### 0.7
-- butterflies
-- some ui features
-
+- shaders (https://www.ronja-tutorials.com/)
+- procedural generation
+	- books
+	- butterflies
 
 ### 0.x
 - skill system
@@ -74,4 +77,10 @@
 + icona libro: orientamento/prospettiva
 + alcuni valori disponibili solo per certe culture
 
+### Biomes
+https://github.com/GrandPiaf/Biome-and-Vegetation-PCG 
 
+### Visual Design
+- https://www.gameuidatabase.com/
+- Screenshot gioco erboristeria
+- https://www.color-hex.com/color-palettes/?keyword=Book
