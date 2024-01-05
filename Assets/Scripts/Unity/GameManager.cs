@@ -66,8 +66,7 @@ namespace Ventura.Unity.Behaviours
         private void onUIRequest(UIRequestData uiRequest)
         {
             //UnityEvents do not automatically handle derived classes for its invocation arguments
-            var reqType = uiRequest.GetType();
-            if (reqType == typeof(MapTileInfoRequest))
+            if (uiRequest is MapTileInfoRequest)
                 onTileInfoRequest((MapTileInfoRequest)uiRequest);
         }
 

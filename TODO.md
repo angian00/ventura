@@ -1,7 +1,6 @@
 # TODO
 
 ## Current sprint
-- zoom mappa
 - informarsi esempi Entity-Component
 - arricchire stats player
 - pathfinding on tile click

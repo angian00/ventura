@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - item generation in MapGenerator
+- zoom in/out in map
 
 ### Changed
 - Extracted SystemManager from GameManager to remove dirty DontDestroyOnLoad hack

@@ -144,6 +144,12 @@ namespace Ventura.Unity.Events
 
     public class ResetViewRequest : UIRequestData { }
 
+    public class ZoomRequest : UIRequestData
+    {
+        public static ZoomRequest ZoomIn = new ZoomRequest();
+        public static ZoomRequest ZoomOut = new ZoomRequest();
+    }
+
 
     public class MapTileInfoRequest : UIRequestData
     {

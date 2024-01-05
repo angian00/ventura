@@ -74,6 +74,14 @@ namespace Ventura.Unity.Input
             {
                 _viewManager.Toggle(ViewManager.ViewId.System);
             }
+            else if (key == keyboard.equalsKey)
+            {
+                EventManager.UIRequestEvent.Invoke(ZoomRequest.ZoomIn);
+            }
+            else if (key == keyboard.minusKey)
+            {
+                EventManager.UIRequestEvent.Invoke(ZoomRequest.ZoomOut);
+            }
 
             else
             {

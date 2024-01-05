@@ -22,6 +22,12 @@ namespace Ventura.Unity.Behaviours
         [Range(0.0f, 1.0f)]
         public float fogUnexploredAlpha = 0.9f;
 
+
+        private float[] zoomLevelsFactors = { 0.5f, 0.75f, 1.0f, 1.5f, 2.0f, };
+        private int _zoomLevelIndex = 2;
+        private const int defaultZoomLevel = 10;
+
+
         public GameObject playerObj;
         public GameObject cameraObj;
         public Transform terrainLayer;
@@ -37,11 +43,13 @@ namespace Ventura.Unity.Behaviours
         private void OnEnable()
         {
             EventManager.GameStateUpdateEvent.AddListener(onGameStateUpdated);
+            EventManager.UIRequestEvent.AddListener(onUIRequest);
         }
 
         private void OnDisable()
         {
             EventManager.GameStateUpdateEvent.RemoveListener(onGameStateUpdated);
+            EventManager.UIRequestEvent.RemoveListener(onUIRequest);
         }
 
         //----------------- EventSystem notification listeners -----------------
@@ -75,6 +83,11 @@ namespace Ventura.Unity.Behaviours
         }
 
 
+        public void onUIRequest(UIRequestData uiRequest)
+        {
+            if (uiRequest is ZoomRequest)
+                updateZoomLevel(((ZoomRequest)uiRequest) == ZoomRequest.ZoomIn);
+        }
 
         // ------ mouse input handlers -------------------------
         public void OnTileClick(Vector2Int tilePos)
@@ -209,6 +222,23 @@ namespace Ventura.Unity.Behaviours
                     _fogTiles[x, y].GetComponent<SpriteRenderer>().color = tileColor;
                 }
             }
+        }
+
+
+        private void updateZoomLevel(bool zoomIn)
+        {
+            if (zoomIn)
+            {
+                if (_zoomLevelIndex > 0)
+                    _zoomLevelIndex--;
+            }
+            else
+            {
+                if (_zoomLevelIndex < zoomLevelsFactors.Length - 1)
+                    _zoomLevelIndex++;
+            }
+
+            cameraObj.GetComponent<Camera>().orthographicSize = defaultZoomLevel * zoomLevelsFactors[_zoomLevelIndex];
         }
 
     }
