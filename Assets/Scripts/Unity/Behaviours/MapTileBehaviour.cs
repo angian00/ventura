@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 namespace Ventura.Unity.Behaviours
 {
 
-    public class MapTileBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class MapTileBehaviour : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [NonSerialized]
         private Vector2Int _mapPos;
@@ -14,13 +14,10 @@ namespace Ventura.Unity.Behaviours
         public MainViewBehaviour mapManager;
 
 
-        public void OnButtonClick()
+        public void OnPointerClick(PointerEventData eventData)
         {
-            //Debug.Log($"InventoryItemBehaviour.OnButtonClick; gameItem.Name: {gameItem.Name}");
-
             mapManager.OnTileClick(_mapPos);
         }
-
 
         public void OnPointerEnter(PointerEventData eventData)
         {

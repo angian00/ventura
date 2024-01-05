@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
+using Ventura.GameLogic.Algorithms;
 using Ventura.Unity.Events;
 using Ventura.Util;
 
@@ -68,6 +69,8 @@ namespace Ventura.Unity.Behaviours
             //UnityEvents do not automatically handle derived classes for its invocation arguments
             if (uiRequest is MapTileInfoRequest)
                 onTileInfoRequest((MapTileInfoRequest)uiRequest);
+            else if (uiRequest is PathfindingRequest)
+                onPathfindingRequest((PathfindingRequest)uiRequest);
         }
 
 
@@ -108,6 +111,19 @@ namespace Ventura.Unity.Behaviours
 
             EventManager.GameStateUpdateEvent.Invoke(tileInfo);
         }
+
+        private void onPathfindingRequest(PathfindingRequest uiRequest)
+        {
+            var pathfinding = new Pathfinding(_gameState.CurrMap.GetBlockedTiles());
+            var path = pathfinding.FindPathAStar(_gameState.Player.pos, uiRequest.EndPos);
+            DebugUtils.Log("onPathfindingRequest found path:");
+            foreach (var pos in path)
+            {
+                DebugUtils.Log($"{pos}");
+            }
+            EventManager.GameStateUpdateEvent.Invoke(new PathfindingUpdateData(path));
+        }
+
 
         //------------------------ System Command Execution ------------------------------------------
         private void newGame()

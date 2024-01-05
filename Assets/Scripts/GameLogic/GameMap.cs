@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using UnityEngine;
 using Ventura.Unity.Events;
 using Ventura.Util;
-using Random = UnityEngine.Random;
 
 
 namespace Ventura.GameLogic
@@ -163,6 +162,8 @@ namespace Ventura.GameLogic
             return terrain;
         }
 
+
+
         public bool IsInBounds(int x, int y)
         {
             return (0 <= x && x < _width && 0 <= y && y < _height);
@@ -247,18 +248,29 @@ namespace Ventura.GameLogic
         }
 
 
-        public Vector2Int? GetRandomWalkablePos()
+        public bool[,] GetBlockedTiles()
         {
-            int x, y;
-
-            while (true)
+            var blocked = new bool[_width, _height];
+            for (var x = 0; x < _width; x++)
             {
-                x = Random.Range(0, _width);
-                y = Random.Range(0, _height);
-
-                if (_terrain[x, y].Walkable && (GetBlockingEntityAt(x, y) == null))
-                    return new Vector2Int(x, y);
+                for (var y = 0; y < _height; y++)
+                {
+                    blocked[x, y] = (!_terrain[x, y].Walkable);
+                }
             }
+
+            foreach (var e in _entities)
+            {
+                if (e is Actor)
+                    blocked[e.x, e.y] = true;
+
+                //FIXME: we should not automatically enter sites
+                if (e is Site)
+                    blocked[e.x, e.y] = true;
+            }
+
+
+            return blocked;
         }
 
 

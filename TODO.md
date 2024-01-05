@@ -1,24 +1,30 @@
 # TODO
 
 ## Current sprint
-- controllare se/quando si possono svuotare i campi aux per la de/serializzazione
-- pensare logica nomi univoci per Entities
-- informarsi esempi Entity-Component
-- arricchire stats player
 - pathfinding on tile click
+	- feedback click
+	- scheduling turni movimento
+	- animazione e sleep turni movimento
 - generazione actors in mappa (butterflies)
+- arricchire stats player
 
 - theme previewer
 
+
 ## Bugfixing
 - aggiungere a GameItem.MoveTo la notifica EventManager.GameStateUpdateEvent.Invoke(...);
+- hide site if there is one behind an item in map
 
 
 ## Improvements
-- informarsi mipmapping sprites
+- spostare PathfindingRequest da UIRequestData
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - dialog scelta nome savefile
 - aggiungere bitfield updatedFields agli EventData
+
++ refactoring Entity-Component-System
+
+- campo id per Entities (Guid.NewGuid())
 
 + ottimizzare la mole di eventi circolanti
 
@@ -88,3 +94,4 @@ https://github.com/GrandPiaf/Biome-and-Vegetation-PCG
 - https://www.gameuidatabase.com/
 - Screenshot gioco erboristeria
 - https://www.color-hex.com/color-palettes/?keyword=Book
+? informarsi mipmapping sprites

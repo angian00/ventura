@@ -170,7 +170,7 @@ namespace Ventura.GameLogic
             var startPos = _currMap.StartingPos;
             DebugUtils.Log($"EnterMap; startPos={startPos}");
             if (startPos == null)
-                startPos = (Vector2Int)_currMap.GetRandomWalkablePos();
+                startPos = (Vector2Int)DataUtils.RandomWalkablePos(_currMap);
 
             MoveActorTo(_player, startPos.x, startPos.y);
 

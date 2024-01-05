@@ -26,6 +26,8 @@ namespace Ventura.GameLogic
         protected bool _isBlocking;
         public bool IsBlocking { get => _isBlocking; }
 
+        public Vector2Int pos { get => new Vector2Int(x, y); }
+
 
         protected Entity()
         {

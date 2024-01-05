@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.Unity.Events;
@@ -34,8 +35,8 @@ namespace Ventura.Unity.Behaviours
         public Transform sitesLayer;
         public Transform itemsLayer;
         public Transform fogLayer;
-        public BoxCollider2D mapCollider;
 
+        public GameObject pathFinderLineObj;
 
         private GameObject[,] _fogTiles;
 
@@ -80,6 +81,13 @@ namespace Ventura.Unity.Behaviours
 
                 updateItems((GameMap)c);
             }
+
+            else if (updateData is PathfindingUpdateData)
+            {
+                var path = ((PathfindingUpdateData)updateData).Path;
+                drawLine(path);
+            }
+
         }
 
 
@@ -92,7 +100,16 @@ namespace Ventura.Unity.Behaviours
         // ------ mouse input handlers -------------------------
         public void OnTileClick(Vector2Int tilePos)
         {
-            //FUTURE: OnTileClick
+            DebugUtils.Log("MainView.OnTileClick");
+            //var path = new List<Vector2Int>();
+            //path.Add(new Vector2Int(5, 5));
+            //path.Add(new Vector2Int(5, 40));
+            //path.Add(new Vector2Int(40, 40));
+            //path.Add(new Vector2Int(40, 6));
+            //path.Add(new Vector2Int(6, 6));
+
+            //drawLine(path);
+            EventManager.UIRequestEvent.Invoke(new PathfindingRequest(tilePos));
         }
 
         public void OnTileMouseEnter(Vector2Int tilePos)
@@ -241,6 +258,29 @@ namespace Ventura.Unity.Behaviours
             cameraObj.GetComponent<Camera>().orthographicSize = defaultZoomLevel * zoomLevelsFactors[_zoomLevelIndex];
         }
 
+        // -----------------------------------------------------
+
+        private void drawLine(List<Vector2Int> tilePath)
+        {
+            //pathFinderLineObj.transform.position = ;
+
+            var lr = pathFinderLineObj.GetComponent<LineRenderer>();
+
+            //lr.SetPosition(0, new Vector3(startPos.x, startPos.y, 1));
+            //lr.SetPosition(1, new Vector3(endPos.x, endPos.y, 1));
+
+            var path = new Vector3[tilePath.Count];
+            for (int i = 0; i < tilePath.Count; i++)
+            {
+                var tilePos = tilePath[i];
+                path[i] = new Vector3(tilePos.x, tilePos.y, 0);
+            }
+
+            lr.positionCount = tilePath.Count;
+            lr.SetPositions(path);
+
+            //GameObject.Destroy(pathFinderLineObj, duration);
+        }
     }
 }
 

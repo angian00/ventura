@@ -47,6 +47,9 @@ TagManager:
   - name: Sites
     uniqueID: 4221333221
     locked: 0
+  - name: Map Annotation
+    uniqueID: 703301405
+    locked: 0
   - name: Fog
     uniqueID: 3226194685
     locked: 0

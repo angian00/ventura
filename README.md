@@ -105,3 +105,4 @@ Keybindings (so far):
 ## Acknowledgements
 Concept art created with [Deep Dream Generator](https://deepdreamgenerator.com/).
 Game icons from [Game-icons.net](https://game-icons.net/).
+Pathfinding algorithm adapted from https://github.com/pixelfac/2D-Astar-Pathfinding-in-Unity

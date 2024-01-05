@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.Events;
@@ -99,6 +100,18 @@ namespace Ventura.Unity.Events
     }
 
 
+
+    public class PathfindingUpdateData : GameStateUpdateData
+    {
+        private List<Vector2Int> _path;
+        public List<Vector2Int> Path { get => _path; set => _path = value; }
+
+        public PathfindingUpdateData(List<Vector2Int> path)
+        {
+            _path = path;
+        }
+    }
+
     //------------- Status Line Notifications ------------
 
     public class StatusNotificationEvent : UnityEvent<string, StatusSeverity>
@@ -159,6 +172,17 @@ namespace Ventura.Unity.Events
         public MapTileInfoRequest(Vector2Int? tilePos)
         {
             _tilePos = tilePos;
+        }
+    }
+
+    public class PathfindingRequest : UIRequestData //FIXME: move from UIRequestData
+    {
+        protected Vector2Int _endPos;
+        public Vector2Int EndPos { get => _endPos; }
+
+        public PathfindingRequest(Vector2Int endPos)
+        {
+            _endPos = endPos;
         }
     }
 
