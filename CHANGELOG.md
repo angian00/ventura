@@ -6,9 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Added
+- item generation in MapGenerator
 
 ### Changed
 - Extracted SystemManager from GameManager to remove dirty DontDestroyOnLoad hack
+
 
 ## [0.5] - 2024-01-04
 ### Added

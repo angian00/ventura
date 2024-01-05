@@ -79,7 +79,7 @@ namespace Ventura.Generators
 
         public string GenerateString()
         {
-            return DataUtils.ChooseWeighted(_names, _frequencies);
+            return DataUtils.RandomWeighted(_names, _frequencies);
         }
     }
 

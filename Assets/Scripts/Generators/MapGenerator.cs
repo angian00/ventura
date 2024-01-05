@@ -10,7 +10,7 @@ namespace Ventura.Generators
     public class MapGenerator
     {
 
-        public static GameMap GenerateWildernessMap(int nRows, int nCols, string? mapName = null, bool hasSites = true)
+        public static GameMap GenerateWildernessMap(int nRows, int nCols, string? mapName = null, bool doGenerateSites = true)
         {
             DebugUtils.Log("GenerateWildernessMap()");
 
@@ -20,21 +20,12 @@ namespace Ventura.Generators
             var newMap = new GameMap(mapName, mapName, nRows, nCols);
 
             generateTerrain(newMap);
+            if (doGenerateSites)
+                generateSites(newMap, 15);
 
-            if (hasSites)
-                addSites(newMap, 8);
+            generateSomeItems(newMap);
 
-            //choose starting lastPos on a empty square
-            while (true)
-            {
-                int x = Random.Range(0, nRows);
-                int y = Random.Range(0, nCols);
-                if (newMap.Terrain[x, y].Walkable && (newMap.GetAnyEntityAt<Entity>(x, y) == null))
-                {
-                    newMap.StartingPos = new Vector2Int(x, y);
-                    break;
-                }
-            }
+            newMap.StartingPos = DataUtils.RandomEmptyPos(newMap);
 
             return newMap;
         }
@@ -100,7 +91,7 @@ namespace Ventura.Generators
         }
 
 
-        private static void addSites(GameMap targetMap, int nSites)
+        private static void generateSites(GameMap targetMap, int nSites)
         {
             DebugUtils.Log($"addSite({targetMap.Name}, {nSites})");
 
@@ -139,5 +130,23 @@ namespace Ventura.Generators
                 i++;
             }
         }
+
+        private static void generateSomeItems(GameMap targetMap)
+        {
+            const float perc = .02f;
+
+            var nItems = (int)(perc * targetMap.Width * targetMap.Height);
+
+            var books = BookItemGenerator.Instance.GenerateBooks(nItems);
+
+            foreach (var book in books)
+            {
+                targetMap.Entities.Add(book);
+                var pos = DataUtils.RandomWalkablePos(targetMap);
+                book.MoveTo(pos.x, pos.y);
+                //FIXME: add to GameItem.MoveTo EventManager.GameStateUpdateEvent.Invoke(new ActorUpdateData(this));
+            }
+        }
     }
+
 }

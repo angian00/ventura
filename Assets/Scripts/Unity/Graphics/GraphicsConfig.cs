@@ -8,9 +8,11 @@ namespace Ventura.Unity.Graphics
 
     public class GraphicsConfig
     {
-        public static readonly Dictionary<string, string> EntityIcons = new()
+        public static readonly Dictionary<string, string> SpriteFiles = new()
         {
             { "site", "temple" },
+            { "item", "powder-bag" },
+            { "book", "book_00" },
         };
 
 

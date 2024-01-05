@@ -26,6 +26,7 @@ namespace Ventura.Unity.Behaviours
         public GameObject cameraObj;
         public Transform terrainLayer;
         public Transform sitesLayer;
+        public Transform itemsLayer;
         public Transform fogLayer;
         public BoxCollider2D mapCollider;
 
@@ -62,6 +63,14 @@ namespace Ventura.Unity.Behaviours
                     return;
 
                 updatePlayer((Player)a);
+            }
+            else if (updateData is ContainerUpdateData)
+            {
+                var c = ((ContainerUpdateData)updateData).Container;
+                if (!(c is GameMap))
+                    return;
+
+                updateItems((GameMap)c);
             }
         }
 
@@ -143,6 +152,7 @@ namespace Ventura.Unity.Behaviours
 
             updateSites(gameMap);
             updateFog(gameMap);
+            updateItems(gameMap);
         }
 
 
@@ -150,30 +160,35 @@ namespace Ventura.Unity.Behaviours
         {
             DebugUtils.Log("MainViewBehaviour.updateSites()");
 
-            foreach (var e in gameMap.Entities)
+            UnityUtils.RemoveAllChildren(sitesLayer);
+            foreach (var e in gameMap.GetAllEntities<Site>())
             {
-                if (!(e is Site))
-                    continue;
+                var newEntityObj = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
+                newEntityObj.name = e.Name; //FIXME: there is no guarantee that entity name is unique
+                newEntityObj.GetComponent<SpriteRenderer>().sprite = SpriteCache.Instance.GetSprite("site");
+                newEntityObj.transform.SetParent(sitesLayer);
+            }
+        }
 
-                var spriteName = GraphicsConfig.EntityIcons["site"];
-                var sprite = Resources.Load<Sprite>($"Sprites/{spriteName}");
-                if (sprite == null)
-                {
-                    DebugUtils.Log($"!! Sprite not found: {spriteName}");
-                    continue;
-                }
+        private void updateItems(GameMap gameMap)
+        {
+            DebugUtils.Log("MainViewBehaviour.updateItems()");
 
-                var newEntity = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
-                newEntity.name = e.Name; //FIXME: there is no guarantee that entity name is unique
-                newEntity.GetComponent<SpriteRenderer>().sprite = sprite;
-                newEntity.transform.SetParent(sitesLayer);
+            UnityUtils.RemoveAllChildren(itemsLayer);
+            foreach (var e in gameMap.GetAllEntities<GameItem>())
+            {
+                var newEntityObj = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
+                newEntityObj.name = e.Name;
+                newEntityObj.GetComponent<SpriteRenderer>().sprite = SpriteCache.Instance.GetSprite("item");
+                newEntityObj.transform.SetParent(itemsLayer);
+                //TODO: hide site if there is one behind
             }
         }
 
 
         private void updateFog(GameMap gameMap)
         {
-            DebugUtils.Log("MainViewBehaviour.UpdateFog()");
+            DebugUtils.Log("MainViewBehaviour.updateFog()");
 
             for (int x = 0; x < gameMap.Width; x++)
             {
@@ -195,5 +210,7 @@ namespace Ventura.Unity.Behaviours
                 }
             }
         }
+
     }
 }
+

@@ -174,6 +174,11 @@ namespace Ventura.GameLogic
             return (IsInBounds(x, y) && Terrain[x, y].Walkable && GetBlockingEntityAt(x, y) == null);
         }
 
+        public bool IsEmpty(int x, int y)
+        {
+            return (IsInBounds(x, y) && Terrain[x, y].Walkable && GetAnyEntityAt<Entity>(x, y) == null);
+        }
+
         public T? GetAnyEntityAt<T>(int x, int y) where T : Entity
         {
             foreach (var e in _entities)

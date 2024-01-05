@@ -99,4 +99,4 @@ Keybindings (so far):
 
 ## Acknowledgements
 Concept art created with [Deep Dream Generator](https://deepdreamgenerator.com/).
-
+Game icons from [Game-icons.net](https://game-icons.net/).

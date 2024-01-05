@@ -1,7 +1,8 @@
 # TODO
 
 ## Current sprint
-- generazione items in mappa
+- zoom mappa
+- informarsi esempi Entity-Component
 - arricchire stats player
 - pathfinding on tile click
 - generazione actors in mappa (butterflies)
@@ -16,6 +17,7 @@
 - pensare logica nomi univoci per Entities
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - dialog scelta nome savefile
+- aggiungere bitfield updatedFields agli EventData
 
 + ottimizzare la mole di eventi circolanti
 
@@ -31,6 +33,7 @@
 - informarsi ScriptableObjects
 - raccogliere file utili sapientia*
 - raccogliere txt Poliziano
+- controllare licenza https://game-icons.net/
 
 - provare onGUI
 ? scouting musica (https://www.freesoundtrackmusic.com/)

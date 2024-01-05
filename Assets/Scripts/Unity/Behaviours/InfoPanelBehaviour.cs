@@ -84,7 +84,7 @@ namespace Ventura.Unity.Behaviours
                 return updateData.Site;
 
             if (updateData.Items != null && updateData.Items.Count > 0)
-                return "..."; //TODO
+                return $"<{updateData.Items[0]}>";
 
             return "";
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -88,6 +89,14 @@ namespace Ventura.Unity.Behaviours
 
                 if (gameMap.Visible[pos.x, pos.y])
                 {
+                    var items = gameMap.GetAllEntitiesAt<GameItem>(pos.x, pos.y);
+                    var itemNames = new List<string>();
+                    foreach (var item in items)
+                    {
+                        itemNames.Add(item.GetType().Name);
+                    }
+                    tileInfo.Items = new ReadOnlyCollection<string>(itemNames);
+
                     var s = gameMap.GetAnyEntityAt<Site>(pos.x, pos.y);
                     if (s != null)
                         tileInfo.Site = s.Name;

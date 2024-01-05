@@ -1,6 +1,8 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using Ventura.GameLogic;
 using Random = UnityEngine.Random;
 
 
@@ -50,7 +52,7 @@ namespace Ventura.Util
 
 
 
-        public static T ChooseWeighted<T>(List<T> values, List<int> weights)
+        public static T RandomWeighted<T>(List<T> values, List<int> weights)
         {
             var cumWeights = new List<int>();
             int currCum = 0;
@@ -73,13 +75,36 @@ namespace Ventura.Util
         }
 
 
+        public static Vector2Int RandomEmptyPos(GameMap targetMap)
+        {
+            //choose starting lastPos on a empty square
+            while (true)
+            {
+                int x = Random.Range(0, targetMap.Width);
+                int y = Random.Range(0, targetMap.Height);
+                if (targetMap.IsEmpty(x, y))
+                    return new Vector2Int(x, y);
+            }
+        }
+
+        public static Vector2Int RandomWalkablePos(GameMap targetMap)
+        {
+            while (true)
+            {
+                int x = Random.Range(0, targetMap.Width);
+                int y = Random.Range(0, targetMap.Height);
+                if (targetMap.IsWalkable(x, y))
+                    return new Vector2Int(x, y);
+            }
+
+        }
         public static bool RandomBool()
         {
             if (Random.value >= 0.5)
                 return true;
             return false;
         }
-     
+
         public static string EnumToStr<T>(T value) where T : Enum
         {
             return Enum.GetName(typeof(T), value);

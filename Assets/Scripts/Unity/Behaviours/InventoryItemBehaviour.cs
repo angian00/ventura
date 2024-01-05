@@ -23,7 +23,8 @@ namespace Ventura.Unity.Behaviours
 
         void Start()
         {
-            thumbnail.sprite = SpriteCache.Instance.GetSprite(_gameItem);
+            var spriteId = _gameItem is BookItem ? "book" : "item";
+            thumbnail.sprite = SpriteCache.Instance.GetSprite(spriteId);
             labelText.text = _gameItem.Label;
 
             labelPanel.SetActive(false);
