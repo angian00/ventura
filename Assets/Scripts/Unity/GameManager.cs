@@ -175,8 +175,14 @@ namespace Ventura.Unity.Behaviours
 
         private void resumeActors()
         {
+            var p = _gameState.CurrMap.GetAnyEntity<Player>();
+            _actorScheduler.Add(p);
+
             foreach (var a in _gameState.CurrMap.GetAllEntities<Actor>())
-                _actorScheduler.Add(a);
+            {
+                if (!(a is Player))
+                    _actorScheduler.Add(a);
+            }
         }
 
         private void suspendActors()
@@ -205,7 +211,7 @@ namespace Ventura.Unity.Behaviours
             if (actionData == null)
                 return;
 
-            DebugUtils.Log($"Performing ${DataUtils.EnumToStr(actionData.ActionType)}");
+            DebugUtils.Log($"Actor {actor.Name} performs ${DataUtils.EnumToStr(actionData.ActionType)}");
 
             var actionResult = performAction(actor, actionData);
 

@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Ventura.Util
@@ -25,6 +24,14 @@ namespace Ventura.Util
 
             targetObj.GetComponent<CanvasRenderer>().SetAlpha(1.0f);
             targetObj.CrossFadeAlpha(0.0f, duration, false);
+        }
+
+        public static Color ColorFromHash(int objHash)
+        {
+            float r = Mathf.Abs(Mathf.Sin(objHash * 0.123f));
+            float g = Mathf.Abs(Mathf.Cos(objHash * 0.456f));
+            float b = Mathf.Abs(Mathf.Sin(objHash * 0.789f));
+            return new Color(r, g, b);
         }
     }
 }

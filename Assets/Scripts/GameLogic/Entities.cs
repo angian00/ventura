@@ -59,14 +59,14 @@ namespace Ventura.GameLogic
     public class Actor : Entity, ISerializationCallbackReceiver
     {
         [NonSerialized]
-        protected AI? _ai;
+        protected AI? _ai = null;
 
-        [SerializeField]
-        protected Skills? _skills;
+        [SerializeReference]
+        protected Skills? _skills = null;
         public Skills? Skills { get => _skills; }
 
-        [SerializeField]
-        protected Inventory? _inventory;
+        [SerializeReference]
+        protected Inventory? _inventory = null;
         public Inventory Inventory { get => _inventory; }
         //private Equipment? _equipment;
 

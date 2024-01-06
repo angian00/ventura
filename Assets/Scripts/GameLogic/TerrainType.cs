@@ -22,6 +22,7 @@
             this._transparent = transparent;
         }
 
+        public static TerrainType Water = new TerrainType("water", "Water", false, true);
         public static TerrainType Plains1 = new TerrainType("plains1", "Plains", true, true);
         public static TerrainType Plains2 = new TerrainType("plains2", "Plains", true, true);
         public static TerrainType Hills1 = new TerrainType("hills1", "Hills", true, true);
@@ -31,6 +32,8 @@
 
         public static TerrainType FromName(string name)
         {
+            if (name == "water")
+                return Water;
             if (name == "plains1")
                 return Plains1;
             if (name == "plains2")

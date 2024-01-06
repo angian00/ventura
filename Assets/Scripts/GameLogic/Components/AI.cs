@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Ventura.GameLogic.Actions;
+using Ventura.Util;
 
 namespace Ventura.GameLogic.Components
 {
@@ -129,4 +130,18 @@ namespace Ventura.GameLogic.Components
     //    }
 
     //}
+
+    public class RandomMovementAI : AI
+    {
+        public RandomMovementAI(Actor parent) : base(parent) { }
+
+        public override ActionData? ChooseAction()
+        {
+            var actionData = new ActionData(GameActionType.BumpAction);
+            actionData.DeltaPos = DataUtils.RandomMovement();
+
+            return actionData;
+        }
+
+    }
 }

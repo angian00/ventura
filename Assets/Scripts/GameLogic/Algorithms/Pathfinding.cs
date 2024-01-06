@@ -76,18 +76,15 @@ namespace Ventura.GameLogic.Algorithms
                 openSet.Remove(node);
                 closedSet.Add(node);
 
-                //If target found, retrace path
+                //if target found, retrace path
                 if (node == targetNode)
-                {
                     return retracePath(seekerNode, targetNode);
-                }
+
 
                 //adds neighbor nodes to openSet
                 foreach (var neighbour in getNeighbors(node))
                 {
-                    //assumption: getNeighbors already removes blocked nodes
-                    //if (neighbour.isBlocking || closedSet.Contains(neighbour))
-                    if (closedSet.Contains(neighbour))
+                    if (neighbour.isBlocking || closedSet.Contains(neighbour))
                         continue;
 
                     float newCostToNeighbour = node.gCost + getDistance(node, neighbour);

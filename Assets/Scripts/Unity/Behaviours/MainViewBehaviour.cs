@@ -34,6 +34,7 @@ namespace Ventura.Unity.Behaviours
         public Transform terrainLayer;
         public Transform sitesLayer;
         public Transform itemsLayer;
+        public Transform monstersLayer;
         public Transform fogLayer;
 
         public GameObject pathFinderLineObj;
@@ -183,6 +184,7 @@ namespace Ventura.Unity.Behaviours
             updateSites(gameMap);
             updateFog(gameMap);
             updateItems(gameMap);
+            updateMonsters(gameMap);
         }
 
 
@@ -215,6 +217,24 @@ namespace Ventura.Unity.Behaviours
             }
         }
 
+        private void updateMonsters(GameMap gameMap)
+        {
+            DebugUtils.Log("MainViewBehaviour.updateItems()");
+
+            UnityUtils.RemoveAllChildren(monstersLayer);
+            foreach (var e in gameMap.GetAllEntities<Actor>())
+            {
+                if (e is Player)
+                    continue;
+                var newEntityObj = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
+                newEntityObj.name = e.Name;
+                newEntityObj.GetComponent<SpriteRenderer>().sprite = SpriteCache.Instance.GetSprite("butterfly"); //TODO: make generic
+                newEntityObj.GetComponent<SpriteRenderer>().color = UnityUtils.ColorFromHash(e.GetHashCode()); //TODO: make generic
+                newEntityObj.transform.SetParent(monstersLayer);
+
+                //TODO: hide site or item if there is one behind
+            }
+        }
 
         private void updateFog(GameMap gameMap)
         {

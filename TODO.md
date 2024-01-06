@@ -1,12 +1,13 @@
 # TODO
 
 ## Current sprint
+- testare actor scheduling
+- monster factory architecture
+
 - pathfinding on tile click
-	- testare con ostacoli (terrain acqua)
 	- feedback click
 	- scheduling turni movimento
 	- animazione e sleep turni movimento
-- generazione actors in mappa (butterflies)
 - arricchire stats player
 
 
@@ -21,6 +22,7 @@
 
 
 ## Improvements
+-  tidy up gameMap/gameState API
 - spostare PathfindingRequest da UIRequestData
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - dialog scelta nome savefile
@@ -98,4 +100,11 @@ https://github.com/GrandPiaf/Biome-and-Vegetation-PCG
 - https://www.gameuidatabase.com/
 - Screenshot Strange Horticulture
 - https://www.color-hex.com/color-palettes/?keyword=Book
-? informarsi mipmapping sprites
+- creare sfondo watercolor https://creativemarket.com/ArtistMef/2928714-Minimalist-Watercolor-Backgrounds
+- creare palette da https://www.mountangelabbey.org/library/illuminated-manuscripts/
+- scelta font
+	https://www.1001fonts.com/vinque-font.html
+	https://fontsgeek.com/lombardic-narrow-font
+	https://www.1001fonts.com/flanker-griffo-font.html
+- capire licensing fonts
+	https://www.reddit.com/r/gamedev/s/NB4PcOYfY3

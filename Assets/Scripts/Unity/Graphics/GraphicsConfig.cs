@@ -12,12 +12,16 @@ namespace Ventura.Unity.Graphics
         {
             { "site", "temple" },
             { "item", "powder-bag" },
+
             { "book", "book_00" },
+
+            { "butterfly", "butterfly" },
         };
 
 
         public static readonly Dictionary<TerrainType, Color> TerrainColors = new()
         {
+            { TerrainType.Water, FromHex("#1CA3EC") },
             { TerrainType.Plains1, FromHex("#A5A58D") },
             { TerrainType.Plains2, FromHex("#B7B7A4") },
             { TerrainType.Hills1, FromHex("#6B705C") },

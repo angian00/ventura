@@ -105,6 +105,17 @@ namespace Ventura.Util
             return false;
         }
 
+        public static Vector2Int RandomMovement()
+        {
+            while (true)
+            {
+                int deltaX = Random.Range(-1, 2);
+                int deltaY = Random.Range(-1, 2);
+                if (deltaX != 0 || deltaY != 0)
+                    return new Vector2Int(deltaX, deltaY);
+            }
+        }
+
         public static string EnumToStr<T>(T value) where T : Enum
         {
             return Enum.GetName(typeof(T), value);

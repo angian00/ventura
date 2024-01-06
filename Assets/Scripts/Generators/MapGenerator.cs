@@ -24,6 +24,7 @@ namespace Ventura.Generators
                 generateSites(newMap, 15);
 
             generateSomeItems(newMap);
+            generateSomeMonsters(newMap);
 
             newMap.StartingPos = DataUtils.RandomEmptyPos(newMap);
 
@@ -37,15 +38,17 @@ namespace Ventura.Generators
             float noiseScale = 10.0f;
 
 
-            //float[] terrainLevels = new float[] { 0.0f, 0.4f, 0.65f, 0.85f, .99f, 1.0f };
-            float[] terrainLevels = new float[] { 0.0f, 0.40f, 0.62f, 0.80f, .90f, 1.0f };
+            var terrainWeights = new float[] { 40, 40, 22, 18, 10, 10 };
             TerrainType[] terrainTypes = new TerrainType[] {
+                TerrainType.Water,
                 TerrainType.Plains1,
                 TerrainType.Plains2,
                 TerrainType.Hills1,
                 TerrainType.Hills2,
                 TerrainType.Mountains,
             };
+
+            var terrainLevels = computeTerrainLevels(terrainWeights);
 
 
             //stats collection
@@ -90,6 +93,20 @@ namespace Ventura.Generators
             //}
         }
 
+        private static float[] computeTerrainLevels(float[] terrainWeights)
+        {
+            var res = new float[terrainWeights.Length + 1];
+            res[0] = 0.0f;
+
+            float totWeight = 0.0f;
+            for (var i = 0; i < terrainWeights.Length; i++)
+                totWeight += terrainWeights[i];
+
+            for (var i = 0; i < terrainWeights.Length; i++)
+                res[i + 1] = res[i] + terrainWeights[i] / totWeight;
+
+            return res;
+        }
 
         private static void generateSites(GameMap targetMap, int nSites)
         {
@@ -145,6 +162,24 @@ namespace Ventura.Generators
                 book.MoveTo(pos.x, pos.y);
 
                 book.TransferTo(targetMap);
+            }
+        }
+
+
+        private static void generateSomeMonsters(GameMap targetMap)
+        {
+            const float perc = .01f;
+
+            var nMonsters = (int)(perc * targetMap.Width * targetMap.Height);
+
+            var monsters = MonsterGenerator.Instance.GenerateMonsters(nMonsters);
+
+            foreach (var monster in monsters)
+            {
+                var pos = DataUtils.RandomEmptyPos(targetMap);
+                monster.MoveTo(pos.x, pos.y);
+
+                targetMap.Entities.Add(monster); //FIXME: tidy up gameMap/gameState API
             }
         }
     }
