@@ -8,7 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - item generation and drawing in map
-- (static) actor generation and drawing in in map
+- monster generation and drawing in map
+- basic monster ai
 - azione PickupItem
 - zoom in/out in map
 - A* pathfinding implementation

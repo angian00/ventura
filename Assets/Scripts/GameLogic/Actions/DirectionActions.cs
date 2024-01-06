@@ -45,11 +45,6 @@ namespace Ventura.GameLogic.Actions
                 actionData.ActionType = GameActionType.MeleeAction;
                 return (new MeleeAction()).Perform(actor, actionData, gameState);
             }
-            else if (GetTargetSite(actor, actionData, gameState) != null)
-            {
-                actionData.ActionType = GameActionType.EnterMapAction;
-                return (new EnterMapAction()).Perform(actor, actionData, gameState);
-            }
             else
             {
                 actionData.ActionType = GameActionType.MovementAction;
@@ -79,11 +74,12 @@ namespace Ventura.GameLogic.Actions
 
             var targetPos = GetTargetPos(actor, actionData);
 
-            if (!currMap.IsInBounds(targetPos.x, targetPos.y))
-            {
-                actionData.ActionType = GameActionType.ExitMapAction;
-                return (new ExitMapAction()).Perform(actor, actionData, gameState);
-            }
+            ////go up to parent map if you try to go out of bounds
+            //if (!currMap.IsInBounds(targetPos.x, targetPos.y))
+            //{
+            //    actionData.ActionType = GameActionType.ExitMapAction;
+            //    return (new ExitMapAction()).Perform(actor, actionData, gameState);
+            //}
 
             if (!currMap.IsWalkable(targetPos.x, targetPos.y))
                 return new ActionResult(false, "That way is blocked");
@@ -127,7 +123,7 @@ namespace Ventura.GameLogic.Actions
             }
             else
             {
-                return new ActionResult(false, "That way is blocked");
+                return new ActionResult(false, "Already at top level map");
             }
         }
 

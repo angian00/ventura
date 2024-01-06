@@ -61,6 +61,17 @@ namespace Ventura.GameLogic.Actions
                     DataUtils.EnumToStr(targetType),
                     DataUtils.EnumToStr(_actionType));
         }
+
+        public override string ToString()
+        {
+            string res = DataUtils.EnumToStr(_actionType);
+            if (_deltaPos != null)
+                res += $" DeltaPos: {_deltaPos}";
+            if (_deltaPos != null)
+                res += $" TargetItem: {_targetItem}";
+
+            return res;
+        }
     }
 
 

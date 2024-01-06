@@ -127,16 +127,17 @@ namespace Ventura.GameLogic
             if (!_currMap.IsWalkable(targetX, targetY))
                 throw new GameException($"Target tile {targetX}, {targetY} is not walkable");
 
-            if (_currMap.IsWalkable(targetX, targetY))
-            {
-                a.MoveTo(targetX, targetY);
+            a.MoveTo(targetX, targetY);
 
-                if (a is Player)
-                {
-                    //DebugUtils.Log($"MoveActorTo {targetX}, {targetY}");
-                    _currMap.UpdateExploration(targetX, targetY);
-                }
+            if (a is Player)
+            {
+                //DebugUtils.Log($"MoveActorTo {targetX}, {targetY}");
+                _currMap.UpdateExploration(targetX, targetY);
             }
+            //FIXME: remove
+            else
+                EventManager.GameStateUpdateEvent.Invoke(new MonstersUpdateData(_currMap));
+            //
 
             return new Vector2Int(a.x, a.y);
         }
@@ -144,8 +145,6 @@ namespace Ventura.GameLogic
 
         public void EnterMap(string mapName)
         {
-            //Orchestrator.Instance.DeactivateAllActors(); //FIXME
-
             _currMap.Entities.Remove(_player);
 
             GameMap newMap;
@@ -173,14 +172,10 @@ namespace Ventura.GameLogic
                 startPos = (Vector2Int)DataUtils.RandomWalkablePos(_currMap);
 
             MoveActorTo(_player, startPos.x, startPos.y);
-
-            //Orchestrator.Instance.ActivateActors(_currMap.GetAllEntities<Actor>()); //FIXME
         }
 
         public void ExitMap()
         {
-            //Orchestrator.Instance.DeactivateAllActors(); //FIXME
-
             _currMap.Entities.Remove(_player);
 
             var previousMapPos = _currMapStack.PopMap();
@@ -192,8 +187,6 @@ namespace Ventura.GameLogic
             _currMap.Entities.Add(_player);
 
             MoveActorTo(_player, previousMapPos.x, previousMapPos.y);
-
-            //Orchestrator.Instance.ActivateActors(_currMap.GetAllEntities<Actor>()); //FIXME
         }
     }
 }

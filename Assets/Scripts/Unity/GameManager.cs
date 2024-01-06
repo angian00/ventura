@@ -19,7 +19,7 @@ namespace Ventura.Unity.Behaviours
         private GameState _gameState;
         public GameState GameState { get => _gameState; }
 
-        private CircularList<Actor> _actorScheduler = new();
+        //private CircularList<Actor> _monsterScheduler = new();
         private Queue<ActionData> _playerActionQueue = new();
 
         private static string? _startStateFile = null;
@@ -53,7 +53,7 @@ namespace Ventura.Unity.Behaviours
 
         void Update()
         {
-            processTurn();
+            processRound();
         }
 
 
@@ -135,7 +135,7 @@ namespace Ventura.Unity.Behaviours
 
             DebugUtils.Log($"Game initialized");
 
-            resumeActors();
+            //resumeActors();
 
             EventManager.StatusNotificationEvent.Invoke("Welcome, adventurer!");
         }
@@ -148,7 +148,7 @@ namespace Ventura.Unity.Behaviours
             var jsonStr = File.ReadAllText(fullPath);
             _gameState = JsonUtility.FromJson<GameState>(jsonStr);
 
-            resumeActors();
+            //resumeActors();
             _gameState.NotifyAllEvents();
 
             EventManager.StatusNotificationEvent.Invoke("Game loaded");
@@ -160,12 +160,12 @@ namespace Ventura.Unity.Behaviours
             var fullPath = Application.persistentDataPath + "/" + filename;
             DebugUtils.Log($"Saving game to {fullPath}");
 
-            suspendActors();
+            //suspendActors();
 
             string jsonStr = JsonUtility.ToJson(_gameState);
             File.WriteAllText(fullPath, jsonStr);
 
-            resumeActors();
+            //resumeActors();
 
             EventManager.StatusNotificationEvent.Invoke("Game saved");
         }
@@ -173,29 +173,38 @@ namespace Ventura.Unity.Behaviours
 
         //------------------------ Action Scheduling ------------------------------------------
 
-        private void resumeActors()
+        //private void resumeActors()
+        //{
+        //    foreach (var a in _gameState.CurrMap.GetAllEntities<Actor>())
+        //    {
+        //        if (!(a is Player))
+        //            _monsterScheduler.Add(a);
+        //    }
+        //}
+
+        //private void suspendActors()
+        //{
+        //    _monsterScheduler.Clear();
+        //}
+
+
+        private void processRound()
         {
-            var p = _gameState.CurrMap.GetAnyEntity<Player>();
-            _actorScheduler.Add(p);
-
-            foreach (var a in _gameState.CurrMap.GetAllEntities<Actor>())
-            {
-                if (!(a is Player))
-                    _actorScheduler.Add(a);
-            }
-        }
-
-        private void suspendActors()
-        {
-            _actorScheduler.Clear();
-        }
-
-
-        private void processTurn()
-        {
-            var actor = _actorScheduler.Next();
-            if (actor == null)
+            var playerMakesMove = processTurn(_gameState.Player);
+            if (!playerMakesMove)
                 return;
+
+            var monsters = _gameState.CurrMap.GetAllEntities<Monster>();
+            foreach (var monster in monsters)
+                processTurn(monster);
+        }
+
+        /**
+         * returns true if an action was successfully performed, i.e. the turn was consumed
+         */
+        private bool processTurn(Actor actor)
+        {
+            //DebugUtils.Log($"processTurn({actor.Name})");
 
             ActionData? actionData = null;
             if (actor is Player)
@@ -209,21 +218,25 @@ namespace Ventura.Unity.Behaviours
             }
 
             if (actionData == null)
-                return;
+                return false;
 
-            DebugUtils.Log($"Actor {actor.Name} performs ${DataUtils.EnumToStr(actionData.ActionType)}");
+            DebugUtils.Log($"Actor {actor.Name} performs {actionData}");
 
             var actionResult = performAction(actor, actionData);
 
             if (actionResult.Success)
             {
+                //FUTURE: improve status notification filtering
                 if (actionResult.Reason != null)
                     EventManager.StatusNotificationEvent.Invoke(actionResult.Reason, StatusSeverity.Normal);
+                return true;
             }
             else
             {
+                //if (actor is Player) //FUTURE: improve status notification filtering
                 EventManager.StatusNotificationEvent.Invoke(actionResult.Reason, StatusSeverity.Warning);
-                DebugUtils.Warning($"Cannot perform {DataUtils.EnumToStr(actionData.ActionType)}: {actionResult.Reason}");
+                DebugUtils.Warning($"{actor.Name} Cannot perform {DataUtils.EnumToStr(actionData.ActionType)}: {actionResult.Reason}");
+                return false;
             }
         }
 

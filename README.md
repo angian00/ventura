@@ -83,6 +83,8 @@ Keybindings (so far):
 | Numpad 2  | Move Down        |
 | Numpad 4  | Move Left        |
 | Numpad 6  | Move Right       |
+|    ,      | Exit Map         |
+|    .      | Enter Map        |
 | Numpad 5  | Wait             |
 |           |                  |
 |    G      | Pickup Item      |
@@ -97,9 +99,7 @@ Keybindings (so far):
 |    N      | New Game         |
 |    S      | Save Game        |
 |    L      | Load Game        |
-|  <Esc>    | System Menu      |
-|           |                  |
-| --------- | ---------------- |
+|   Esc     | System Menu      |
 
 
 ## Acknowledgements

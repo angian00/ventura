@@ -36,6 +36,18 @@ namespace Ventura.Unity.Events
         }
     }
 
+    //FIXME: optimize this data structure and calls
+    public class MonstersUpdateData : GameStateUpdateData
+    {
+        private GameMap _gameMap;
+        public GameMap GameMap { get => _gameMap; }
+
+        public MonstersUpdateData(GameMap gameMap)
+        {
+            _gameMap = gameMap;
+        }
+    }
+
     public class MapVisibilityUpdateData : GameStateUpdateData
     {
         //FIXME: expose only relevant fields

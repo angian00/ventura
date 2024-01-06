@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Ventura.GameLogic.Components;
 
 namespace Ventura.GameLogic
 {
@@ -8,7 +9,8 @@ namespace Ventura.GameLogic
     {
         public Monster(string name) : base(name)
         {
-            //_ai = new RandomMovementAI(this);
+            _ai = new RandomMovementAI(this);
+            //_ai = new StaticAI(this);
         }
     }
 }

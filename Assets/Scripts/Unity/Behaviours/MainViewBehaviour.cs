@@ -62,6 +62,10 @@ namespace Ventura.Unity.Behaviours
             {
                 updateMap(((MapUpdateData)updateData).GameMap);
             }
+            else if (updateData is MonstersUpdateData)
+            {
+                updateMonsters(((MonstersUpdateData)updateData).GameMap); //FIXME optimize updateMonsters
+            }
             else if (updateData is MapVisibilityUpdateData)
             {
                 updateFog(((MapVisibilityUpdateData)updateData).GameMap);
@@ -69,10 +73,9 @@ namespace Ventura.Unity.Behaviours
             else if (updateData is ActorUpdateData)
             {
                 var a = ((ActorUpdateData)updateData).Actor;
-                if (!(a is Player))
-                    return;
+                if (a is Player)
+                    updatePlayer((Player)a);
 
-                updatePlayer((Player)a);
             }
             else if (updateData is ContainerUpdateData)
             {
@@ -204,7 +207,7 @@ namespace Ventura.Unity.Behaviours
 
         private void updateItems(GameMap gameMap)
         {
-            DebugUtils.Log("MainViewBehaviour.updateItems()");
+            //DebugUtils.Log("MainViewBehaviour.updateItems()");
 
             UnityUtils.RemoveAllChildren(itemsLayer);
             foreach (var e in gameMap.GetAllEntities<GameItem>())
@@ -219,7 +222,7 @@ namespace Ventura.Unity.Behaviours
 
         private void updateMonsters(GameMap gameMap)
         {
-            DebugUtils.Log("MainViewBehaviour.updateItems()");
+            DebugUtils.Log("MainViewBehaviour.updateMonsters()");
 
             UnityUtils.RemoveAllChildren(monstersLayer);
             foreach (var e in gameMap.GetAllEntities<Actor>())
@@ -238,7 +241,7 @@ namespace Ventura.Unity.Behaviours
 
         private void updateFog(GameMap gameMap)
         {
-            DebugUtils.Log("MainViewBehaviour.updateFog()");
+            //DebugUtils.Log("MainViewBehaviour.updateFog()");
 
             for (int x = 0; x < gameMap.Width; x++)
             {

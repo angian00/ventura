@@ -1,8 +1,9 @@
 # TODO
 
 ## Current sprint
-- testare actor scheduling
+- refactoring data structures eventi
 - monster factory architecture
+- animazione e messa in sequenza movimento mostri
 
 - pathfinding on tile click
 	- feedback click

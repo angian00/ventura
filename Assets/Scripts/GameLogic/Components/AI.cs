@@ -131,6 +131,17 @@ namespace Ventura.GameLogic.Components
 
     //}
 
+    public class StaticAI : AI
+    {
+        public StaticAI(Actor parent) : base(parent) { }
+
+        public override ActionData? ChooseAction()
+        {
+            return new ActionData(GameActionType.WaitAction);
+        }
+
+    }
+
     public class RandomMovementAI : AI
     {
         public RandomMovementAI(Actor parent) : base(parent) { }

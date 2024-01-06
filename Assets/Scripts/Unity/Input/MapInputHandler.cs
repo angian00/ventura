@@ -66,6 +66,15 @@ namespace Ventura.Unity.Input
             {
                 newActionData = new ActionData(GameActionType.WaitAction);
             }
+            else if (key == keyboard.commaKey)
+            {
+                newActionData = new ActionData(GameActionType.ExitMapAction);
+            }
+            else if (key == keyboard.periodKey)
+            {
+                newActionData = new ActionData(GameActionType.EnterMapAction);
+            }
+
             else if (key == keyboard.gKey)
             {
                 newActionData = new ActionData(GameActionType.PickupItemAction);

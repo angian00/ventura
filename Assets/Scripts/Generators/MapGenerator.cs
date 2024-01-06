@@ -171,6 +171,7 @@ namespace Ventura.Generators
             const float perc = .01f;
 
             var nMonsters = (int)(perc * targetMap.Width * targetMap.Height);
+            //var nMonsters = 1;
 
             var monsters = MonsterGenerator.Instance.GenerateMonsters(nMonsters);
 

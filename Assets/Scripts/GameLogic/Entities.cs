@@ -101,7 +101,10 @@ namespace Ventura.GameLogic
         public override void MoveTo(int x, int y)
         {
             base.MoveTo(x, y);
-            EventManager.GameStateUpdateEvent.Invoke(new ActorUpdateData(this));
+            //FIXME
+            if (this is Player)
+                //
+                EventManager.GameStateUpdateEvent.Invoke(new ActorUpdateData(this));
         }
 
         public ActionData? ChooseAction()
