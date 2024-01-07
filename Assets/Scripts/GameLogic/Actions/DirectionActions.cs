@@ -8,8 +8,7 @@ namespace Ventura.GameLogic.Actions
 
         protected static Vector2Int GetTargetPos(Actor actor, ActionData actionData)
         {
-            Debug.Assert(actionData.DeltaPos != null);
-            var deltaPos = (Vector2Int)actionData.DeltaPos;
+            var deltaPos = actionData.DeltaPos ?? new Vector2Int(0, 0);
 
             return new Vector2Int(actor.x + deltaPos.x, actor.y + deltaPos.y);
         }
@@ -97,12 +96,10 @@ namespace Ventura.GameLogic.Actions
         {
             actionData.CheckActionType(GameActionType.EnterMapAction);
 
-            var targetPos = GetTargetPos(actor, actionData);
             var targetSite = GetTargetSite(actor, actionData, gameState);
             if (targetSite == null)
                 return new ActionResult(false, "No site to enter");
 
-            gameState.MoveActorTo(actor, targetPos.x, targetPos.y);
             gameState.EnterMap(targetSite.Name);
 
             return new ActionResult(true, $"{actor.Name} enters {targetSite.Name}");

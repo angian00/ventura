@@ -41,12 +41,12 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.UIRequestEvent.AddListener(onUIEvent);
+            EventManager.Subscribe<UIRequest>(onUIRequest);
         }
 
         private void OnDisable()
         {
-            EventManager.UIRequestEvent.RemoveListener(onUIEvent);
+            EventManager.Unsubscribe<UIRequest>(onUIRequest);
         }
 
 
@@ -68,26 +68,24 @@ namespace Ventura.Unity.Behaviours
         }
 
 
-        private void onUIEvent(UIRequestData uiRequest)
+        private void onUIRequest(UIRequest uiRequest)
         {
-            if (uiRequest is ResetViewRequest)
+            if (uiRequest.command == UIRequest.Command.ResetView)
             {
                 resetDefaultView();
             }
-            else if (uiRequest is AskConfirmationRequest)
+            else if (uiRequest.command == UIRequest.Command.AskYesNo)
             {
-                var popupRequest = (AskConfirmationRequest)uiRequest;
-                ShowPopup(popupRequest.Title, popupRequest.Command);
+                ShowPopup(((AskYesNoRequest)uiRequest).title, ((AskYesNoRequest)uiRequest).systemCommand);
             }
         }
-
 
         private void resetDefaultView()
         {
             foreach (var viewId in DataUtils.EnumValues<ViewId>())
                 hideView(viewId);
 
-            EventManager.StatusNotificationEvent.Invoke(null);
+            EventManager.Publish(new TextNotification(null));
             _activeView = ViewId.Map;
             _mainView = ViewId.Map;
         }
@@ -103,7 +101,7 @@ namespace Ventura.Unity.Behaviours
 
             showView(targetView);
 
-            EventManager.StatusNotificationEvent.Invoke(null);
+            EventManager.Publish(new TextNotification(null));
 
             _activeView = targetView;
             _mainView = targetView;
@@ -117,7 +115,7 @@ namespace Ventura.Unity.Behaviours
                 SwitchTo(targetView);
         }
 
-        public void ShowPopup(string title, SystemCommand command)
+        public void ShowPopup(string title, SystemRequest.Command command)
         {
             popupManager.Title = title;
             popupManager.Command = command;

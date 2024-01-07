@@ -71,7 +71,7 @@ namespace Ventura.GameLogic.Components
         public void AddToSkillValue(SkillId skillId, int deltaValue)
         {
             _skillValues[skillId] = GetSkillValue(skillId) + deltaValue;
-            EventManager.GameStateUpdateEvent.Invoke(new SkillsUpdateData(this));
+            EventManager.Publish(new EntityUpdate(_parent));
         }
 
 

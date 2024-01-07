@@ -1,7 +1,6 @@
 # TODO
 
 ## Current sprint
-- refactoring data structures eventi
 - monster factory architecture
 - animazione e messa in sequenza movimento mostri
 
@@ -18,8 +17,9 @@
 
 
 ## Bugfixing
-- aggiungere a GameItem.MoveTo la notifica EventManager.GameStateUpdateEvent.Invoke(...);
-- hide site if there is one behind an item in map
+- pickup item
+- hide site if there is one behind an item or monster or player in map
+- filtering out notifications for monster actions
 
 
 ## Improvements

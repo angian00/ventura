@@ -8,8 +8,8 @@ namespace Ventura.Unity.Behaviours
 
     public class PopupBehaviour : MonoBehaviour
     {
-        private SystemCommand _command;
-        public SystemCommand Command { set { _command = value; } }
+        private SystemRequest.Command _command;
+        public SystemRequest.Command Command { set { _command = value; } }
 
         public ViewManager viewManager;
         public TextMeshProUGUI titleObj;
@@ -42,7 +42,7 @@ namespace Ventura.Unity.Behaviours
             Debug.Log($"PopupBehaviour.OnYes()");
             viewManager.HidePopup();
 
-            EventManager.SystemCommandEvent.Invoke(_command);
+            EventManager.Publish(new SystemRequest(_command));
 
         }
 
@@ -51,19 +51,6 @@ namespace Ventura.Unity.Behaviours
             Debug.Log($"PopupBehaviour.OnNo()");
             viewManager.HidePopup();
         }
-
-
-        //private void show()
-        //{
-        //    raycaster.enabled = true;
-        //    popupCamera.enabled = true;
-        //}
-
-        //private void hide()
-        //{
-        //    popupCamera.enabled = false;
-        //    raycaster.enabled = false;
-        //}
 
     }
 }

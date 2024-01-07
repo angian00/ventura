@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using Ventura.Unity.Events;
@@ -14,40 +15,29 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.GameStateUpdateEvent.AddListener(onGameStateUpdated);
+            EventManager.Subscribe<GameStateUpdate>(onGameStateUpdated);
+            EventManager.Subscribe<InfoResponse>(onInfoResponse);
         }
 
         private void OnDisable()
         {
-            EventManager.GameStateUpdateEvent.AddListener(onGameStateUpdated);
+            EventManager.Unsubscribe<GameStateUpdate>(onGameStateUpdated);
+            EventManager.Unsubscribe<InfoResponse>(onInfoResponse);
         }
 
 
         //----------------- EventSystem notification listeners -----------------
 
-        public void onGameStateUpdated(GameStateUpdateData updateData)
+        public void onGameStateUpdated(GameStateUpdate updateData)
         {
-            if (updateData is TileUpdateData)
+            if (updateData.updatedFields.HasFlag(GameStateUpdate.UpdatedFields.Location))
             {
-                onTileUpdate((TileUpdateData)updateData);
-            }
-            else if (updateData is LocationUpdateData)
-            {
-                onLocationUpdate((LocationUpdateData)updateData);
+                onLocationUpdate(updateData.mapStackNames);
             }
         }
 
-        public void onTileUpdate(TileUpdateData updateData)
+        private void onLocationUpdate(List<string> mapStackNames)
         {
-            tileInfo.text = getTileInfoStr(updateData); ;
-            entityInfo.text = getEntityInfoStr(updateData);
-        }
-
-
-        private void onLocationUpdate(LocationUpdateData updateData)
-        {
-            var mapStackNames = updateData.MapStackNames;
-
             string locationInfoStr = "";
 
             for (int i = 0; i < mapStackNames.Count; i++)
@@ -61,30 +51,47 @@ namespace Ventura.Unity.Behaviours
             locationInfo.text = locationInfoStr;
         }
 
+        public void onInfoResponse(InfoResponse infoData)
+        {
+            if (infoData.infoType == InfoType.TileContent)
+            {
+                var tileInfoData = (TileInfoResponse)infoData;
+                tileInfo.text = getTileInfoStr(tileInfoData);
+                entityInfo.text = getEntityInfoStr(tileInfoData);
+            }
+        }
+
+
 
         //--------------------------------------------------------------------
 
-        private string getTileInfoStr(TileUpdateData updateData)
+        private string getTileInfoStr(TileInfoResponse tileInfoData)
         {
-            var res = $"x: {updateData.Pos.x}, y: {updateData.Pos.y}";
+            if (tileInfoData.pos == null)
+                return "";
 
-            if (updateData.Terrain != null)
-                res += $" - {updateData.Terrain}";
+            var res = $"x: {((Vector2Int)tileInfoData.pos).x}, y: {((Vector2Int)tileInfoData.pos).y}";
+
+            if (tileInfoData.terrain != null)
+                res += $" - {tileInfoData.terrain}";
 
             return res;
         }
 
 
-        private string getEntityInfoStr(TileUpdateData updateData)
+        private string getEntityInfoStr(TileInfoResponse tileInfoData)
         {
-            if (updateData.Actor != null)
-                return updateData.Actor;
+            if (tileInfoData.pos == null)
+                return "";
 
-            if (updateData.Site != null)
-                return updateData.Site;
+            if (tileInfoData.actor != null)
+                return tileInfoData.actor;
 
-            if (updateData.Items != null && updateData.Items.Count > 0)
-                return $"<{updateData.Items[0]}>";
+            if (tileInfoData.site != null)
+                return tileInfoData.site;
+
+            if (tileInfoData.items != null && tileInfoData.items.Count > 0)
+                return $"<{tileInfoData.items[0]}>";
 
             return "";
         }

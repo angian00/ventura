@@ -21,7 +21,8 @@ namespace Ventura.Unity.Input
 
             if (key == keyboard.escapeKey)
             {
-                EventManager.UIRequestEvent.Invoke(new ResetViewRequest()); //consistent with "resumeActors" menu button
+                //EventManager.UIRequestEvent.Invoke(new ResetViewRequest());
+                EventManager.Publish(new UIRequest(UIRequest.Command.ResetView));
             }
         }
     }

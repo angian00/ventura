@@ -34,11 +34,11 @@ namespace Ventura.Unity.Graphics
 
 
 
-        public static readonly Dictionary<StatusSeverity, Color> StatusLineColors = new()
+        public static readonly Dictionary<TextNotification.Severity, Color> StatusLineColors = new()
         {
-            { StatusSeverity.Normal, Color.white },
-            { StatusSeverity.Warning, FromHex("#FFA500") },
-            { StatusSeverity.Critical, Color.red },
+            { TextNotification.Severity.Normal, Color.white },
+            { TextNotification.Severity.Warning, FromHex("#FFA500") },
+            { TextNotification.Severity.Critical, Color.red },
         };
 
 

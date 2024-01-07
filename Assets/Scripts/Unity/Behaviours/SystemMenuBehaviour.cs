@@ -98,32 +98,34 @@ namespace Ventura.Unity.Behaviours
             {
                 case SystemMenuCommand.New:
                     if (_isGameScene)
-                        EventManager.UIRequestEvent.Invoke(new AskConfirmationRequest("New Game", SystemCommand.New));
+                        EventManager.Publish(new AskYesNoRequest("New Game", SystemRequest.Command.New));
                     else
-                        EventManager.SystemCommandEvent.Invoke(SystemCommand.New);
+                        EventManager.Publish(new SystemRequest(SystemRequest.Command.New));
                     break;
 
                 case SystemMenuCommand.Exit:
                     if (_isGameScene)
-                        EventManager.UIRequestEvent.Invoke(new AskConfirmationRequest("Exit", SystemCommand.Exit));
+                        EventManager.Publish(new AskYesNoRequest("Exit", SystemRequest.Command.Exit));
                     else
-                        EventManager.SystemCommandEvent.Invoke(SystemCommand.Exit);
+                        EventManager.Publish(new SystemRequest(SystemRequest.Command.Exit));
                     break;
 
                 case SystemMenuCommand.Load:
                     if (_isGameScene)
-                        EventManager.UIRequestEvent.Invoke(new AskConfirmationRequest("Load Game", SystemCommand.Load));
+                        EventManager.Publish(new AskYesNoRequest("Load Game", SystemRequest.Command.Load));
                     else
-                        EventManager.SystemCommandEvent.Invoke(SystemCommand.Load);
+                        EventManager.Publish(new SystemRequest(SystemRequest.Command.Load));
                     break;
 
                 case SystemMenuCommand.Save:
-                    EventManager.SystemCommandEvent.Invoke(SystemCommand.Save);
-                    EventManager.UIRequestEvent.Invoke(new ResetViewRequest());
+                    EventManager.Publish(new SystemRequest(SystemRequest.Command.Save));
+                    //EventManager.UIRequestEvent.Invoke(new ResetViewRequest());
+                    EventManager.Publish(new UIRequest(UIRequest.Command.ResetView));
                     break;
 
                 case SystemMenuCommand.Resume:
-                    EventManager.UIRequestEvent.Invoke(new ResetViewRequest());
+                    //EventManager.UIRequestEvent.Invoke(new ResetViewRequest());
+                    EventManager.Publish(new UIRequest(UIRequest.Command.ResetView));
                     break;
 
                 case SystemMenuCommand.Settings:

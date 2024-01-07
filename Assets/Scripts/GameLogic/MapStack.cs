@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UnityEngine;
 
 
 namespace Ventura.GameLogic
 {
     [Serializable]
-    public class MapStack: ISerializationCallbackReceiver
+    public class MapStack : ISerializationCallbackReceiver
     {
         [Serializable]
         private record MapStackItem
@@ -41,9 +40,10 @@ namespace Ventura.GameLogic
         /**
          * From widest scale to finest scale
          */
-        public ReadOnlyCollection<string> StackMapNames
+        public List<string> StackMapNames
         {
-            get {
+            get
+            {
                 var res = new List<string>();
 
                 var en = _data.GetEnumerator();
@@ -53,7 +53,7 @@ namespace Ventura.GameLogic
                 }
 
                 res.Reverse();
-                return new ReadOnlyCollection<string>(res);
+                return res;
             }
         }
 

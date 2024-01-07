@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using Ventura.Unity.Events;
-using Ventura.Unity.Graphics;
 using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
@@ -12,21 +11,25 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.StatusNotificationEvent.AddListener(onStatusNotification);
+            EventManager.Subscribe<TextNotification>(onTextNotification);
+            //EventManager.Subscribe(onSystemActionTest);
+
         }
 
         private void OnDisable()
         {
-            EventManager.StatusNotificationEvent.RemoveListener(onStatusNotification);
+            EventManager.Unsubscribe<TextNotification>(onTextNotification);
         }
 
 
-        private void onStatusNotification(string msg, StatusSeverity severity)
+        public void onTextNotification(TextNotification eventData)
         {
+            DebugUtils.Warning($"DEBUG: StatusLineBehaviour.onTextNotification; msg is [{eventData.msg}]");
+            var msg = eventData.msg;
             if (msg != null && msg != "")
                 DebugUtils.Log(msg);
 
-            statusLine.color = GraphicsConfig.StatusLineColors[severity];
+            //statusLine.color = GraphicsConfig.StatusLineColors[severity]; //FIXME
             statusLine.text = msg;
 
             UnityUtils.FlashAndFade(statusLine);

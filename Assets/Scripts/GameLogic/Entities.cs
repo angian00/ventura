@@ -101,10 +101,7 @@ namespace Ventura.GameLogic
         public override void MoveTo(int x, int y)
         {
             base.MoveTo(x, y);
-            //FIXME
-            if (this is Player)
-                //
-                EventManager.GameStateUpdateEvent.Invoke(new ActorUpdateData(this));
+            EventManager.Publish(new EntityUpdate(this));
         }
 
         public ActionData? ChooseAction()
@@ -189,7 +186,6 @@ namespace Ventura.GameLogic
 
             targetContainer.AddItem(this);
         }
-
     }
 
     [Serializable]

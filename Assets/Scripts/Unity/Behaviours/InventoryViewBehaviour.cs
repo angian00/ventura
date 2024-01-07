@@ -15,44 +15,32 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.GameStateUpdateEvent.AddListener(onGameStateUpdated);
+            EventManager.Subscribe<EntityUpdate>(onActorUpdate);
+
         }
 
         private void OnDisable()
         {
-            EventManager.GameStateUpdateEvent.RemoveListener(onGameStateUpdated);
+            EventManager.Unsubscribe<EntityUpdate>(onActorUpdate);
         }
 
         public void OnItemClick(GameItem gameItem)
         {
-            var actionRequestData = new ActionData(GameActionType.UseItemAction);
-            actionRequestData.TargetItem = gameItem;
+            var actionData = new ActionData(GameActionType.UseItemAction);
+            actionData.TargetItem = gameItem;
 
-            EventManager.ActionRequestEvent.Invoke(actionRequestData);
+            EventManager.Publish(new ActionRequest(actionData));
         }
 
 
 
-        private void onGameStateUpdated(GameStateUpdateData updateData)
+        private void onActorUpdate(EntityUpdate updateData)
         {
-            if (!(updateData is ContainerUpdateData))
+            if (!(updateData.entity is Player))
                 return;
 
-            onInventoryChanged(((ContainerUpdateData)updateData).Container);
-        }
-
-
-        private void onInventoryChanged(Container c)
-        {
-            if (!(c is Inventory))
-                return;
-
-            var inv = (Inventory)c;
-
-            if (!(inv.Parent is Player))
-                return;
-
-            updateView(inv);
+            var inventoryData = ((Player)updateData.entity).Inventory;
+            updateView(inventoryData);
         }
 
 

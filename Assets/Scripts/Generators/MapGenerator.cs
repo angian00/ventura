@@ -24,7 +24,7 @@ namespace Ventura.Generators
                 generateSites(newMap, 15);
 
             generateSomeItems(newMap);
-            generateSomeMonsters(newMap);
+            //generateSomeMonsters(newMap);
 
             newMap.StartingPos = DataUtils.RandomEmptyPos(newMap);
 

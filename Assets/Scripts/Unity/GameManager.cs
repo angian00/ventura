@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
-using Ventura.GameLogic.Algorithms;
 using Ventura.Unity.Events;
 using Ventura.Util;
 
@@ -41,14 +39,14 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.ActionRequestEvent.AddListener(onActionRequest);
-            EventManager.UIRequestEvent.AddListener(onUIRequest);
+            EventManager.Subscribe<ActionRequest>(onActionRequest);
+            EventManager.Subscribe<InfoRequest>(onInfoRequest);
         }
 
         private void OnDisable()
         {
-            EventManager.ActionRequestEvent.RemoveListener(onActionRequest);
-            EventManager.UIRequestEvent.RemoveListener(onUIRequest);
+            EventManager.Unsubscribe<ActionRequest>(onActionRequest);
+            EventManager.Unsubscribe<InfoRequest>(onInfoRequest);
         }
 
         void Update()
@@ -59,35 +57,34 @@ namespace Ventura.Unity.Behaviours
 
         //----------------- EventSystem notification listeners -----------------
 
-        private void onActionRequest(ActionData actionRequest)
+        private void onActionRequest(ActionRequest actionRequest)
         {
-            _playerActionQueue.Enqueue(actionRequest);
+            _playerActionQueue.Enqueue(actionRequest.actionData);
         }
 
-        private void onUIRequest(UIRequestData uiRequest)
+        private void onInfoRequest(InfoRequest infoRequest)
         {
-            //UnityEvents do not automatically handle derived classes for its invocation arguments
-            if (uiRequest is MapTileInfoRequest)
-                onTileInfoRequest((MapTileInfoRequest)uiRequest);
-            else if (uiRequest is PathfindingRequest)
-                onPathfindingRequest((PathfindingRequest)uiRequest);
+            if (infoRequest.infoType == InfoType.TileContent)
+                onTileInfoRequest((TileInfoRequest)infoRequest);
+            //else if (infoRequest is PathfindingRequest)
+            //    onPathfindingRequest((PathfindingRequest)uiRequest);
         }
 
 
-        private void onTileInfoRequest(MapTileInfoRequest tilePointerRequest)
+        private void onTileInfoRequest(TileInfoRequest tileInfoRequest)
         {
-            var maybePos = tilePointerRequest.TilePos;
+            var maybePos = tileInfoRequest.pos;
             var gameMap = _gameState.CurrMap;
 
-            TileUpdateData tileInfo = new TileUpdateData();
+            TileInfoResponse tileInfoResponse = new TileInfoResponse();
 
             if (maybePos != null && gameMap.IsInBounds(((Vector2Int)maybePos).x, ((Vector2Int)maybePos).y))
             {
                 var pos = (Vector2Int)maybePos;
-                tileInfo.Pos = pos;
+                tileInfoResponse.pos = pos;
 
                 if (gameMap.Explored[pos.x, pos.y])
-                    tileInfo.Terrain = gameMap.Terrain[pos.x, pos.y].Label;
+                    tileInfoResponse.terrain = gameMap.Terrain[pos.x, pos.y].Label;
 
                 if (gameMap.Visible[pos.x, pos.y])
                 {
@@ -97,32 +94,33 @@ namespace Ventura.Unity.Behaviours
                     {
                         itemNames.Add(item.GetType().Name);
                     }
-                    tileInfo.Items = new ReadOnlyCollection<string>(itemNames);
+                    tileInfoResponse.items = itemNames;
 
                     var s = gameMap.GetAnyEntityAt<Site>(pos.x, pos.y);
                     if (s != null)
-                        tileInfo.Site = s.Name;
+                        tileInfoResponse.site = s.Name;
 
                     var a = gameMap.GetAnyEntityAt<Actor>(pos);
                     if (a != null)
-                        tileInfo.Actor = a.Name;
+                        tileInfoResponse.actor = a.Name;
                 }
             }
 
-            EventManager.GameStateUpdateEvent.Invoke(tileInfo);
+            EventManager.Publish(tileInfoResponse);
         }
 
-        private void onPathfindingRequest(PathfindingRequest uiRequest)
-        {
-            var pathfinding = new Pathfinding(_gameState.CurrMap.GetBlockedTiles());
-            var path = pathfinding.FindPathAStar(_gameState.Player.pos, uiRequest.EndPos);
-            DebugUtils.Log("onPathfindingRequest found path:");
-            foreach (var pos in path)
-            {
-                DebugUtils.Log($"{pos}");
-            }
-            EventManager.GameStateUpdateEvent.Invoke(new PathfindingUpdateData(path));
-        }
+        //private void onPathfindingRequest(PathfindingRequest uiRequest)
+        //{
+        //    var pathfinding = new Pathfinding(_gameState.CurrMap.GetBlockedTiles());
+        //    var path = pathfinding.FindPathAStar(_gameState.Player.pos, uiRequest.EndPos);
+        //    DebugUtils.Log("onPathfindingRequest found path:");
+        //    foreach (var pos in path)
+        //    {
+        //        DebugUtils.Log($"{pos}");
+        //    }
+
+        //    EventManager.Publish(new PathfindingUpdateData(path));
+        //}
 
 
         //------------------------ System Command Execution ------------------------------------------
@@ -135,9 +133,7 @@ namespace Ventura.Unity.Behaviours
 
             DebugUtils.Log($"Game initialized");
 
-            //resumeActors();
-
-            EventManager.StatusNotificationEvent.Invoke("Welcome, adventurer!");
+            EventManager.Publish(new TextNotification("Welcome, adventurer!"));
         }
 
         private void loadGame(string filename)
@@ -148,10 +144,9 @@ namespace Ventura.Unity.Behaviours
             var jsonStr = File.ReadAllText(fullPath);
             _gameState = JsonUtility.FromJson<GameState>(jsonStr);
 
-            //resumeActors();
-            _gameState.NotifyAllEvents();
+            _gameState.NotifyEverything();
 
-            EventManager.StatusNotificationEvent.Invoke("Game loaded");
+            EventManager.Publish(new TextNotification("Game loaded"));
         }
 
 
@@ -160,33 +155,14 @@ namespace Ventura.Unity.Behaviours
             var fullPath = Application.persistentDataPath + "/" + filename;
             DebugUtils.Log($"Saving game to {fullPath}");
 
-            //suspendActors();
-
             string jsonStr = JsonUtility.ToJson(_gameState);
             File.WriteAllText(fullPath, jsonStr);
 
-            //resumeActors();
-
-            EventManager.StatusNotificationEvent.Invoke("Game saved");
+            EventManager.Publish(new TextNotification("Game saved"));
         }
 
 
         //------------------------ Action Scheduling ------------------------------------------
-
-        //private void resumeActors()
-        //{
-        //    foreach (var a in _gameState.CurrMap.GetAllEntities<Actor>())
-        //    {
-        //        if (!(a is Player))
-        //            _monsterScheduler.Add(a);
-        //    }
-        //}
-
-        //private void suspendActors()
-        //{
-        //    _monsterScheduler.Clear();
-        //}
-
 
         private void processRound()
         {
@@ -228,13 +204,13 @@ namespace Ventura.Unity.Behaviours
             {
                 //FUTURE: improve status notification filtering
                 if (actionResult.Reason != null)
-                    EventManager.StatusNotificationEvent.Invoke(actionResult.Reason, StatusSeverity.Normal);
+                    EventManager.Publish(new TextNotification(actionResult.Reason));
                 return true;
             }
             else
             {
                 //if (actor is Player) //FUTURE: improve status notification filtering
-                EventManager.StatusNotificationEvent.Invoke(actionResult.Reason, StatusSeverity.Warning);
+                EventManager.Publish(new TextNotification(actionResult.Reason, TextNotification.Severity.Warning));
                 DebugUtils.Warning($"{actor.Name} Cannot perform {DataUtils.EnumToStr(actionData.ActionType)}: {actionResult.Reason}");
                 return false;
             }
@@ -254,6 +230,12 @@ namespace Ventura.Unity.Behaviours
                     break;
                 case GameActionType.BumpAction:
                     action = new BumpAction();
+                    break;
+                case GameActionType.EnterMapAction:
+                    action = new EnterMapAction();
+                    break;
+                case GameActionType.ExitMapAction:
+                    action = new ExitMapAction();
                     break;
                 case GameActionType.UseItemAction:
                     action = new UseItemAction();

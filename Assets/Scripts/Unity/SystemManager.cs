@@ -18,38 +18,40 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.SystemCommandEvent.AddListener(onSystemCommand);
+            EventManager.Subscribe<SystemRequest>(onSystemCommand);
+
         }
 
         private void OnDisable()
         {
-            EventManager.SystemCommandEvent.RemoveListener(onSystemCommand);
+            EventManager.Unsubscribe<SystemRequest>(onSystemCommand);
         }
 
 
         //----------------- EventSystem notification listeners -----------------
 
-        private void onSystemCommand(SystemCommand command)
+        private void onSystemCommand(SystemRequest commandRequest)
         {
+            var command = commandRequest.command;
             DebugUtils.Log($"SystemManager.onSystemCommand(); command: {DataUtils.EnumToStr(command)}");
 
             switch (command)
             {
-                case SystemCommand.New:
+                case SystemRequest.Command.New:
                     GameManager.StartStateFile = null;
                     SceneManager.LoadScene(UnityUtils.GAME_SCENE_NAME);
                     break;
 
-                case SystemCommand.Exit:
+                case SystemRequest.Command.Exit:
                     exitGame();
                     break;
 
-                case SystemCommand.Load:
+                case SystemRequest.Command.Load:
                     GameManager.StartStateFile = savegameFile;
                     SceneManager.LoadScene(UnityUtils.GAME_SCENE_NAME);
                     break;
 
-                case SystemCommand.Save:
+                case SystemRequest.Command.Save:
                     gameManager.SaveGame(savegameFile);
                     break;
             }

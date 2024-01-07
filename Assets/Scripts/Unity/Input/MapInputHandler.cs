@@ -85,11 +85,11 @@ namespace Ventura.Unity.Input
             }
             else if (key == keyboard.equalsKey)
             {
-                EventManager.UIRequestEvent.Invoke(ZoomRequest.ZoomIn);
+                EventManager.Publish(new UIRequest(UIRequest.Command.ZoomIn));
             }
             else if (key == keyboard.minusKey)
             {
-                EventManager.UIRequestEvent.Invoke(ZoomRequest.ZoomOut);
+                EventManager.Publish(new UIRequest(UIRequest.Command.ZoomOut));
             }
 
             else
@@ -98,7 +98,8 @@ namespace Ventura.Unity.Input
             }
 
             if (newActionData != null)
-                EventManager.ActionRequestEvent.Invoke(newActionData);
+                EventManager.Publish(new ActionRequest(newActionData));
+
         }
     }
 }

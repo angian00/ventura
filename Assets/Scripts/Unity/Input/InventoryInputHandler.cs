@@ -35,7 +35,7 @@ namespace Ventura.Unity.Input
             }
 
             if (newActionData != null)
-                EventManager.ActionRequestEvent.Invoke(newActionData);
+                EventManager.Publish(new ActionRequest(newActionData));
         }
     }
 }

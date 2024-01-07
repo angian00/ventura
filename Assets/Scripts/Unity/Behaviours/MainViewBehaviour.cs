@@ -44,76 +44,66 @@ namespace Ventura.Unity.Behaviours
 
         private void OnEnable()
         {
-            EventManager.GameStateUpdateEvent.AddListener(onGameStateUpdated);
-            EventManager.UIRequestEvent.AddListener(onUIRequest);
+            EventManager.Subscribe<GameStateUpdate>(onGameStateUpdated);
+            EventManager.Subscribe<EntityUpdate>(onEntityUpdated);
+            EventManager.Subscribe<UIRequest>(onUIRequest);
         }
 
         private void OnDisable()
         {
-            EventManager.GameStateUpdateEvent.RemoveListener(onGameStateUpdated);
-            EventManager.UIRequestEvent.RemoveListener(onUIRequest);
+            EventManager.Unsubscribe<GameStateUpdate>(onGameStateUpdated);
+            EventManager.Unsubscribe<EntityUpdate>(onEntityUpdated);
+            EventManager.Unsubscribe<UIRequest>(onUIRequest);
         }
 
         //----------------- EventSystem notification listeners -----------------
 
-        public void onGameStateUpdated(GameStateUpdateData updateData)
+        private void onGameStateUpdated(GameStateUpdate updateData)
         {
-            if (updateData is MapUpdateData)
-            {
-                updateMap(((MapUpdateData)updateData).GameMap);
-            }
-            else if (updateData is MonstersUpdateData)
-            {
-                updateMonsters(((MonstersUpdateData)updateData).GameMap); //FIXME optimize updateMonsters
-            }
-            else if (updateData is MapVisibilityUpdateData)
-            {
-                updateFog(((MapVisibilityUpdateData)updateData).GameMap);
-            }
-            else if (updateData is ActorUpdateData)
-            {
-                var a = ((ActorUpdateData)updateData).Actor;
-                if (a is Player)
-                    updatePlayer((Player)a);
+            if (updateData.updatedFields.HasFlag(GameStateUpdate.UpdatedFields.Terrain))
+                updateMap(updateData.gameMap);
 
-            }
-            else if (updateData is ContainerUpdateData)
-            {
-                var c = ((ContainerUpdateData)updateData).Container;
-                if (!(c is GameMap))
-                    return;
+            if (updateData.updatedFields.HasFlag(GameStateUpdate.UpdatedFields.Visibility))
+                updateFog(updateData.gameMap);
 
-                updateItems((GameMap)c);
-            }
+            if (updateData.updatedFields.HasFlag(GameStateUpdate.UpdatedFields.Items))
+                updateItems(updateData.gameMap.GetVisibleEntities<GameItem>());
 
-            else if (updateData is PathfindingUpdateData)
-            {
-                var path = ((PathfindingUpdateData)updateData).Path;
-                drawLine(path);
-            }
+            if (updateData.updatedFields.HasFlag(GameStateUpdate.UpdatedFields.Monsters))
+                updateMonsters(updateData.gameMap.GetVisibleEntities<Monster>());
 
         }
 
-
-        public void onUIRequest(UIRequestData uiRequest)
+        private void onEntityUpdated(EntityUpdate updateData)
         {
-            if (uiRequest is ZoomRequest)
-                updateZoomLevel(((ZoomRequest)uiRequest) == ZoomRequest.ZoomIn);
+            var a = updateData.entity;
+            if (a is Player)
+                updatePlayer((Player)a);
+        }
+
+        //private void onItemsUpdated(EntityNotification updateData)
+        //{ 
+        //}
+
+        //private void onInfoUpdated(EntityNotification updateData)
+        //{
+        //    var path = ((PathfindingUpdateData)updateData).Path;
+        //    drawLine(path);
+        //}
+
+        public void onUIRequest(UIRequest uiRequest)
+        {
+            if (uiRequest.command == UIRequest.Command.ZoomIn)
+                updateZoomLevel(true);
+            else if (uiRequest.command == UIRequest.Command.ZoomOut)
+                updateZoomLevel(false);
         }
 
         // ------ mouse input handlers -------------------------
         public void OnTileClick(Vector2Int tilePos)
         {
             DebugUtils.Log("MainView.OnTileClick");
-            //var path = new List<Vector2Int>();
-            //path.Add(new Vector2Int(5, 5));
-            //path.Add(new Vector2Int(5, 40));
-            //path.Add(new Vector2Int(40, 40));
-            //path.Add(new Vector2Int(40, 6));
-            //path.Add(new Vector2Int(6, 6));
-
-            //drawLine(path);
-            EventManager.UIRequestEvent.Invoke(new PathfindingRequest(tilePos));
+            //EventManager.UIRequestEvent.Invoke(new PathfindingRequest(tilePos)); //FUTURE: reinsert pathfinding on click
         }
 
         public void OnTileMouseEnter(Vector2Int tilePos)
@@ -128,7 +118,7 @@ namespace Ventura.Unity.Behaviours
 
         private void sendTileInfo(Vector2Int? tilePos)
         {
-            EventManager.UIRequestEvent.Invoke(new MapTileInfoRequest(tilePos));
+            EventManager.Publish(new TileInfoRequest(tilePos));
         }
 
 
@@ -185,9 +175,9 @@ namespace Ventura.Unity.Behaviours
             }
 
             updateSites(gameMap);
-            updateFog(gameMap);
-            updateItems(gameMap);
-            updateMonsters(gameMap);
+            //updateFog(gameMap);
+            //updateItems(gameMap);
+            //updateMonsters(gameMap);
         }
 
 
@@ -205,34 +195,32 @@ namespace Ventura.Unity.Behaviours
             }
         }
 
-        private void updateItems(GameMap gameMap)
+        private void updateItems(IEnumerable<GameItem> items)
         {
-            //DebugUtils.Log("MainViewBehaviour.updateItems()");
+            DebugUtils.Log("MainViewBehaviour.updateItems()");
 
             UnityUtils.RemoveAllChildren(itemsLayer);
-            foreach (var e in gameMap.GetAllEntities<GameItem>())
+            foreach (var item in items)
             {
-                var newEntityObj = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
-                newEntityObj.name = e.Name;
+                var newEntityObj = Instantiate(entityTemplate, new Vector3(item.x, item.y), Quaternion.identity);
+                newEntityObj.name = item.Name;
                 newEntityObj.GetComponent<SpriteRenderer>().sprite = SpriteCache.Instance.GetSprite("item");
                 newEntityObj.transform.SetParent(itemsLayer);
                 //TODO: hide site if there is one behind
             }
         }
 
-        private void updateMonsters(GameMap gameMap)
+        private void updateMonsters(IEnumerable<Monster> monsters)
         {
             DebugUtils.Log("MainViewBehaviour.updateMonsters()");
 
             UnityUtils.RemoveAllChildren(monstersLayer);
-            foreach (var e in gameMap.GetAllEntities<Actor>())
+            foreach (var m in monsters)
             {
-                if (e is Player)
-                    continue;
-                var newEntityObj = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
-                newEntityObj.name = e.Name;
+                var newEntityObj = Instantiate(entityTemplate, new Vector3(m.x, m.y), Quaternion.identity);
+                newEntityObj.name = m.Name;
                 newEntityObj.GetComponent<SpriteRenderer>().sprite = SpriteCache.Instance.GetSprite("butterfly"); //TODO: make generic
-                newEntityObj.GetComponent<SpriteRenderer>().color = UnityUtils.ColorFromHash(e.GetHashCode()); //TODO: make generic
+                newEntityObj.GetComponent<SpriteRenderer>().color = UnityUtils.ColorFromHash(m.GetHashCode()); //TODO: make generic
                 newEntityObj.transform.SetParent(monstersLayer);
 
                 //TODO: hide site or item if there is one behind
@@ -241,7 +229,13 @@ namespace Ventura.Unity.Behaviours
 
         private void updateFog(GameMap gameMap)
         {
-            //DebugUtils.Log("MainViewBehaviour.updateFog()");
+            if ((_fogTiles == null) || (_fogTiles.GetLength(0) != gameMap.Width) || (_fogTiles.GetLength(1) != gameMap.Height))
+            {
+                //visibility data is (still) inconsistent with our terrain, ignore
+                return;
+            }
+
+            DebugUtils.Log("MainViewBehaviour.updateFog()");
 
             for (int x = 0; x < gameMap.Width; x++)
             {

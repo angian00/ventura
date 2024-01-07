@@ -38,22 +38,22 @@ namespace Ventura.Unity.Input
             //------------------- system commands -------------------
             if (key == keyboard.nKey)
             {
-                _viewManager.ShowPopup("New Game", SystemCommand.New);
+                _viewManager.ShowPopup("New Game", SystemRequest.Command.New);
                 processed = true;
             }
             else if (key == keyboard.qKey)
             {
-                _viewManager.ShowPopup("Exit Game", SystemCommand.Exit);
+                _viewManager.ShowPopup("Exit Game", SystemRequest.Command.Exit);
                 processed = true;
             }
             else if (key == keyboard.sKey)
             {
-                _viewManager.ShowPopup("Save Game", SystemCommand.Save);
+                _viewManager.ShowPopup("Save Game", SystemRequest.Command.Save);
                 processed = true;
             }
             else if (key == keyboard.lKey)
             {
-                _viewManager.ShowPopup("Load Game", SystemCommand.Load);
+                _viewManager.ShowPopup("Load Game", SystemRequest.Command.Load);
                 processed = true;
             }
 

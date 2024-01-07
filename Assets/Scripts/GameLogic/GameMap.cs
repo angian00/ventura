@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
-using Ventura.Unity.Events;
 using Ventura.Util;
 
 
@@ -237,6 +236,21 @@ namespace Ventura.GameLogic
         }
 
 
+        public ReadOnlyCollection<T> GetVisibleEntities<T>() where T : Entity
+        {
+            var result = new List<T>();
+
+            foreach (var e in _entities)
+            {
+                if ((e is T) && (_visible[e.x, e.y]))
+                    result.Add((T)e);
+            }
+
+            return new ReadOnlyCollection<T>(result);
+        }
+
+
+
         public Entity? GetBlockingEntityAt(int x, int y)
         {
             foreach (var e in _entities)
@@ -301,8 +315,6 @@ namespace Ventura.GameLogic
                     _explored[x, y] = true;
                 }
             }
-
-            EventManager.GameStateUpdateEvent.Invoke(new MapVisibilityUpdateData(this));
         }
 
 
@@ -334,7 +346,7 @@ namespace Ventura.GameLogic
             _entities.Add(item);
             item.Parent = this;
 
-            EventManager.GameStateUpdateEvent.Invoke(new ContainerUpdateData(this));
+            //EventManager.GameStateUpdateEvent.Invoke(new ContainerUpdateData(this));
         }
 
         public void RemoveItem(GameItem item)
@@ -342,7 +354,7 @@ namespace Ventura.GameLogic
             _entities.Remove(item);
             item.Parent = null;
 
-            EventManager.GameStateUpdateEvent.Invoke(new ContainerUpdateData(this));
+            //EventManager.GameStateUpdateEvent.Invoke(new ContainerUpdateData(this)); //FIXME container events
         }
     }
 }
