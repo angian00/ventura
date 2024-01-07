@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
-using Ventura.GameLogic;
 using Ventura.GameLogic.Components;
+using Ventura.GameLogic.Entities;
 using Ventura.Unity.Events;
 using Ventura.Util;
 
@@ -26,7 +26,7 @@ namespace Ventura.Unity.Behaviours
 
         private void onPlayerUpdated(EntityUpdate updateData)
         {
-            if (!(updateData.entity is Player))
+            if (!(updateData.entity is Player) || !(updateData.type == EntityUpdate.Type.Changed))
                 return;
 
             var skillsData = ((Player)updateData.entity).Skills;

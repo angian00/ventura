@@ -24,7 +24,7 @@ namespace Ventura.Unity.Behaviours
 
         public void onTextNotification(TextNotification eventData)
         {
-            DebugUtils.Warning($"DEBUG: StatusLineBehaviour.onTextNotification; msg is [{eventData.msg}]");
+            //DebugUtils.Warning($"DEBUG: StatusLineBehaviour.onTextNotification; msg is [{eventData.msg}]");
             var msg = eventData.msg;
             if (msg != null && msg != "")
                 DebugUtils.Log(msg);

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Ventura.GameLogic.Entities;
 using Ventura.Generators;
 using Ventura.Unity.Events;
 using Ventura.Util;
@@ -113,8 +114,6 @@ namespace Ventura.GameLogic
                 _currMap.UpdateExploration(targetX, targetY);
                 EventManager.Publish(new GameStateUpdate(null, _currMap, GameStateUpdate.UpdatedFields.Visibility));
             }
-            else
-                EventManager.Publish(new GameStateUpdate(null, _currMap, GameStateUpdate.UpdatedFields.Monsters));
 
             return new Vector2Int(a.x, a.y);
         }

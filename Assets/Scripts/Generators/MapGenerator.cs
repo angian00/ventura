@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Ventura.GameLogic;
+using Ventura.GameLogic.Entities;
 using Ventura.Util;
 using Random = UnityEngine.Random;
 
@@ -24,7 +25,9 @@ namespace Ventura.Generators
                 generateSites(newMap, 15);
 
             generateSomeItems(newMap);
-            //generateSomeMonsters(newMap);
+            generateSomeMonsters(newMap);
+            //generateSomeItems(newMap, 1);
+            //generateSomeMonsters(newMap, 1);
 
             newMap.StartingPos = DataUtils.RandomEmptyPos(newMap);
 
@@ -148,11 +151,12 @@ namespace Ventura.Generators
             }
         }
 
-        private static void generateSomeItems(GameMap targetMap)
+        private static void generateSomeItems(GameMap targetMap, int nItems = -1)
         {
             const float perc = .02f;
 
-            var nItems = (int)(perc * targetMap.Width * targetMap.Height);
+            if (nItems == -1)
+                nItems = (int)(perc * targetMap.Width * targetMap.Height);
 
             var books = BookItemGenerator.Instance.GenerateBooks(nItems);
 
@@ -166,12 +170,12 @@ namespace Ventura.Generators
         }
 
 
-        private static void generateSomeMonsters(GameMap targetMap)
+        private static void generateSomeMonsters(GameMap targetMap, int nMonsters = -1)
         {
             const float perc = .01f;
 
-            var nMonsters = (int)(perc * targetMap.Width * targetMap.Height);
-            //var nMonsters = 1;
+            if (nMonsters == -1)
+                nMonsters = (int)(perc * targetMap.Width * targetMap.Height);
 
             var monsters = MonsterGenerator.Instance.GenerateMonsters(nMonsters);
 
@@ -180,7 +184,7 @@ namespace Ventura.Generators
                 var pos = DataUtils.RandomEmptyPos(targetMap);
                 monster.MoveTo(pos.x, pos.y);
 
-                targetMap.Entities.Add(monster); //FIXME: tidy up gameMap/gameState API
+                targetMap.Entities.Add(monster);
             }
         }
     }

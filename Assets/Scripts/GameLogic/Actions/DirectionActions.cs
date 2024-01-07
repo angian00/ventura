@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Ventura.GameLogic.Entities;
 
 namespace Ventura.GameLogic.Actions
 {

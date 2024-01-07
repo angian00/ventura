@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using Ventura.GameLogic.Actions;
 using Ventura.GameLogic.Components;
+using Ventura.GameLogic.Entities;
 using Ventura.Util;
 
 namespace Ventura.GameLogic

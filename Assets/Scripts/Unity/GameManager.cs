@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
+using Ventura.GameLogic.Entities;
 using Ventura.Unity.Events;
 using Ventura.Util;
 

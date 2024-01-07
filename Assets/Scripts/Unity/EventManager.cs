@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Actions;
+using Ventura.GameLogic.Entities;
 
 namespace Ventura.Unity.Events
 {
@@ -19,7 +20,7 @@ namespace Ventura.Unity.Events
             Terrain = 2,
             Visibility = 4,
             Items = 8,
-            Monsters = 16,
+            Actors = 16,
 
             Everything = ~0,
         }
@@ -38,10 +39,19 @@ namespace Ventura.Unity.Events
 
     public record EntityUpdate : GameEventData
     {
+        public enum Type
+        {
+            Added,
+            Removed,
+            Changed,
+        }
+
+        public Type type { get; }
         public Entity entity { get; }
 
-        public EntityUpdate(Entity entity)
+        public EntityUpdate(Type type, Entity entity)
         {
+            this.type = type;
             this.entity = entity;
         }
     }

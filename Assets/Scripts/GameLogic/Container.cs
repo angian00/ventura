@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Ventura.GameLogic.Entities;
 
 namespace Ventura.GameLogic
 {

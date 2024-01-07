@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Ventura.GameLogic.Actions;
+using Ventura.GameLogic.Entities;
 using Ventura.Util;
 
 namespace Ventura.GameLogic.Components

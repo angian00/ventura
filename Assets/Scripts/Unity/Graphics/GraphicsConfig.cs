@@ -12,6 +12,7 @@ namespace Ventura.Unity.Graphics
         {
             { "site", "temple" },
             { "item", "powder-bag" },
+            { "player", "character" },
 
             { "book", "book_00" },
 

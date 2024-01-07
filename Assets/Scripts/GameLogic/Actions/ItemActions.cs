@@ -1,4 +1,6 @@
-﻿namespace Ventura.GameLogic.Actions
+﻿using Ventura.GameLogic.Entities;
+
+namespace Ventura.GameLogic.Actions
 {
     public abstract class ItemAction : GameAction
     {

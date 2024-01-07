@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using Ventura.GameLogic.Entities;
+using Ventura.Unity.Events;
 using Ventura.Util;
 
 
@@ -346,7 +348,7 @@ namespace Ventura.GameLogic
             _entities.Add(item);
             item.Parent = this;
 
-            //EventManager.GameStateUpdateEvent.Invoke(new ContainerUpdateData(this));
+            EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Added, item));
         }
 
         public void RemoveItem(GameItem item)
@@ -354,7 +356,7 @@ namespace Ventura.GameLogic
             _entities.Remove(item);
             item.Parent = null;
 
-            //EventManager.GameStateUpdateEvent.Invoke(new ContainerUpdateData(this)); //FIXME container events
+            EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Removed, item));
         }
     }
 }

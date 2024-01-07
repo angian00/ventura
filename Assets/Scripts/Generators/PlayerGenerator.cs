@@ -1,4 +1,4 @@
-using Ventura.GameLogic;
+using Ventura.GameLogic.Entities;
 using Ventura.Util;
 
 namespace Ventura.Generators

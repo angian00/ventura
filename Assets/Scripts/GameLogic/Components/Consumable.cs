@@ -1,5 +1,6 @@
 ﻿using System;
 using Ventura.GameLogic.Actions;
+using Ventura.GameLogic.Entities;
 
 namespace Ventura.GameLogic.Components
 {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using Ventura.GameLogic.Entities;
 using Ventura.Unity.Events;
 using Ventura.Util;
 
@@ -55,7 +56,7 @@ namespace Ventura.GameLogic.Components
             _items.Add(item);
             item.Parent = this;
 
-            EventManager.Publish(new EntityUpdate(_parent));
+            EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Changed, _parent));
         }
 
         public void RemoveItem(GameItem item)
@@ -63,7 +64,7 @@ namespace Ventura.GameLogic.Components
             _items.Remove(item);
             item.Parent = null;
 
-            EventManager.Publish(new EntityUpdate(_parent));
+            EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Changed, _parent));
         }
 
 

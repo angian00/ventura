@@ -2,7 +2,7 @@
 using UnityEngine;
 using Ventura.GameLogic.Components;
 
-namespace Ventura.GameLogic
+namespace Ventura.GameLogic.Entities
 {
     [Serializable]
     public class Monster : Actor, ISerializationCallbackReceiver

@@ -17,23 +17,18 @@
 
 
 ## Bugfixing
-- pickup item
-- hide site if there is one behind an item or monster or player in map
+- tileinfo con player
 - filtering out notifications for monster actions
-
 
 ## Improvements
 -  tidy up gameMap/gameState API
-- spostare PathfindingRequest da UIRequestData
+- trasformare graphicsConfig in ScriptableObject
+- generare cognomi degli autori dei libri
+- riattivare e migliorare PathfindingRequest 
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - dialog scelta nome savefile
-- aggiungere bitfield updatedFields agli EventData
 
 + refactoring Entity-Component-System
-
-- campo id per Entities (Guid.NewGuid())
-
-+ ottimizzare la mole di eventi circolanti
 
 
 ## Minutiae

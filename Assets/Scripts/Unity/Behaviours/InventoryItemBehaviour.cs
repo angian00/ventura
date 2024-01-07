@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Ventura.GameLogic;
+using Ventura.GameLogic.Entities;
 using Ventura.Unity.Graphics;
 
 namespace Ventura.Unity.Behaviours

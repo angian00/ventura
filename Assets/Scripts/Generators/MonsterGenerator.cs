@@ -1,6 +1,6 @@
 
 using System.Collections.Generic;
-using Ventura.GameLogic;
+using Ventura.GameLogic.Entities;
 
 namespace Ventura.Generators
 {

@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Ventura.GameLogic;
+using Ventura.GameLogic.Entities;
 using Ventura.Unity.Events;
 using Ventura.Unity.Graphics;
 using Ventura.Util;
@@ -29,18 +31,43 @@ namespace Ventura.Unity.Behaviours
         private const int defaultZoomLevel = 10;
 
 
-        public GameObject playerObj;
         public GameObject cameraObj;
         public Transform terrainLayer;
         public Transform sitesLayer;
         public Transform itemsLayer;
         public Transform monstersLayer;
         public Transform fogLayer;
+        public Transform playerLayer;
+
 
         public GameObject pathFinderLineObj;
 
-        private GameObject[,] _fogTiles;
+        private Dictionary<Type, Transform> _entityLayers;
+        private Dictionary<Transform, int> _layerPriorities;
 
+        private GameObject[,] _fogTiles;
+        private Dictionary<Guid, GameObject> _entityObjs = new();
+
+
+        private void Awake()
+        {
+            _entityLayers = new() {
+                { typeof(Site), sitesLayer },
+                { typeof(GameItem), itemsLayer },
+                { typeof(BookItem), itemsLayer }, //FIXME
+                { typeof(Monster), monstersLayer },
+                { typeof(Player), playerLayer },
+            };
+
+            //bigger is overlayed over smaller
+            _layerPriorities = new()
+            {
+                { itemsLayer, 1 },
+                { sitesLayer, 2 },
+                { monstersLayer, 3 },
+                { playerLayer, 4 },
+            };
+        }
 
         private void OnEnable()
         {
@@ -67,23 +94,39 @@ namespace Ventura.Unity.Behaviours
                 updateFog(updateData.gameMap);
 
             if (updateData.updatedFields.HasFlag(GameStateUpdate.UpdatedFields.Items))
-                updateItems(updateData.gameMap.GetVisibleEntities<GameItem>());
+                resetEntities(updateData.gameMap.GetAllEntities<GameItem>(), true);
 
-            if (updateData.updatedFields.HasFlag(GameStateUpdate.UpdatedFields.Monsters))
-                updateMonsters(updateData.gameMap.GetVisibleEntities<Monster>());
+            if (updateData.updatedFields.HasFlag(GameStateUpdate.UpdatedFields.Actors))
+            {
+                resetEntities(updateData.gameMap.GetAllEntities<Monster>(), true);
+                resetEntities(updateData.gameMap.GetAllEntities<Player>(), true);
+                updateCamera();
+            }
 
         }
 
         private void onEntityUpdated(EntityUpdate updateData)
         {
             var a = updateData.entity;
-            if (a is Player)
-                updatePlayer((Player)a);
-        }
 
-        //private void onItemsUpdated(EntityNotification updateData)
-        //{ 
-        //}
+            DebugUtils.Log("MainViewBehaviour.onEntityUpdated()");
+
+            if (updateData.type == EntityUpdate.Type.Added)
+            {
+                createEntityObj(updateData.entity);
+            }
+            else if (updateData.type == EntityUpdate.Type.Removed)
+            {
+                destroyEntityObj(updateData.entity);
+            }
+            else if (updateData.type == EntityUpdate.Type.Changed)
+            {
+                updateEntityObj(updateData.entity);
+            }
+
+            if (a is Player)
+                updateCamera();
+        }
 
         //private void onInfoUpdated(EntityNotification updateData)
         //{
@@ -124,26 +167,6 @@ namespace Ventura.Unity.Behaviours
 
         // -----------------------------------------------------
 
-
-        private void updatePlayer(Player playerData)
-        {
-            DebugUtils.Log("MainViewBehaviour.updatePlayer()");
-
-            var playerX = playerData.x;
-            var playerY = playerData.y;
-
-            var targetObjPos = playerObj.transform.position;
-            targetObjPos.x = playerX;
-            targetObjPos.y = playerY;
-            playerObj.transform.position = targetObjPos;
-
-            targetObjPos = cameraObj.transform.position;
-            targetObjPos.x = playerX;
-            targetObjPos.y = playerY;
-            cameraObj.transform.position = targetObjPos;
-        }
-
-
         private void updateMap(GameMap gameMap)
         {
             DebugUtils.Log($"MainViewBehaviour.updateMap(); mapName: {gameMap.Name}");
@@ -174,56 +197,152 @@ namespace Ventura.Unity.Behaviours
                 }
             }
 
-            updateSites(gameMap);
-            //updateFog(gameMap);
-            //updateItems(gameMap);
-            //updateMonsters(gameMap);
+            resetEntities(gameMap.GetAllEntities<Site>(), true);
         }
 
 
-        private void updateSites(GameMap gameMap)
+        private void resetEntities<T>(IEnumerable<T> newEntities, bool removeOld) where T : Entity
         {
-            DebugUtils.Log("MainViewBehaviour.updateSites()");
+            //DebugUtils.Log("MainViewBehaviour.resetEntities()");
 
-            UnityUtils.RemoveAllChildren(sitesLayer);
-            foreach (var e in gameMap.GetAllEntities<Site>())
+            //find all old entityObjs on the correct layer
+            var toBeRemoved = new HashSet<Guid>();
+            foreach (var entityId in _entityObjs.Keys)
             {
-                var newEntityObj = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
-                newEntityObj.name = e.Name; //FIXME: there is no guarantee that entity name is unique
-                newEntityObj.GetComponent<SpriteRenderer>().sprite = SpriteCache.Instance.GetSprite("site");
-                newEntityObj.transform.SetParent(sitesLayer);
+                if (_entityObjs[entityId].transform.parent == _entityLayers[typeof(T)])
+                    toBeRemoved.Add(entityId);
+            }
+
+            //add new entityObjs
+            foreach (var newEntity in newEntities)
+            {
+                var newEntityObj = updateEntityObj(newEntity);
+                if (newEntityObj == null)
+                    newEntityObj = createEntityObj(newEntity);
+
+                toBeRemoved.Remove(newEntity.Id);
+            }
+
+            //remove old entityObjs
+            foreach (var entityId in toBeRemoved)
+            {
+                destroyEntityObj(entityId);
             }
         }
 
-        private void updateItems(IEnumerable<GameItem> items)
+        private GameObject createEntityObj(Entity e)
         {
-            DebugUtils.Log("MainViewBehaviour.updateItems()");
+            //DebugUtils.Log($"createEntityObj; name: [{e.Name}], e.id=[{e.Id}]");
+            var pos = new Vector3(e.x, e.y);
 
-            UnityUtils.RemoveAllChildren(itemsLayer);
-            foreach (var item in items)
+            var newEntityObj = Instantiate(entityTemplate, pos, Quaternion.identity);
+            newEntityObj.name = e.Name;
+
+            string spriteId = null;
+
+            //TODO: make generic
+            if (e is Site)
+                spriteId = "site";
+            else if ((e is GameItem) || (e.GetType().IsSubclassOf(typeof(GameItem))))
+                spriteId = "item";
+            else if (e is Monster)
+                spriteId = "butterfly";
+            else if (e is Player)
+                spriteId = "player";
+            //
+
+            newEntityObj.GetComponent<SpriteRenderer>().sprite = SpriteCache.Instance.GetSprite(spriteId);
+
+            //TODO: set color for butterflies
+            //newEntityObj.GetComponent<SpriteRenderer>().color = UnityUtils.ColorFromHash(e.GetHashCode());
+
+            newEntityObj.transform.SetParent(_entityLayers[e.GetType()]);
+            _entityObjs[e.Id] = newEntityObj;
+
+            resetVisibleEntities(pos);
+
+            return newEntityObj;
+        }
+
+        private void destroyEntityObj(Entity e)
+        {
+            //DebugUtils.Log($"destroyEntityObj; name: [{e.Name}], e.id=[{e.Id}]");
+            destroyEntityObj(e.Id);
+        }
+
+        private void destroyEntityObj(Guid entityId)
+        {
+            //DebugUtils.Log($"destroyEntityObj; e.id=[{entityId}]");
+            if (_entityObjs.ContainsKey(entityId))
             {
-                var newEntityObj = Instantiate(entityTemplate, new Vector3(item.x, item.y), Quaternion.identity);
-                newEntityObj.name = item.Name;
-                newEntityObj.GetComponent<SpriteRenderer>().sprite = SpriteCache.Instance.GetSprite("item");
-                newEntityObj.transform.SetParent(itemsLayer);
-                //TODO: hide site if there is one behind
+                var targetEntityObj = _entityObjs[entityId];
+                var pos = targetEntityObj.transform.position;
+                Destroy(targetEntityObj);
+                _entityObjs.Remove(entityId);
+
+                resetVisibleEntities(pos);
             }
         }
 
-        private void updateMonsters(IEnumerable<Monster> monsters)
+        private GameObject updateEntityObj(Entity e)
         {
-            DebugUtils.Log("MainViewBehaviour.updateMonsters()");
+            //DebugUtils.Log($"updateEntityObj; name: [{e.Name}], id=[{e.Id}]");
+            if (!_entityObjs.ContainsKey(e.Id))
+                return null;
 
-            UnityUtils.RemoveAllChildren(monstersLayer);
-            foreach (var m in monsters)
+            //DebugUtils.Log($"updateEntityObj ok");
+
+            var entityObj = _entityObjs[e.Id];
+            var oldPos = entityObj.transform.position;
+            var newPos = new Vector3(e.x, e.y);
+
+            entityObj.transform.position = newPos;
+
+            resetVisibleEntities(oldPos);
+            resetVisibleEntities(newPos);
+
+            return entityObj;
+        }
+
+        private void resetVisibleEntities(Vector3 pos)
+        {
+            ////TODO: make more efficient, either with a data structure or using Unity (colliders?)
+            var targetEntityObjs = new List<GameObject>();
+
+            foreach (var e in _entityObjs.Values)
             {
-                var newEntityObj = Instantiate(entityTemplate, new Vector3(m.x, m.y), Quaternion.identity);
-                newEntityObj.name = m.Name;
-                newEntityObj.GetComponent<SpriteRenderer>().sprite = SpriteCache.Instance.GetSprite("butterfly"); //TODO: make generic
-                newEntityObj.GetComponent<SpriteRenderer>().color = UnityUtils.ColorFromHash(m.GetHashCode()); //TODO: make generic
-                newEntityObj.transform.SetParent(monstersLayer);
+                if ((e.transform.position.x == pos.x) && (e.transform.position.y == pos.y))
+                    targetEntityObjs.Add(e);
+            }
 
-                //TODO: hide site or item if there is one behind
+            if (targetEntityObjs.Count == 0)
+                return;
+
+            if (targetEntityObjs.Count == 1)
+            {
+                targetEntityObjs[0].GetComponent<SpriteRenderer>().enabled = true;
+                return;
+            }
+
+            targetEntityObjs.Sort(delegate (GameObject eObj1, GameObject eObj2)
+            {
+                var pr1 = _layerPriorities[eObj1.transform.parent];
+                var pr2 = _layerPriorities[eObj2.transform.parent];
+
+                return pr1.CompareTo(pr2);
+            });
+
+
+            foreach (var e in targetEntityObjs)
+            {
+                //last element has highest prority
+                bool mustEnable;
+                if (e == targetEntityObjs[^1])
+                    mustEnable = true;
+                else
+                    mustEnable = false;
+
+                e.GetComponent<SpriteRenderer>().enabled = mustEnable;
             }
         }
 
@@ -275,6 +394,19 @@ namespace Ventura.Unity.Behaviours
             cameraObj.GetComponent<Camera>().orthographicSize = defaultZoomLevel * zoomLevelsFactors[_zoomLevelIndex];
         }
 
+        private void updateCamera()
+        {
+            DebugUtils.Log("MainViewBehaviour.updateCamera()");
+
+            if (playerLayer.childCount == 0)
+                return;
+
+            var playerPos = playerLayer.GetChild(0).position;
+            var newCameraPos = cameraObj.transform.position;
+            newCameraPos.x = playerPos.x;
+            newCameraPos.y = playerPos.y;
+            cameraObj.transform.position = newCameraPos;
+        }
         // -----------------------------------------------------
 
         private void drawLine(List<Vector2Int> tilePath)
