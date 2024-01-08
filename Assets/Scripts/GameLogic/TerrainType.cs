@@ -1,7 +1,21 @@
 ﻿namespace Ventura.GameLogic
 {
-    public record TerrainType : GameLogicObject
+    public record TerrainDef : GameLogicObject
     {
+        public enum TerrainType
+        {
+            Water,
+            Plains1,
+            Plains2,
+            Hills1,
+            Hills2,
+            Mountains,
+        }
+
+
+        private TerrainType _type;
+        public TerrainType Type { get => _type; }
+
         private string _name;
         public string Name { get => _name; }
 
@@ -14,38 +28,43 @@
         private bool _transparent;
         public bool Transparent { get => _transparent; }
 
-        public TerrainType(string name, string label, bool walkable, bool transparent)
+        private TerrainDef(TerrainType type, string name, string label, bool walkable, bool transparent)
         {
+            this._type = type;
             this._name = name;
             this._label = label;
             this._walkable = walkable;
             this._transparent = transparent;
         }
 
-        public static TerrainType Water = new TerrainType("water", "Water", false, true);
-        public static TerrainType Plains1 = new TerrainType("plains1", "Plains", true, true);
-        public static TerrainType Plains2 = new TerrainType("plains2", "Plains", true, true);
-        public static TerrainType Hills1 = new TerrainType("hills1", "Hills", true, true);
-        public static TerrainType Hills2 = new TerrainType("hills2", "Hills", true, true);
-        public static TerrainType Mountains = new TerrainType("mountains", "Mountains", true, true);
+        public static TerrainDef Water = new TerrainDef(TerrainType.Water, "water", "Water", false, true);
+        public static TerrainDef Plains1 = new TerrainDef(TerrainType.Plains1, "plains1", "Plains", true, true);
+        public static TerrainDef Plains2 = new TerrainDef(TerrainType.Plains2, "plains2", "Plains", true, true);
+        public static TerrainDef Hills1 = new TerrainDef(TerrainType.Hills1, "hills1", "Hills", true, true);
+        public static TerrainDef Hills2 = new TerrainDef(TerrainType.Hills2, "hills2", "Hills", true, true);
+        public static TerrainDef Mountains = new TerrainDef(TerrainType.Mountains, "mountains", "Mountains", true, true);
 
 
-        public static TerrainType FromName(string name)
+        public static TerrainDef FromType(TerrainType terrainType)
         {
-            if (name == "water")
-                return Water;
-            if (name == "plains1")
-                return Plains1;
-            if (name == "plains2")
-                return Plains2;
-            if (name == "hills1")
-                return Hills1;
-            if (name == "hills2")
-                return Hills2;
-            if (name == "mountains")
-                return Mountains;
+            switch (terrainType)
+            {
+                case TerrainType.Water:
+                    return Water;
+                case TerrainType.Plains1:
+                    return Plains1;
+                case TerrainType.Plains2:
+                    return Plains2;
+                case TerrainType.Hills1:
+                    return Hills1;
+                case TerrainType.Hills2:
+                    return Hills2;
+                case TerrainType.Mountains:
+                    return Mountains;
 
-            throw new GameException($"Invalid TerrainType name: {name}");
+                default:
+                    throw new GameException($"Invalid TerrainType: {terrainType}");
+            }
         }
     }
 }

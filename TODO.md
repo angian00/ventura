@@ -1,16 +1,14 @@
 # TODO
 
 ## Current sprint
-- fighter component
-- monster factory architecture
-- ripristinare colore e icone custom per entities
+- completare trasformaz graphicsConfig in ScriptableObject
+- DevTools per backup ScriptableObjects
 
 
 ## Bugfixing
 
 
 ## Improvements
-- trasformare graphicsConfig in ScriptableObject
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - aggiornare visuals a mockup figma
 - sperimentare uso colliders vs resetVisibleEntities
@@ -33,10 +31,8 @@
 
 
 ## Errands
-- informarsi ScriptableObjects
 - raccogliere file utili sapientia*
 - raccogliere txt Poliziano
-- controllare licenza https://game-icons.net/
 
 - provare onGUI
 ? scouting musica (https://www.freesoundtrackmusic.com/)
@@ -52,7 +48,10 @@
 
 
 ### 0.7
-+ animazione e messa in sequenza movimento mostri
+
+- fighter component
+- monster factory architecture
+- ripristinare colore e icone custom per entities
 
 
 ### 0.x

@@ -43,7 +43,7 @@ namespace Ventura.Unity.Graphics
 
         private static Sprite LoadSprite(string spriteId)
         {
-            var spriteName = GraphicsConfig.SpriteFiles[spriteId];
+            var spriteName = GraphicsConfigOld.SpriteFiles[spriteId];
             var sprite = Resources.Load<Sprite>($"Sprites/{spriteName}");
             if (sprite == null)
                 throw new GameException($"!! Sprite not found: {spriteName}");

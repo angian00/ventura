@@ -122,9 +122,9 @@ namespace Ventura.Test
 
         private void applyTheme(ThemeConfig themeConfig, Transform screenObj)
         {
-            screenObj.GetComponent<Image>().color = GraphicsConfig.FromHex(themeConfig.colors[0]);
-            screenObj.Find("Title").GetComponent<TextMeshProUGUI>().color = GraphicsConfig.FromHex(themeConfig.colors[1]);
-            screenObj.Find("Subtitle").GetComponent<TextMeshProUGUI>().color = GraphicsConfig.FromHex(themeConfig.colors[2]);
+            screenObj.GetComponent<Image>().color = GraphicsConfigOld.FromHex(themeConfig.colors[0]);
+            screenObj.Find("Title").GetComponent<TextMeshProUGUI>().color = GraphicsConfigOld.FromHex(themeConfig.colors[1]);
+            screenObj.Find("Subtitle").GetComponent<TextMeshProUGUI>().color = GraphicsConfigOld.FromHex(themeConfig.colors[2]);
 
             var textObjs = screenObj.GetComponentsInChildren<TextMeshProUGUI>();
             foreach (var textObj in textObjs)

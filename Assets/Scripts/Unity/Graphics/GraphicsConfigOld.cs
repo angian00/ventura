@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Ventura.GameLogic;
 using Ventura.Unity.Events;
 
 namespace Ventura.Unity.Graphics
 {
 
-    public class GraphicsConfig
+    public class GraphicsConfigOld
     {
         public static readonly Dictionary<string, string> SpriteFiles = new()
         {
@@ -20,18 +19,15 @@ namespace Ventura.Unity.Graphics
         };
 
 
-        public static readonly Dictionary<TerrainType, Color> TerrainColors = new()
-        {
-            { TerrainType.Water, FromHex("#1CA3EC") },
-            { TerrainType.Plains1, FromHex("#A5A58D") },
-            { TerrainType.Plains2, FromHex("#B7B7A4") },
-            { TerrainType.Hills1, FromHex("#6B705C") },
-            { TerrainType.Hills2, FromHex("#CB997E") },
-            { TerrainType.Mountains, FromHex("#DDBEA9") },
-        };
-
-        //darkTile: TerrainAspect
-        //lightTile: TerrainAspect
+        //public static readonly Dictionary<TerrainDef, Color> TerrainColors = new()
+        //{
+        //    { TerrainDef.Water, FromHex("#1CA3EC") },
+        //    { TerrainDef.Plains1, FromHex("#A5A58D") },
+        //    { TerrainDef.Plains2, FromHex("#B7B7A4") },
+        //    { TerrainDef.Hills1, FromHex("#6B705C") },
+        //    { TerrainDef.Hills2, FromHex("#CB997E") },
+        //    { TerrainDef.Mountains, FromHex("#DDBEA9") },
+        //};
 
 
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Entities;
+using Ventura.Unity.Config;
 using Ventura.Unity.Events;
 using Ventura.Unity.Graphics;
 using Ventura.Util;
@@ -13,6 +14,8 @@ namespace Ventura.Unity.Behaviours
 
     public class MainViewBehaviour : MonoBehaviour
     {
+        public GameGraphicsConfig graphicsConfig;
+
         public GameObject terrainTileTemplate;
         public GameObject fogTileTemplate;
         public GameObject entityTemplate;
@@ -184,12 +187,12 @@ namespace Ventura.Unity.Behaviours
             {
                 for (int y = 0; y < gameMap.Height; y++)
                 {
-                    TerrainType terrainType = gameMap.Terrain[x, y];
+                    TerrainDef terrain = gameMap.Terrain[x, y];
 
                     var newMapTile = Instantiate(terrainTileTemplate, new Vector3(x, y), Quaternion.identity);
                     newMapTile.GetComponent<MapTileBehaviour>().mapManager = this;
                     newMapTile.GetComponent<MapTileBehaviour>().MapPos = new Vector2Int(x, y);
-                    newMapTile.GetComponent<SpriteRenderer>().color = GraphicsConfig.TerrainColors[terrainType];
+                    newMapTile.GetComponent<SpriteRenderer>().color = graphicsConfig.GetColor(terrain.Type);
                     newMapTile.transform.SetParent(terrainLayer);
                     _mapTiles[x, y] = newMapTile;
 

@@ -28,7 +28,7 @@ namespace Ventura.Unity.Behaviours
             if (msg != null && msg != "")
                 DebugUtils.Log(msg);
 
-            //statusLine.color = GraphicsConfig.StatusLineColors[severity]; //FIXME
+            //statusLine.color = GraphicsConfigOld.StatusLineColors[severity]; //FIXME
             statusLine.text = msg;
 
             UnityUtils.FlashAndFade(statusLine);

@@ -39,8 +39,8 @@ namespace Ventura.GameLogic
         public Vector2Int StartingPos { get => _startingPos; set => _startingPos = value; }
 
 
-        private TerrainType[,] _terrain;
-        public TerrainType[,] Terrain { get => _terrain; }
+        private TerrainDef[,] _terrain;
+        public TerrainDef[,] Terrain { get => _terrain; }
 
         private bool[,] _visible;
         public bool[,] Visible { get => _visible; }
@@ -60,7 +60,7 @@ namespace Ventura.GameLogic
             this._width = width;
             this._height = height;
 
-            _terrain = new TerrainType[width, height];
+            _terrain = new TerrainDef[width, height];
             _visible = new bool[width, height];
             _explored = new bool[width, height];
 
@@ -81,7 +81,7 @@ namespace Ventura.GameLogic
         /// -------- Custom Serialization -------------------
 
         [SerializeField]
-        private string[] _auxTerrain;
+        private TerrainDef.TerrainType[] _auxTerrain;
 
         [SerializeField]
         private bool[] _auxExplored;
@@ -97,13 +97,13 @@ namespace Ventura.GameLogic
         {
             //Debug.Log($"GameMap.OnBeforeSerialize()");
 
-            _auxTerrain = new string[_width * _height];
+            _auxTerrain = new TerrainDef.TerrainType[_width * _height];
 
             for (var x = 0; x < _width; x++)
             {
                 for (var y = 0; y < _height; y++)
                 {
-                    _auxTerrain[x * _height + y] = _terrain[x, y].Name;
+                    _auxTerrain[x * _height + y] = _terrain[x, y].Type;
                 }
             }
 
@@ -116,10 +116,10 @@ namespace Ventura.GameLogic
         {
             //Debug.Log($"GameMap.OnAfterDeserialize()");
 
-            _terrain = new TerrainType[_width, _height];
+            _terrain = new TerrainDef[_width, _height];
             for (var x = 0; x < _width; x++)
                 for (var y = 0; y < _height; y++)
-                    _terrain[x, y] = TerrainType.FromName(_auxTerrain[x * _height + y]);
+                    _terrain[x, y] = TerrainDef.FromType(_auxTerrain[x * _height + y]);
 
 
             _visible = DataUtils.Unflatten(_auxVisible, _width, _height);

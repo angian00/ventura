@@ -43,13 +43,13 @@ namespace Ventura.Generators
 
 
             var terrainWeights = new float[] { 40, 40, 22, 18, 10, 10 };
-            TerrainType[] terrainTypes = new TerrainType[] {
-                TerrainType.Water,
-                TerrainType.Plains1,
-                TerrainType.Plains2,
-                TerrainType.Hills1,
-                TerrainType.Hills2,
-                TerrainType.Mountains,
+            TerrainDef[] terrainTypes = new TerrainDef[] {
+                TerrainDef.Water,
+                TerrainDef.Plains1,
+                TerrainDef.Plains2,
+                TerrainDef.Hills1,
+                TerrainDef.Hills2,
+                TerrainDef.Mountains,
             };
 
             var terrainLevels = computeTerrainLevels(terrainWeights);
