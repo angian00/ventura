@@ -92,7 +92,7 @@ namespace Ventura.Unity.Behaviours
                     var itemNames = new List<string>();
                     foreach (var item in items)
                     {
-                        itemNames.Add(item.GetType().Name);
+                        itemNames.Add(item.Name);
                     }
                     tileInfoResponse.items = itemNames;
 

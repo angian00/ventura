@@ -49,7 +49,7 @@ namespace Ventura.GameLogic
         public bool[,] Explored { get => _explored; }
 
         private HashSet<Entity> _entities = new();
-        //not exposed by choice
+        //only exposed through specific methods
         //public HashSet<Entity> Entities { get => _entities; }
 
 
@@ -95,7 +95,7 @@ namespace Ventura.GameLogic
 
         public void OnBeforeSerialize()
         {
-            Debug.Log($"GameMap.OnBeforeSerialize()");
+            //Debug.Log($"GameMap.OnBeforeSerialize()");
 
             _auxTerrain = new string[_width * _height];
 
@@ -114,7 +114,7 @@ namespace Ventura.GameLogic
 
         public void OnAfterDeserialize()
         {
-            Debug.Log($"GameMap.OnAfterDeserialize()");
+            //Debug.Log($"GameMap.OnAfterDeserialize()");
 
             _terrain = new TerrainType[_width, _height];
             for (var x = 0; x < _width; x++)

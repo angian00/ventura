@@ -88,7 +88,7 @@ namespace Ventura.Unity.Behaviours
 
         private void onGameStateUpdated(GameStateUpdate updateData)
         {
-            DebugUtils.Log($"MainViewBehaviour.onGameStateUpdated()");
+            //DebugUtils.Log($"MainViewBehaviour.onGameStateUpdated()");
 
             if (updateData.updatedFields.HasFlag(GameStateUpdate.UpdatedFields.Terrain))
                 updateMap(updateData.gameMap);
@@ -295,11 +295,7 @@ namespace Ventura.Unity.Behaviours
             //DebugUtils.Log($"updateEntityObj; name: [{e.Name}], id=[{e.Id}]");
             if (!_entityObjs.ContainsKey(e.Id))
             {
-                //create it if for some reason it wasn't there
-                //DebugUtils.Log($"calling create instead");
-                //return createEntityObj(e);
-
-                DebugUtils.Log($"entity with id=[{e.Id}] not found in _entityObjs, skipping update");
+                //DebugUtils.Log($"entity with id=[{e.Id}] not found in _entityObjs, skipping update");
                 return null;
             }
 
@@ -428,7 +424,6 @@ namespace Ventura.Unity.Behaviours
                 return;
 
             var playerPos = playerLayer.GetChild(0).position;
-            DebugUtils.Log($"MainViewBehaviour.updateCamera(); player pos: {playerPos}");
             var newCameraPos = cameraObj.transform.position;
             newCameraPos.x = playerPos.x;
             newCameraPos.y = playerPos.y;

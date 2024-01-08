@@ -114,7 +114,7 @@ namespace Ventura.Generators
 
         private static void generateSites(GameMap targetMap, int nSites)
         {
-            DebugUtils.Log($"generateSites({targetMap.Name}, {nSites})");
+            //DebugUtils.Log($"generateSites({targetMap.Name}, {nSites})");
 
             const int MIN_SITE_DISTANCE = 3;
 
@@ -124,8 +124,6 @@ namespace Ventura.Generators
                 //leave a 1 tile padding around the borders
                 var x = Random.Range(1, targetMap.Width - 1);
                 var y = Random.Range(1, targetMap.Height - 1);
-
-                //if not any (entity.x == x and entity.y == y for entity in target_map.entities):
 
                 // guarantee minimal distance between sites
                 var isTileOk = targetMap.Terrain[x, y].Walkable;

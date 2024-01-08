@@ -43,10 +43,7 @@ namespace Ventura.Unity.Behaviours
             _buttonObjs.Clear();
             for (int i = 0; i < buttonNames.Count; i++)
             {
-                //var newButton = Instantiate(systemMenuButtonTemplate);
                 var newButton = Instantiate(systemMenuButtonTemplate, new Vector3(0, 0), Quaternion.identity);
-                //var newButtonScript = newButton.GetComponent<SystemMenuButtonBehaviour>();
-                //newButtonScript.buttonLabel.text = buttonNames[i];
                 getButtonLabel(newButton).text = buttonNames[i];
                 var command = buttonCommands[i];
                 newButton.GetComponent<Button>().onClick.AddListener(() => { processSystemMenuCommand(command); });
@@ -118,13 +115,11 @@ namespace Ventura.Unity.Behaviours
                     break;
 
                 case SystemMenuCommand.Save:
-                    EventManager.Publish(new SystemRequest(SystemRequest.Command.Save));
-                    //EventManager.UIRequestEvent.Invoke(new ResetViewRequest());
                     EventManager.Publish(new UIRequest(UIRequest.Command.ResetView));
+                    EventManager.Publish(new SystemRequest(SystemRequest.Command.Save));
                     break;
 
                 case SystemMenuCommand.Resume:
-                    //EventManager.UIRequestEvent.Invoke(new ResetViewRequest());
                     EventManager.Publish(new UIRequest(UIRequest.Command.ResetView));
                     break;
 

@@ -1,11 +1,9 @@
 # TODO
 
 ## Current sprint
-- tidy up uso entity.Name
 - fighter component
 - monster factory architecture
-- ripristinare colore custom per monster
-
+- ripristinare colore e icone custom per entities
 
 
 ## Bugfixing
@@ -21,6 +19,7 @@
 - riattivare e migliorare PathfindingRequest 
 - generare cognomi degli autori dei libri
 ? spostare visibility status property da map tiles
+- generatore mappe dungeon (e citta'?)
 + refactoring Consumable
 
 ++ refactoring Entity-Component-System

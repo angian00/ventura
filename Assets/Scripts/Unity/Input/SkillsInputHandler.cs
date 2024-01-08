@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace Ventura.Unity.Input
 {
-    public class SkillsInputHandler : AbstractViewInputHandler
+    public class SkillsInputHandler : BaseViewInputHandler
     {
         public SkillsInputHandler(ViewManager viewManager) : base(viewManager) { }
 

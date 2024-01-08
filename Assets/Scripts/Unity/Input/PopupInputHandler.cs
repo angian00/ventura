@@ -4,7 +4,7 @@ using Ventura.Unity.Behaviours;
 
 namespace Ventura.Unity.Input
 {
-    public class PopupInputHandler : AbstractViewInputHandler
+    public class PopupInputHandler : BaseViewInputHandler
     {
         private PopupBehaviour _popupManager;
 

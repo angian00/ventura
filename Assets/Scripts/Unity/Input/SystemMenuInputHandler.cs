@@ -6,7 +6,7 @@ using Ventura.Util;
 
 namespace Ventura.Unity.Input
 {
-    public class SystemMenuInputHandler : AbstractViewInputHandler
+    public class SystemMenuInputHandler : BaseViewInputHandler
     {
         public SystemMenuInputHandler(ViewManager viewManager) : base(viewManager) { }
 

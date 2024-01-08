@@ -7,7 +7,7 @@ using Ventura.Unity.Events;
 namespace Ventura.Unity.Input
 {
 
-    public class InventoryInputHandler : AbstractViewInputHandler
+    public class InventoryInputHandler : BaseViewInputHandler
     {
         public InventoryInputHandler(ViewManager viewManager) : base(viewManager) { }
 

@@ -1,5 +1,4 @@
 using Ventura.GameLogic.Entities;
-using Ventura.Util;
 
 namespace Ventura.Generators
 {
@@ -9,7 +8,7 @@ namespace Ventura.Generators
 
         public static Player GeneratePlayerWithBooks()
         {
-            DebugUtils.Log("GeneratePlayer()");
+            //DebugUtils.Log("GeneratePlayer()");
             var player = new Player("AnGian");
             foreach (var book in BookItemGenerator.Instance.GenerateBooks())
                 player.Inventory.AddItem(book);

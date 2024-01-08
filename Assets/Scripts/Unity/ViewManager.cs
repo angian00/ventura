@@ -35,8 +35,8 @@ namespace Ventura.Unity.Behaviours
 
         public Camera CurrCamera { get => secondaryUICamera.enabled ? secondaryUICamera : mapCamera; }
 
-        private Dictionary<ViewId, AbstractViewInputHandler> _inputHandlers = new();
-        public AbstractViewInputHandler? CurrInputHandler { get => _activeView == null ? null : _inputHandlers[(ViewId)_activeView]; }
+        private Dictionary<ViewId, BaseViewInputHandler> _inputHandlers = new();
+        public BaseViewInputHandler? CurrInputHandler { get => _activeView == null ? null : _inputHandlers[(ViewId)_activeView]; }
 
 
         private void OnEnable()

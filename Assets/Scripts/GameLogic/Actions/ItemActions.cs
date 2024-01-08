@@ -18,7 +18,7 @@ namespace Ventura.GameLogic.Actions
             if (actor.Inventory.ContainsItem(item))
             {
                 actor.Inventory.RemoveItem(item);
-                return new ActionResult(true, $"{actor.Name} drops the {item.Name}");
+                return new ActionResult(true, $"{actor.Name} drops {item.Name}");
             }
             else
                 return new ActionResult(false, $"{actor.Name} doesn't have that item");
@@ -36,7 +36,7 @@ namespace Ventura.GameLogic.Actions
                 return item.Consumable.Use(actor, this);
 
             else
-                return new ActionResult(false, $"the {item.Name} cannot be used");
+                return new ActionResult(false, $"{item.Name} cannot be used");
         }
     }
 
@@ -82,7 +82,7 @@ namespace Ventura.GameLogic.Actions
             var targetItem = tileItems[0]; //FUTURE: properly support the case of multiple tileItems on the same tile
 
             targetItem.TransferTo(actor.Inventory);
-            return new ActionResult(true, $"{actor.Name} picks up the {targetItem.Label}");
+            return new ActionResult(true, $"{actor.Name} picks up {targetItem.Label}");
         }
     }
 

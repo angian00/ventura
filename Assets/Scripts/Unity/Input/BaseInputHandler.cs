@@ -6,11 +6,11 @@ using Ventura.Unity.Events;
 
 namespace Ventura.Unity.Input
 {
-    public abstract class AbstractViewInputHandler
+    public abstract class BaseViewInputHandler
     {
         protected ViewManager _viewManager;
 
-        protected AbstractViewInputHandler(ViewManager viewManager)
+        protected BaseViewInputHandler(ViewManager viewManager)
         {
             this._viewManager = viewManager;
         }

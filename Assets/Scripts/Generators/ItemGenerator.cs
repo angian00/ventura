@@ -1,8 +1,8 @@
 
 using System.Collections.Generic;
-using Random = UnityEngine.Random;
 using Ventura.GameLogic;
 using Ventura.Util;
+using Random = UnityEngine.Random;
 
 namespace Ventura.Generators
 {
@@ -19,7 +19,7 @@ namespace Ventura.Generators
         }
 
         //public void GenerateBooks(Actor actor, int nItems=10)
-        public List<BookItem> GenerateBooks(int nItems=10)
+        public List<BookItem> GenerateBooks(int nItems = 10)
         {
             var res = new List<BookItem>();
 
@@ -34,17 +34,15 @@ namespace Ventura.Generators
 
         private BookItem GenerateBookItem()
         {
-            var name = DummyStringGenerator.Instance.GenerateString();
-
             var skill = SkillId.Latin;
             var amount = Random.Range(1, 50);
 
-            var title = _titleGen.GenerateString(new Dictionary<string, string>() { { "skill", DataUtils.EnumToStr<SkillId>(skill)} });
+            var title = _titleGen.GenerateString(new Dictionary<string, string>() { { "skill", DataUtils.EnumToStr<SkillId>(skill) } });
             string author = null;
             if (DataUtils.RandomBool())
                 author = FileStringGenerator.FirstNames.GenerateString();
 
-            return new BookItem(name, title, author, skill, amount);
+            return new BookItem(title, author, skill, amount);
         }
     }
 

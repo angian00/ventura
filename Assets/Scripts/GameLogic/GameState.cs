@@ -46,7 +46,7 @@ namespace Ventura.GameLogic
 
         public void OnBeforeSerialize()
         {
-            Debug.Log($"GameState.OnBeforeSerialize");
+            //Debug.Log($"GameState.OnBeforeSerialize");
 
             __auxAllMapsKeys = new();
             __auxAllMapsValues = new();
@@ -60,7 +60,7 @@ namespace Ventura.GameLogic
 
         public void OnAfterDeserialize()
         {
-            Debug.Log($"GameState.OnAfterDeserialize");
+            //Debug.Log($"GameState.OnAfterDeserialize");
             Debug.Assert(__auxAllMapsKeys.Count == __auxAllMapsValues.Count);
 
             _allMaps = new();

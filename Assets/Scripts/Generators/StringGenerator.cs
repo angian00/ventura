@@ -10,7 +10,7 @@ namespace Ventura.Generators
     }
 
 
-    public class DummyStringGenerator: StringGenerator
+    public class DummyStringGenerator : StringGenerator
     {
         private static DummyStringGenerator _instance = new DummyStringGenerator();
         public static DummyStringGenerator Instance { get => _instance; }
@@ -33,7 +33,7 @@ namespace Ventura.Generators
     }
 
 
-    public class FileStringGenerator: StringGenerator
+    public class FileStringGenerator : StringGenerator
     {
         private List<string> _names = new();
         private List<int> _frequencies = new();
@@ -44,7 +44,7 @@ namespace Ventura.Generators
         public static FileStringGenerator FirstNames = new FileStringGenerator("names_people_toscana");
 
 
-        protected FileStringGenerator(string sourceFile): this(new string[] { sourceFile }) { }
+        protected FileStringGenerator(string sourceFile) : this(new string[] { sourceFile }) { }
 
         protected FileStringGenerator(string[] sourceFiles)
         {

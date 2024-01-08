@@ -39,7 +39,7 @@ namespace Ventura.GameLogic
         }
 
 
-        public BookItem(string name, string title, string? author, SkillId skill, int amount) : base(name)
+        public BookItem(string title, string? author, SkillId skill, int amount) : base("book")
         {
             this._title = title;
             this._author = author;
@@ -67,13 +67,13 @@ namespace Ventura.GameLogic
         public override ActionResult Use(Actor consumer, ItemAction action)
         {
             if (consumer.Skills == null)
-                return new ActionResult(false, $"{consumer.Name} cannot use [{_parent.Name}]");
+                return new ActionResult(false, $"{consumer.Name} cannot use [{_parent.Label}]");
 
             consumer.Skills.AddToSkillValue(_skill, _amount);
 
             Consume();
 
-            return new ActionResult(true, $"You read [{_parent.Name}], and gain {_amount} points in the skill [{DataUtils.EnumToStr<SkillId>(_skill)}]");
+            return new ActionResult(true, $"You read [{_parent.Label}], and gain {_amount} points in the skill [{DataUtils.EnumToStr<SkillId>(_skill)}]");
         }
     }
 }

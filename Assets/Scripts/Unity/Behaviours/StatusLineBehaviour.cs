@@ -12,7 +12,6 @@ namespace Ventura.Unity.Behaviours
         private void OnEnable()
         {
             EventManager.Subscribe<TextNotification>(onTextNotification);
-            //EventManager.Subscribe(onSystemActionTest);
 
         }
 

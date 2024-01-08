@@ -2,7 +2,6 @@
 using UnityEngine;
 using Ventura.GameLogic.Actions;
 using Ventura.GameLogic.Components;
-using Ventura.Util;
 
 namespace Ventura.GameLogic.Entities
 {
@@ -28,13 +27,13 @@ namespace Ventura.GameLogic.Entities
         public override void OnBeforeSerialize()
         {
             base.OnBeforeSerialize();
-            DebugUtils.Log($"Actor {_name}.OnBeforeSerialize()");
+            //DebugUtils.Log($"Actor {_name}.OnBeforeSerialize()");
         }
 
         public override void OnAfterDeserialize()
         {
             base.OnAfterDeserialize();
-            DebugUtils.Log($"Actor {_name}.OnAfterDeserialize()");
+            //DebugUtils.Log($"Actor {_name}.OnAfterDeserialize()");
 
             if (_ai != null)
                 _ai.Parent = this;
