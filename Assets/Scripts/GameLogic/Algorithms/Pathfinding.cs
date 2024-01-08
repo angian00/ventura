@@ -1,4 +1,7 @@
 ﻿
+// Algorithm adapted from https://github.com/pixelfac/2D-Astar-Pathfinding-in-Unity 
+// by Nathan Harris (https://github.com/pixelfac).
+// Licensed under https://opensource.org/license/mit/
 
 namespace Ventura.GameLogic.Algorithms
 {

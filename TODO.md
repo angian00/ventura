@@ -1,6 +1,8 @@
 # TODO
 
 ## Current sprint
+- add copyright header to all sources
+
 - tidy up gameMap/gameState API
 
 - tidy up uso entity.Name
@@ -16,11 +18,12 @@
 ## Improvements
 - cambiare icona libro; differenziare mapIcon/inventoryIcon
 - trasformare graphicsConfig in ScriptableObject
-- generare cognomi degli autori dei libri
-- riattivare e migliorare PathfindingRequest 
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
-- dialog scelta nome savefile
 - sperimentare uso colliders vs resetVisibleEntities
+
+- dialog scelta nome savefile
+- riattivare e migliorare PathfindingRequest 
+- generare cognomi degli autori dei libri
 ? spostare visibility status property da map tiles
 
 + refactoring Entity-Component-System
@@ -91,15 +94,17 @@
 ### Biomes
 https://github.com/GrandPiaf/Biome-and-Vegetation-PCG 
 
+
 ### Visual Design
 - https://www.gameuidatabase.com/
 - Screenshot Strange Horticulture
 - https://www.color-hex.com/color-palettes/?keyword=Book
 - creare sfondo watercolor https://creativemarket.com/ArtistMef/2928714-Minimalist-Watercolor-Backgrounds
 - creare palette da https://www.mountangelabbey.org/library/illuminated-manuscripts/
+- provare icone pozioni con solo liquido colorato
+
 - scelta font
 	https://www.1001fonts.com/vinque-font.html
 	https://fontsgeek.com/lombardic-narrow-font
 	https://www.1001fonts.com/flanker-griffo-font.html
-- capire licensing fonts
-	https://www.reddit.com/r/gamedev/s/NB4PcOYfY3
+	https://www.1001fonts.com/camelotcaps-font.html
