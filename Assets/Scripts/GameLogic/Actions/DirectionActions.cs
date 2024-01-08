@@ -85,7 +85,7 @@ namespace Ventura.GameLogic.Actions
                 return new ActionResult(false, "That way is blocked");
 
 
-            gameState.MoveActorTo(actor, targetPos.x, targetPos.y);
+            currMap.MoveActorTo(actor, targetPos.x, targetPos.y);
 
             return new ActionResult(true);
         }

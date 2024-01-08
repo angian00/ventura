@@ -23,6 +23,7 @@ namespace Ventura.Generators
             generateTerrain(newMap);
             if (doGenerateSites)
                 generateSites(newMap, 15);
+            //generateSites(newMap, 1);
 
             generateSomeItems(newMap);
             generateSomeMonsters(newMap);
@@ -113,7 +114,7 @@ namespace Ventura.Generators
 
         private static void generateSites(GameMap targetMap, int nSites)
         {
-            DebugUtils.Log($"addSite({targetMap.Name}, {nSites})");
+            DebugUtils.Log($"generateSites({targetMap.Name}, {nSites})");
 
             const int MIN_SITE_DISTANCE = 3;
 
@@ -128,7 +129,7 @@ namespace Ventura.Generators
 
                 // guarantee minimal distance between sites
                 var isTileOk = targetMap.Terrain[x, y].Walkable;
-                foreach (var e in targetMap.Entities)
+                foreach (var e in targetMap.GetAllEntities<Entity>())
                 {
                     if ((e.x == x && e.y == y) || (e is Site && Math.Abs(e.x - x) < MIN_SITE_DISTANCE && Math.Abs(e.y - y) < MIN_SITE_DISTANCE))
                     {
@@ -143,9 +144,10 @@ namespace Ventura.Generators
 
                 var siteName = FileStringGenerator.Sites.GenerateString();
                 var newSite = new Site(siteName, targetMap.Name);
-                newSite.MoveTo(x, y);
 
-                targetMap.Entities.Add(newSite);
+                var pos = new Vector2Int(x, y);
+
+                targetMap.AddEntity(newSite, pos);
 
                 i++;
             }
@@ -163,9 +165,9 @@ namespace Ventura.Generators
             foreach (var book in books)
             {
                 var pos = DataUtils.RandomWalkablePos(targetMap);
-                book.MoveTo(pos.x, pos.y);
 
-                book.TransferTo(targetMap);
+                book.TransferTo(targetMap); //FIXME: tidy up API
+                targetMap.AddEntity(book, pos);
             }
         }
 
@@ -182,9 +184,8 @@ namespace Ventura.Generators
             foreach (var monster in monsters)
             {
                 var pos = DataUtils.RandomEmptyPos(targetMap);
-                monster.MoveTo(pos.x, pos.y);
 
-                targetMap.Entities.Add(monster);
+                targetMap.AddEntity(monster, pos);
             }
         }
     }

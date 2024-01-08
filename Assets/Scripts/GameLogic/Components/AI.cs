@@ -34,9 +34,9 @@ namespace Ventura.GameLogic.Components
                 }
             }
 
-            foreach (var e in targetMap.Entities)
+            var e = targetMap.GetBlockingEntityAt(destX, destY);
             {
-                if (e.IsBlocking && !(e == _parent) && !(e.x == destX && e.y == destY))
+                if (e != null && !(e == _parent))
                     //walkables[e.x][e.y] = false;
                     ;
             }

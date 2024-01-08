@@ -21,5 +21,15 @@ namespace Ventura.GameLogic.Entities
             DebugUtils.Log($"Site {_name}");
         }
 
+
+        public override void OnBeforeSerialize()
+        {
+            base.OnBeforeSerialize();
+        }
+
+        public override void OnAfterDeserialize()
+        {
+            base.OnAfterDeserialize();
+        }
     }
 }

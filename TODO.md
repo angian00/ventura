@@ -1,32 +1,27 @@
 # TODO
 
 ## Current sprint
+- tidy up gameMap/gameState API
+
+- tidy up uso entity.Name
+- fighter component
 - monster factory architecture
-- animazione e messa in sequenza movimento mostri
+- ripristinare colore custom per monster
 
-- pathfinding on tile click
-	- feedback click
-	- scheduling turni movimento
-	- animazione e sleep turni movimento
-- arricchire stats player
-
-
-- theme previewer
-	- impacchettare font resources
-	- bitmap di sfondo
 
 
 ## Bugfixing
-- tileinfo con player
-- filtering out notifications for monster actions
+
 
 ## Improvements
--  tidy up gameMap/gameState API
+- cambiare icona libro; differenziare mapIcon/inventoryIcon
 - trasformare graphicsConfig in ScriptableObject
 - generare cognomi degli autori dei libri
 - riattivare e migliorare PathfindingRequest 
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - dialog scelta nome savefile
+- sperimentare uso colliders vs resetVisibleEntities
+? spostare visibility status property da map tiles
 
 + refactoring Entity-Component-System
 
@@ -56,11 +51,10 @@
 
 ## Milestones
 
+
 ### 0.7
-- shaders (https://www.ronja-tutorials.com/)
-- procedural generation
-	- books
-	- butterflies
++ animazione e messa in sequenza movimento mostri
+
 
 ### 0.x
 - skill system
@@ -69,6 +63,11 @@
 	- stats
 	- knowledge base
 
+### 0.xx
+- shaders (https://www.ronja-tutorials.com/)
+- procedural generation
+	- books
+	- butterflies
 
 
 ## Prototyping

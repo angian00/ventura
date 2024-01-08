@@ -29,7 +29,10 @@ namespace Ventura.GameLogic
 
         public GameState()
         {
-            Clear();
+            _allMaps = new();
+            _currMapStack = new();
+            _currMap = null;
+            _player = null;
         }
 
         /// -------- Custom Serialization -------------------
@@ -53,7 +56,6 @@ namespace Ventura.GameLogic
                 __auxAllMapsKeys.Add(mapName);
                 __auxAllMapsValues.Add(_allMaps[mapName]);
             }
-
         }
 
         public void OnAfterDeserialize()
@@ -72,14 +74,6 @@ namespace Ventura.GameLogic
         /// ------------------------------------------------------
 
 
-        public void Clear()
-        {
-            _allMaps = new();
-            _currMapStack = new();
-            _currMap = null;
-            _player = null;
-        }
-
         public void NewGame()
         {
             DebugUtils.Log("GameState.NewGame()");
@@ -94,34 +88,16 @@ namespace Ventura.GameLogic
             _currMapStack.PushMap(startMap.Name);
 
             _player = PlayerGenerator.GeneratePlayerWithBooks();
-            _currMap.Entities.Add(_player);
+            _currMap.AddEntity(_player);
+            _currMap.MoveActorTo(_player, _currMap.StartingPos.x, _currMap.StartingPos.y);
 
-            MoveActorTo(_player, _currMap.StartingPos.x, _currMap.StartingPos.y);
             NotifyEverything();
-        }
-
-
-        public Vector2Int MoveActorTo(Actor a, int targetX, int targetY)
-        {
-            if (!_currMap.IsWalkable(targetX, targetY))
-                throw new GameException($"Target tile {targetX}, {targetY} is not walkable");
-
-            a.MoveTo(targetX, targetY);
-
-            if (a is Player)
-            {
-                //DebugUtils.Log($"MoveActorTo {targetX}, {targetY}");
-                _currMap.UpdateExploration(targetX, targetY);
-                EventManager.Publish(new GameStateUpdate(null, _currMap, GameStateUpdate.UpdatedFields.Visibility));
-            }
-
-            return new Vector2Int(a.x, a.y);
         }
 
 
         public void EnterMap(string mapName)
         {
-            _currMap.Entities.Remove(_player);
+            _currMap.RemoveEntity(_player);
 
             GameMap newMap;
             if (_allMaps.ContainsKey(mapName))
@@ -137,28 +113,21 @@ namespace Ventura.GameLogic
             _currMapStack.PushMap(mapName, new Vector2Int(_player.x, _player.y));
             _currMap = newMap;
 
-            _currMap.Entities.Add(_player);
-
-            var startPos = _currMap.StartingPos;
-            DebugUtils.Log($"EnterMap; startPos={startPos}");
-            if (startPos == null)
-                startPos = DataUtils.RandomWalkablePos(_currMap);
-
-            MoveActorTo(_player, startPos.x, startPos.y);
-            NotifyEverything();
+            _currMap.AddEntity(_player);
+            _currMap.MoveActorTo(_player, _currMap.StartingPos.x, _currMap.StartingPos.y);
+            NotifyEverything(); //just to be sure
         }
 
         public void ExitMap()
         {
-            _currMap.Entities.Remove(_player);
+            _currMap.RemoveEntity(_player);
 
             var previousMapPos = _currMapStack.PopMap();
             _currMap = _allMaps[_currMapStack.CurrMapName];
             Debug.Assert(_currMap != null);
 
-
-            _currMap.Entities.Add(_player);
-            MoveActorTo(_player, previousMapPos.x, previousMapPos.y);
+            _currMap.AddEntity(_player);
+            _currMap.MoveActorTo(_player, previousMapPos.x, previousMapPos.y);
             NotifyEverything();
         }
 

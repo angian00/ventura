@@ -25,17 +25,16 @@ namespace Ventura.GameLogic.Entities
         public Actor(string name) : base(name, true) { }
 
         // -------- Custom Serialization -------------------
-        public virtual void OnBeforeSerialize()
+        public override void OnBeforeSerialize()
         {
+            base.OnBeforeSerialize();
             DebugUtils.Log($"Actor {_name}.OnBeforeSerialize()");
         }
 
-        public virtual void OnAfterDeserialize()
+        public override void OnAfterDeserialize()
         {
+            base.OnAfterDeserialize();
             DebugUtils.Log($"Actor {_name}.OnAfterDeserialize()");
-
-            //if (this is Player)
-            //    _ai = new PlayerAI(this);
 
             if (_ai != null)
                 _ai.Parent = this;

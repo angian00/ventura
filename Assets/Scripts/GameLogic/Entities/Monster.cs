@@ -12,6 +12,20 @@ namespace Ventura.GameLogic.Entities
             _ai = new RandomMovementAI(this);
             //_ai = new StaticAI(this);
         }
+
+
+        // -------- Custom Serialization -------------------
+        public override void OnBeforeSerialize()
+        {
+            base.OnBeforeSerialize();
+        }
+
+        public override void OnAfterDeserialize()
+        {
+            base.OnAfterDeserialize();
+
+            _ai = new RandomMovementAI(this);
+        }
     }
 }
 

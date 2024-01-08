@@ -11,6 +11,9 @@ namespace Ventura.Unity.Behaviours
         private Vector2Int _mapPos;
         public Vector2Int MapPos { set { _mapPos = value; } }
 
+        //shouldn't be here
+        public bool isVisible;
+
         public MainViewBehaviour mapManager;
 
 

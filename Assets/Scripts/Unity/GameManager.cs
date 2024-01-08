@@ -18,7 +18,6 @@ namespace Ventura.Unity.Behaviours
         private GameState _gameState;
         public GameState GameState { get => _gameState; }
 
-        //private CircularList<Actor> _monsterScheduler = new();
         private Queue<ActionData> _playerActionQueue = new();
 
         private static string? _startStateFile = null;
@@ -199,20 +198,25 @@ namespace Ventura.Unity.Behaviours
 
             DebugUtils.Log($"Actor {actor.Name} performs {actionData}");
 
+            var startPos = actor.pos;
             var actionResult = performAction(actor, actionData);
 
             if (actionResult.Success)
             {
-                //FUTURE: improve status notification filtering
-                if (actionResult.Reason != null)
-                    EventManager.Publish(new TextNotification(actionResult.Reason));
+                if (actor is Player || _gameState.CurrMap.Visible[startPos.x, startPos.y] || _gameState.CurrMap.Visible[actor.x, actor.y])
+                {
+                    if (actionResult.Reason != null)
+                        EventManager.Publish(new TextNotification(actionResult.Reason));
+                }
                 return true;
             }
             else
             {
-                //if (actor is Player) //FUTURE: improve status notification filtering
-                EventManager.Publish(new TextNotification(actionResult.Reason, TextNotification.Severity.Warning));
-                DebugUtils.Warning($"{actor.Name} Cannot perform {DataUtils.EnumToStr(actionData.ActionType)}: {actionResult.Reason}");
+                if (actor is Player)
+                {
+                    EventManager.Publish(new TextNotification(actionResult.Reason, TextNotification.Severity.Warning));
+                    DebugUtils.Warning($"{actor.Name} Cannot perform {DataUtils.EnumToStr(actionData.ActionType)}: {actionResult.Reason}");
+                }
                 return false;
             }
         }

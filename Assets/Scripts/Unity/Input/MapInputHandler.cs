@@ -4,7 +4,6 @@ using UnityEngine.InputSystem.Controls;
 using Ventura.GameLogic.Actions;
 using Ventura.Unity.Behaviours;
 using Ventura.Unity.Events;
-using Ventura.Util;
 
 namespace Ventura.Unity.Input
 {
@@ -17,7 +16,7 @@ namespace Ventura.Unity.Input
 
         public override void OnKeyPressed(KeyControl key)
         {
-            DebugUtils.Log("MapInputHandler.OnKeyPressed");
+            //DebugUtils.Log("MapInputHandler.OnKeyPressed");
 
             if (processCommonKey(key))
                 return;

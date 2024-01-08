@@ -23,12 +23,15 @@ namespace Ventura.GameLogic.Entities
 
 
         // -------- Custom Serialization -------------------
-        public void OnBeforeSerialize()
+        public override void OnBeforeSerialize()
         {
+            base.OnBeforeSerialize();
         }
 
-        public void OnAfterDeserialize()
+        public override void OnAfterDeserialize()
         {
+            base.OnAfterDeserialize();
+
             if (_consumable != null)
                 _consumable.Parent = this;
         }

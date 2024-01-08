@@ -8,7 +8,6 @@ namespace Ventura.GameLogic.Entities
     {
         public Player(string name) : base(name)
         {
-            //_ai = new PlayerAI(this);
             _inventory = new Inventory(this, 999);
             _skills = new Skills(this);
         }

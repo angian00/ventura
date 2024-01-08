@@ -49,7 +49,8 @@ namespace Ventura.GameLogic
         public bool[,] Explored { get => _explored; }
 
         private HashSet<Entity> _entities = new();
-        public HashSet<Entity> Entities { get => _entities; }
+        //not exposed by choice
+        //public HashSet<Entity> Entities { get => _entities; }
 
 
         public GameMap(string name, string label, int width, int height, TerrainType[,] terrain)
@@ -181,11 +182,37 @@ namespace Ventura.GameLogic
             return (IsInBounds(x, y) && Terrain[x, y].Walkable && GetAnyEntityAt<Entity>(x, y) == null);
         }
 
+
+        public void AddEntity(Entity entity)
+        {
+            AddEntity(entity, _startingPos);
+        }
+
+        public void AddEntity(Entity entity, Vector2Int pos)
+        {
+            _entities.Add(entity);
+            EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Added, entity));
+            entity.MoveTo(pos.x, pos.y);
+        }
+
+
+        public void RemoveEntity(Entity entity)
+        {
+            _entities.Remove(entity);
+            EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Removed, entity));
+        }
+
+        public bool ContainsEntity(Entity entity)
+        {
+            return _entities.Contains(entity);
+        }
+
+
         public T? GetAnyEntityAt<T>(int x, int y) where T : Entity
         {
             foreach (var e in _entities)
             {
-                if ((e.x == x) && (e.y == y) && (e is Site))
+                if ((e.x == x) && (e.y == y) && (e is T || e.GetType().IsSubclassOf(typeof(T))))
                     return e as T;
             }
 
@@ -204,7 +231,7 @@ namespace Ventura.GameLogic
 
             foreach (var e in _entities)
             {
-                if (e.x == x && e.y == y && e is T)
+                if (e.x == x && e.y == y && (e is T || e.GetType().IsSubclassOf(typeof(T))))
                     result.Add((T)e);
 
             }
@@ -217,7 +244,7 @@ namespace Ventura.GameLogic
         {
             foreach (var e in _entities)
             {
-                if (e is T)
+                if (e is T || e.GetType().IsSubclassOf(typeof(T)))
                     return (T)e;
             }
 
@@ -230,7 +257,7 @@ namespace Ventura.GameLogic
 
             foreach (var e in _entities)
             {
-                if (e is T)
+                if (e is T || e.GetType().IsSubclassOf(typeof(T)))
                     result.Add((T)e);
             }
 
@@ -244,7 +271,7 @@ namespace Ventura.GameLogic
 
             foreach (var e in _entities)
             {
-                if ((e is T) && (_visible[e.x, e.y]))
+                if (_visible[e.x, e.y] && (e is T || e.GetType().IsSubclassOf(typeof(T))))
                     result.Add((T)e);
             }
 
@@ -289,12 +316,27 @@ namespace Ventura.GameLogic
             return blocked;
         }
 
+        public Vector2Int MoveActorTo(Actor a, int targetX, int targetY)
+        {
+            if (GetAnyEntityAt<Actor>(targetX, targetY) != a && !IsWalkable(targetX, targetY))
+                throw new GameException($"Target tile {targetX}, {targetY} is not walkable");
 
-        public void UpdateExploration(int targetX, int targetY)
+            if (a.x != targetX || a.y != targetY)
+                a.MoveTo(targetX, targetY);
+
+            if (a is Player)
+                updateExploration(targetX, targetY);
+
+
+            return new Vector2Int(a.x, a.y);
+        }
+
+
+        private void updateExploration(int targetX, int targetY)
         {
             var r = VISIBILITY_RADIUS;
 
-            //GameDebugging.Log("UpdateExploration");
+            //GameDebugging.Log("updateExploration");
             //fov.compute(this.player.x, this.player.y, lightRadius, this.setFov.bind(this))
 
             //reset visible
@@ -317,22 +359,16 @@ namespace Ventura.GameLogic
                     _explored[x, y] = true;
                 }
             }
+
+            EventManager.Publish(new GameStateUpdate(null, this, GameStateUpdate.UpdatedFields.Visibility));
         }
 
 
+        // -------------------------- Container methods --------------------------
+
         public ReadOnlyCollection<GameItem> Items
         {
-            get
-            {
-                List<GameItem> res = new();
-                foreach (var e in _entities)
-                {
-                    if (e is GameItem)
-                        res.Add((GameItem)e);
-                }
-
-                return new ReadOnlyCollection<GameItem>(res);
-            }
+            get => GetAllEntities<GameItem>();
         }
 
 

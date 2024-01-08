@@ -7,7 +7,6 @@ namespace Ventura.GameLogic.Entities
     [Serializable]
     public abstract class Entity : GameLogicObject
     {
-        [SerializeField]
         protected Guid _id;
         public Guid Id { get => _id; }
 
@@ -43,6 +42,22 @@ namespace Ventura.GameLogic.Entities
 
             _x = 0;
             _y = 0;
+        }
+
+        // -------- Custom Serialization -------------------
+        [SerializeField]
+        protected string __auxId;
+
+        public virtual void OnBeforeSerialize()
+        {
+            //DebugUtils.Log($"Entity {_name}.OnBeforeSerialize()");
+            __auxId = _id.ToString();
+        }
+
+        public virtual void OnAfterDeserialize()
+        {
+            //DebugUtils.Log($"Entity {_name}.OnAfterDeserialize()");
+            _id = Guid.Parse(__auxId);
         }
 
         public virtual void MoveTo(int x, int y)

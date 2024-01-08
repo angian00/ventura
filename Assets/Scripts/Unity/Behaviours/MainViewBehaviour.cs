@@ -45,6 +45,7 @@ namespace Ventura.Unity.Behaviours
         private Dictionary<Type, Transform> _entityLayers;
         private Dictionary<Transform, int> _layerPriorities;
 
+        private GameObject[,] _mapTiles;
         private GameObject[,] _fogTiles;
         private Dictionary<Guid, GameObject> _entityObjs = new();
 
@@ -87,11 +88,13 @@ namespace Ventura.Unity.Behaviours
 
         private void onGameStateUpdated(GameStateUpdate updateData)
         {
+            DebugUtils.Log($"MainViewBehaviour.onGameStateUpdated()");
+
             if (updateData.updatedFields.HasFlag(GameStateUpdate.UpdatedFields.Terrain))
                 updateMap(updateData.gameMap);
 
             if (updateData.updatedFields.HasFlag(GameStateUpdate.UpdatedFields.Visibility))
-                updateFog(updateData.gameMap);
+                updateVisibility(updateData.gameMap);
 
             if (updateData.updatedFields.HasFlag(GameStateUpdate.UpdatedFields.Items))
                 resetEntities(updateData.gameMap.GetAllEntities<GameItem>(), true);
@@ -109,7 +112,7 @@ namespace Ventura.Unity.Behaviours
         {
             var a = updateData.entity;
 
-            DebugUtils.Log("MainViewBehaviour.onEntityUpdated()");
+            //DebugUtils.Log($"MainViewBehaviour.onEntityUpdated(); update type: [{DataUtils.EnumToStr(updateData.type)}] entity name: [{updateData.entity.Name}]");
 
             if (updateData.type == EntityUpdate.Type.Added)
             {
@@ -169,12 +172,12 @@ namespace Ventura.Unity.Behaviours
 
         private void updateMap(GameMap gameMap)
         {
-            DebugUtils.Log($"MainViewBehaviour.updateMap(); mapName: {gameMap.Name}");
+            //DebugUtils.Log($"MainViewBehaviour.updateMap(); mapName: {gameMap.Name}");
 
             UnityUtils.RemoveAllChildren(terrainLayer);
-            UnityUtils.RemoveAllChildren(sitesLayer);
             UnityUtils.RemoveAllChildren(fogLayer);
 
+            _mapTiles = new GameObject[gameMap.Width, gameMap.Height];
             _fogTiles = new GameObject[gameMap.Width, gameMap.Height];
 
             for (int x = 0; x < gameMap.Width; x++)
@@ -188,6 +191,7 @@ namespace Ventura.Unity.Behaviours
                     newMapTile.GetComponent<MapTileBehaviour>().MapPos = new Vector2Int(x, y);
                     newMapTile.GetComponent<SpriteRenderer>().color = GraphicsConfig.TerrainColors[terrainType];
                     newMapTile.transform.SetParent(terrainLayer);
+                    _mapTiles[x, y] = newMapTile;
 
                     var newFogTile = Instantiate(fogTileTemplate, new Vector3(x, y), Quaternion.identity);
                     newFogTile.GetComponent<SpriteRenderer>().color = fogColor;
@@ -203,7 +207,7 @@ namespace Ventura.Unity.Behaviours
 
         private void resetEntities<T>(IEnumerable<T> newEntities, bool removeOld) where T : Entity
         {
-            //DebugUtils.Log("MainViewBehaviour.resetEntities()");
+            //DebugUtils.Log($"MainViewBehaviour.resetEntities() [{typeof(T)}]");
 
             //find all old entityObjs on the correct layer
             var toBeRemoved = new HashSet<Guid>();
@@ -232,10 +236,9 @@ namespace Ventura.Unity.Behaviours
 
         private GameObject createEntityObj(Entity e)
         {
-            //DebugUtils.Log($"createEntityObj; name: [{e.Name}], e.id=[{e.Id}]");
-            var pos = new Vector3(e.x, e.y);
+            //DebugUtils.Log($"createEntityObj; name: [{e.Name}], eObj.id=[{e.Id}]");
 
-            var newEntityObj = Instantiate(entityTemplate, pos, Quaternion.identity);
+            var newEntityObj = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
             newEntityObj.name = e.Name;
 
             string spriteId = null;
@@ -254,33 +257,36 @@ namespace Ventura.Unity.Behaviours
             newEntityObj.GetComponent<SpriteRenderer>().sprite = SpriteCache.Instance.GetSprite(spriteId);
 
             //TODO: set color for butterflies
-            //newEntityObj.GetComponent<SpriteRenderer>().color = UnityUtils.ColorFromHash(e.GetHashCode());
+            //newEntityObj.GetComponent<SpriteRenderer>().color = UnityUtils.ColorFromHash(eObj.GetHashCode());
 
             newEntityObj.transform.SetParent(_entityLayers[e.GetType()]);
             _entityObjs[e.Id] = newEntityObj;
 
-            resetVisibleEntities(pos);
+            resetVisibleEntities(e.x, e.y);
 
             return newEntityObj;
         }
 
         private void destroyEntityObj(Entity e)
         {
-            //DebugUtils.Log($"destroyEntityObj; name: [{e.Name}], e.id=[{e.Id}]");
+            //DebugUtils.Log($"destroyEntityObj; name: [{e.Name}], eObj.id=[{e.Id}]");
             destroyEntityObj(e.Id);
         }
 
         private void destroyEntityObj(Guid entityId)
         {
             //DebugUtils.Log($"destroyEntityObj; e.id=[{entityId}]");
+
             if (_entityObjs.ContainsKey(entityId))
             {
                 var targetEntityObj = _entityObjs[entityId];
-                var pos = targetEntityObj.transform.position;
-                Destroy(targetEntityObj);
-                _entityObjs.Remove(entityId);
 
-                resetVisibleEntities(pos);
+                var x = (int)targetEntityObj.transform.position.x;
+                var y = (int)targetEntityObj.transform.position.y;
+
+                DestroyImmediate(targetEntityObj);
+                _entityObjs.Remove(entityId);
+                resetVisibleEntities(x, y);
             }
         }
 
@@ -288,39 +294,56 @@ namespace Ventura.Unity.Behaviours
         {
             //DebugUtils.Log($"updateEntityObj; name: [{e.Name}], id=[{e.Id}]");
             if (!_entityObjs.ContainsKey(e.Id))
-                return null;
+            {
+                //create it if for some reason it wasn't there
+                //DebugUtils.Log($"calling create instead");
+                //return createEntityObj(e);
 
-            //DebugUtils.Log($"updateEntityObj ok");
+                DebugUtils.Log($"entity with id=[{e.Id}] not found in _entityObjs, skipping update");
+                return null;
+            }
 
             var entityObj = _entityObjs[e.Id];
-            var oldPos = entityObj.transform.position;
+
+            var oldX = (int)entityObj.transform.position.x;
+            var oldY = (int)entityObj.transform.position.y;
             var newPos = new Vector3(e.x, e.y);
 
             entityObj.transform.position = newPos;
 
-            resetVisibleEntities(oldPos);
-            resetVisibleEntities(newPos);
+            resetVisibleEntities(oldX, oldY);
+            resetVisibleEntities(e.x, e.y);
 
             return entityObj;
         }
 
-        private void resetVisibleEntities(Vector3 pos)
+        private void resetVisibleEntities(int x, int y)
         {
-            ////TODO: make more efficient, either with a data structure or using Unity (colliders?)
+            // TODO: make more efficient, either with a data structure or using Unity (colliders?)
             var targetEntityObjs = new List<GameObject>();
+            //DebugUtils.Log($"resetVisibleEntities x={x}, y={y}");
 
-            foreach (var e in _entityObjs.Values)
+            foreach (var eId in _entityObjs.Keys)
             {
-                if ((e.transform.position.x == pos.x) && (e.transform.position.y == pos.y))
-                    targetEntityObjs.Add(e);
+                var eObj = _entityObjs[eId];
+                if (eObj == null)
+                    throw new GameException($"Inconsistent status for entityObj with id [{eId}]");
+
+                if ((eObj.transform.position.x == x) && (eObj.transform.position.y == y))
+                    targetEntityObjs.Add(eObj);
             }
 
             if (targetEntityObjs.Count == 0)
                 return;
 
+
+            bool isTileVisible = false;
+            if (_mapTiles != null && x >= 0 && x < _mapTiles.GetLength(0) && y >= 0 && y < _mapTiles.GetLength(1))
+                isTileVisible = _mapTiles[x, y].GetComponent<MapTileBehaviour>().isVisible;
+
             if (targetEntityObjs.Count == 1)
             {
-                targetEntityObjs[0].GetComponent<SpriteRenderer>().enabled = true;
+                targetEntityObjs[0].GetComponent<SpriteRenderer>().enabled = isTileVisible;
                 return;
             }
 
@@ -338,7 +361,7 @@ namespace Ventura.Unity.Behaviours
                 //last element has highest prority
                 bool mustEnable;
                 if (e == targetEntityObjs[^1])
-                    mustEnable = true;
+                    mustEnable = isTileVisible;
                 else
                     mustEnable = false;
 
@@ -346,15 +369,14 @@ namespace Ventura.Unity.Behaviours
             }
         }
 
-        private void updateFog(GameMap gameMap)
+        private void updateVisibility(GameMap gameMap)
         {
+            //DebugUtils.Log("MainViewBehaviour.updateVisibility()");
             if ((_fogTiles == null) || (_fogTiles.GetLength(0) != gameMap.Width) || (_fogTiles.GetLength(1) != gameMap.Height))
             {
-                //visibility data is (still) inconsistent with our terrain, ignore
+                DebugUtils.Warning("visibility data is (still) inconsistent with our terrain, ignoring it");
                 return;
             }
-
-            DebugUtils.Log("MainViewBehaviour.updateFog()");
 
             for (int x = 0; x < gameMap.Width; x++)
             {
@@ -373,6 +395,10 @@ namespace Ventura.Unity.Behaviours
                     tileColor.a = alpha;
 
                     _fogTiles[x, y].GetComponent<SpriteRenderer>().color = tileColor;
+
+                    //surreptitiously using mapTile to store visibility status
+                    _mapTiles[x, y].GetComponent<MapTileBehaviour>().isVisible = gameMap.Visible[x, y];
+                    resetVisibleEntities(x, y);
                 }
             }
         }
@@ -396,12 +422,13 @@ namespace Ventura.Unity.Behaviours
 
         private void updateCamera()
         {
-            DebugUtils.Log("MainViewBehaviour.updateCamera()");
+            //DebugUtils.Log($"MainViewBehaviour.updateCamera()");
 
             if (playerLayer.childCount == 0)
                 return;
 
             var playerPos = playerLayer.GetChild(0).position;
+            DebugUtils.Log($"MainViewBehaviour.updateCamera(); player pos: {playerPos}");
             var newCameraPos = cameraObj.transform.position;
             newCameraPos.x = playerPos.x;
             newCameraPos.y = playerPos.y;
