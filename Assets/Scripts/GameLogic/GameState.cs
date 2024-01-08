@@ -135,6 +135,7 @@ namespace Ventura.GameLogic
         {
             EventManager.Publish(new GameStateUpdate(
                 _currMapStack.StackMapNames, _currMap, GameStateUpdate.UpdatedFields.Everything));
+            EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Changed, _player));
         }
 
     }

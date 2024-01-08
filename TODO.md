@@ -1,8 +1,6 @@
 # TODO
 
 ## Current sprint
-- add copyright header to all sources
-
 - tidy up gameMap/gameState API
 
 - tidy up uso entity.Name
