@@ -58,26 +58,6 @@ namespace Ventura.GameLogic.Entities
             return _ai?.ChooseAction();
         }
 
-        //public void Die()
-        //{
-        //}
-
-        public override void Dump()
-        {
-            DebugUtils.Log($"Actor {_name}; x={_x}, y={_y}");
-
-            if (_inventory != null)
-            {
-                //DebugUtils.Log($"has inventory:");
-                //_inventory.Dump();
-            }
-
-            if (_skills != null)
-            {
-                //DebugUtils.Log($"has skills:");
-                //_skills.Dump();
-            }
-        }
     }
 
 }

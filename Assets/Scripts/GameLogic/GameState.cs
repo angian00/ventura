@@ -115,7 +115,7 @@ namespace Ventura.GameLogic
 
             _currMap.AddEntity(_player);
             _currMap.MoveActorTo(_player, _currMap.StartingPos.x, _currMap.StartingPos.y);
-            NotifyEverything(); //just to be sure
+            NotifyEverything();
         }
 
         public void ExitMap()

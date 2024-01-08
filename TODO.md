@@ -1,8 +1,6 @@
 # TODO
 
 ## Current sprint
-- tidy up gameMap/gameState API
-
 - tidy up uso entity.Name
 - fighter component
 - monster factory architecture
@@ -14,17 +12,18 @@
 
 
 ## Improvements
-- cambiare icona libro; differenziare mapIcon/inventoryIcon
 - trasformare graphicsConfig in ScriptableObject
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
+- aggiornare visuals a mockup figma
 - sperimentare uso colliders vs resetVisibleEntities
 
 - dialog scelta nome savefile
 - riattivare e migliorare PathfindingRequest 
 - generare cognomi degli autori dei libri
 ? spostare visibility status property da map tiles
++ refactoring Consumable
 
-+ refactoring Entity-Component-System
+++ refactoring Entity-Component-System
 
 
 ## Minutiae

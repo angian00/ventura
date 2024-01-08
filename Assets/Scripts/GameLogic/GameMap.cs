@@ -53,14 +53,14 @@ namespace Ventura.GameLogic
         //public HashSet<Entity> Entities { get => _entities; }
 
 
-        public GameMap(string name, string label, int width, int height, TerrainType[,] terrain)
+        public GameMap(string name, string label, int width, int height)
         {
             this._name = name;
             this._label = label;
             this._width = width;
             this._height = height;
-            this._terrain = terrain;
 
+            _terrain = new TerrainType[width, height];
             _visible = new bool[width, height];
             _explored = new bool[width, height];
 
@@ -76,9 +76,6 @@ namespace Ventura.GameLogic
                 }
             }
         }
-
-        public GameMap(string name, string label, int width, int height) : this(name, label, width, height, makeDefaultTerrain(width, height))
-        { }
 
 
         /// -------- Custom Serialization -------------------
@@ -138,34 +135,6 @@ namespace Ventura.GameLogic
 
         /// ------------------------------------------------------
 
-
-        public void DumpEntities()
-        {
-            foreach (var e in _entities)
-            {
-                DebugUtils.Log($"Found entity {e.Name} of type {e.GetType()}");
-                e.Dump();
-            }
-        }
-
-
-        private static TerrainType[,] makeDefaultTerrain(int w, int h)
-        {
-            var terrain = new TerrainType[w, h];
-
-            for (var x = 0; x < w; x++)
-            {
-                for (var y = 0; y < h; y++)
-                {
-                    terrain[x, y] = TerrainType.Plains1;
-                }
-            }
-
-            return terrain;
-        }
-
-
-
         public bool IsInBounds(int x, int y)
         {
             return (0 <= x && x < _width && 0 <= y && y < _height);
@@ -191,6 +160,9 @@ namespace Ventura.GameLogic
         public void AddEntity(Entity entity, Vector2Int pos)
         {
             _entities.Add(entity);
+            if (entity is GameItem || entity.GetType().IsSubclassOf(typeof(GameItem)))
+                ((GameItem)entity).Parent = this;
+
             EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Added, entity));
             entity.MoveTo(pos.x, pos.y);
         }
@@ -198,6 +170,9 @@ namespace Ventura.GameLogic
 
         public void RemoveEntity(Entity entity)
         {
+            if (entity is GameItem || entity.GetType().IsSubclassOf(typeof(GameItem)))
+                ((GameItem)entity).Parent = null;
+
             _entities.Remove(entity);
             EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Removed, entity));
         }
@@ -376,23 +351,17 @@ namespace Ventura.GameLogic
 
         public bool ContainsItem(GameItem item)
         {
-            return _entities.Contains(item);
+            return ContainsEntity(item);
         }
 
         public void AddItem(GameItem item)
         {
-            _entities.Add(item);
-            item.Parent = this;
-
-            EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Added, item));
+            AddEntity(item);
         }
 
         public void RemoveItem(GameItem item)
         {
-            _entities.Remove(item);
-            item.Parent = null;
-
-            EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Removed, item));
+            RemoveEntity(item);
         }
     }
 }

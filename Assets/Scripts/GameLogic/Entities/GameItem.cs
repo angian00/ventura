@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using Ventura.GameLogic.Components;
-using Ventura.Util;
 
 namespace Ventura.GameLogic.Entities
 {
@@ -37,12 +36,6 @@ namespace Ventura.GameLogic.Entities
         }
 
         // -------------------------------------------------
-        public override void Dump()
-        {
-            DebugUtils.Log($"GameItem {_name}");
-            if (_consumable != null)
-                DebugUtils.Log($"has consumable");
-        }
 
         public void TransferTo(Container targetContainer)
         {

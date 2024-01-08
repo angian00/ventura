@@ -67,8 +67,6 @@ namespace Ventura.GameLogic.Entities
 
             EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Changed, this));
         }
-
-        public abstract void Dump();
     }
 
 }

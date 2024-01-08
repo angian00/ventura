@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using UnityEngine;
 using Ventura.GameLogic.Entities;
 using Ventura.Unity.Events;
-using Ventura.Util;
 
 namespace Ventura.GameLogic.Components
 {
@@ -66,14 +65,5 @@ namespace Ventura.GameLogic.Components
 
             EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Changed, _parent));
         }
-
-
-        public void Dump()
-        {
-            DebugUtils.Log($"maxSize: {_maxSize}");
-            foreach (var gameItem in _items)
-                gameItem.Dump();
-        }
-
     }
 }

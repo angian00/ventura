@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Ventura.Util;
 
 namespace Ventura.GameLogic.Entities
 {
@@ -15,12 +14,6 @@ namespace Ventura.GameLogic.Entities
         {
             _mapName = mapName;
         }
-
-        public override void Dump()
-        {
-            DebugUtils.Log($"Site {_name}");
-        }
-
 
         public override void OnBeforeSerialize()
         {
