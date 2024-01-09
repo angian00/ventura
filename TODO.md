@@ -1,23 +1,23 @@
 # TODO
 
 ## Current sprint
-- completare trasformaz graphicsConfig in ScriptableObject
-- DevTools per backup ScriptableObjects
+- completare trasformaz graphicsConfig in ScriptableObject(s)
+- verificare DevTools per backup ScriptableObjects
+	https://learn.unity.com/tutorial/editor-scripting#5c7f8528edbc2a002053b5f9
+
 
 
 ## Bugfixing
 
 
 ## Improvements
-- irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
-- aggiornare visuals a mockup figma
 - sperimentare uso colliders vs resetVisibleEntities
 
 - dialog scelta nome savefile
+- generatore mappe dungeon (e citta'?)
 - riattivare e migliorare PathfindingRequest 
 - generare cognomi degli autori dei libri
 ? spostare visibility status property da map tiles
-- generatore mappe dungeon (e citta'?)
 + refactoring Consumable
 
 ++ refactoring Entity-Component-System
@@ -48,6 +48,8 @@
 
 
 ### 0.7
+- irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
+- aggiornare visuals a mockup figma
 
 - fighter component
 - monster factory architecture

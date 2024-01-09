@@ -26,7 +26,7 @@ Licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
 
 
 UI Background
-
+...
 
 Concept art and some ui backgrounds created by Andrea Giancola, with [Deep Dream Generator](https://deepdreamgenerator.com/).
 Terms of use: https://deepdreamgenerator.com/terms.
