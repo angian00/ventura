@@ -223,6 +223,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b43fa05ce5d73d488009c24b3759a9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteConfig: {fileID: 11400000, guid: 048d790b8719af643ba5875c4edfb8a8, type: 2}
+  inventoryManager: {fileID: 0}
   thumbnail: {fileID: 3945174540026394247}
   labelPanel: {fileID: 3992295025537142218}
   labelText: {fileID: 1033847543371936444}

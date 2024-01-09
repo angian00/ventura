@@ -1,49 +1,34 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Ventura.Unity.Graphics;
+using Ventura.Unity.ScriptableObjects;
 using Ventura.Util;
 
 namespace Ventura.Test
 {
 
+
     public class ThemePreviewerManager : MonoBehaviour
     {
+        public enum ScreenId
+        {
+            Inventory,
+            Settings,
+        }
+
+
         public TextAsset configFile;
 
         public GameObject previewScreenContainer;
         public TMP_Dropdown themeDropdown;
         public TMP_Dropdown screenDropdown;
 
-        private ThemePreviewerConfig _configData;
+        public ThemePreviewerConfig themePreviewerConfig;
+
         private Dictionary<string, Transform> _previewScreenObjs = new();
         private Dictionary<string, TMP_FontAsset> _fontCache = new();
 
-
-        [Serializable]
-        private record ThemePreviewerConfig
-        {
-            public List<string> previewScreenNames;
-            public List<ThemeConfig> themes;
-        }
-
-        [Serializable]
-        private record ThemeConfig
-        {
-            public string name;
-            public List<string> colors;
-            public string fontName;
-            public int fontSize;
-        }
-
-
-
-        private void Awake()
-        {
-            loadConfig();
-        }
 
 
         void Start()
@@ -51,23 +36,12 @@ namespace Ventura.Test
             findScreenObjs();
 
             screenDropdown.onValueChanged.AddListener(delegate { onScreenChosen(); });
-            populateDropdown(screenDropdown, _configData.previewScreenNames);
-
-            var themeNames = new List<string>();
-            foreach (var theme in _configData.themes)
-                themeNames.Add(theme.name);
+            //populateDropdown(screenDropdown, _configData.previewScreenNames); //FIXME
 
             themeDropdown.onValueChanged.AddListener(delegate { onThemeChosen(); });
-            populateDropdown(themeDropdown, themeNames);
+            populateDropdown(themeDropdown, themePreviewerConfig.GetKeys());
 
         }
-
-
-        private void loadConfig()
-        {
-            _configData = JsonUtility.FromJson<ThemePreviewerConfig>(configFile.text);
-        }
-
 
         private void populateDropdown(TMP_Dropdown dropdown, List<string> options)
         {
@@ -94,37 +68,28 @@ namespace Ventura.Test
             var themeName = themeDropdown.options[themeDropdown.value].text;
             DebugUtils.Log($"onThemeChosen: {themeName}");
 
-            //apply theme
-            var themeConfig = findThemeConfig(themeName);
             foreach (var screenObj in _previewScreenObjs.Values)
-                applyTheme(themeConfig, screenObj);
+                applyTheme(themePreviewerConfig.Get(themeName), screenObj);
 
         }
 
 
         private void findScreenObjs()
         {
-            foreach (var screenName in _configData.previewScreenNames)
-            {
-                var screenObj = previewScreenContainer.transform.Find($"{screenName} Screen");
-                _previewScreenObjs.Add(screenName, screenObj);
-            }
+            //FIXME: findScreenObjs
+            //foreach (var screenName in _configData.previewScreenNames)
+            //{
+            //    var screenObj = previewScreenContainer.transform.Find($"{screenName} Screen");
+            //    _previewScreenObjs.Add(screenName, screenObj);
+            //}
         }
 
-        private ThemeConfig findThemeConfig(string themeName)
-        {
-            foreach (var themeConfig in _configData.themes)
-                if (themeConfig.name == themeName)
-                    return themeConfig;
-
-            return null;
-        }
 
         private void applyTheme(ThemeConfig themeConfig, Transform screenObj)
         {
-            screenObj.GetComponent<Image>().color = GraphicsConfigOld.FromHex(themeConfig.colors[0]);
-            screenObj.Find("Title").GetComponent<TextMeshProUGUI>().color = GraphicsConfigOld.FromHex(themeConfig.colors[1]);
-            screenObj.Find("Subtitle").GetComponent<TextMeshProUGUI>().color = GraphicsConfigOld.FromHex(themeConfig.colors[2]);
+            screenObj.GetComponent<Image>().color = themeConfig.colors.Get("backgroundColor");
+            screenObj.Find("Title").GetComponent<TextMeshProUGUI>().color = themeConfig.colors.Get("titleColor");
+            screenObj.Find("Subtitle").GetComponent<TextMeshProUGUI>().color = themeConfig.colors.Get("subtitleColor");
 
             var textObjs = screenObj.GetComponentsInChildren<TextMeshProUGUI>();
             foreach (var textObj in textObjs)

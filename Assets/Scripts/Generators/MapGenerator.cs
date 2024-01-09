@@ -164,7 +164,6 @@ namespace Ventura.Generators
             {
                 var pos = DataUtils.RandomWalkablePos(targetMap);
 
-                book.TransferTo(targetMap); //FIXME: tidy up API
                 targetMap.AddEntity(book, pos);
             }
         }

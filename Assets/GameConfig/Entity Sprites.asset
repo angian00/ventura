@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86d97acbe464e0549a2409272276c7dc, type: 3}
+  m_Name: Entity Sprites
+  m_EditorClassIdentifier: 
+  propertyValues:
+  - key: site
+    value: {fileID: 21300000, guid: 14312d7a6c40d5e4ebe125203bcc5273, type: 3}
+  - key: item
+    value: {fileID: 21300000, guid: b1a250e4e4e8ac0408c6f3751a5cc2f7, type: 3}
+  - key: player
+    value: {fileID: 21300000, guid: 3372b62438055a24583d78fdfb51c3b5, type: 3}
+  - key: book
+    value: {fileID: 0}
+  - key: butterfly
+    value: {fileID: 21300000, guid: b7f27931f0bb9224681dae342fdffc5c, type: 3}

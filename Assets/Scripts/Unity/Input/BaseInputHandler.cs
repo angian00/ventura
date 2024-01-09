@@ -63,7 +63,7 @@ namespace Ventura.Unity.Input
                 _viewManager.Toggle(ViewManager.ViewId.Inventory);
                 processed = true;
             }
-            else if (key == keyboard.kKey) //TODO: choose sensible key mapping
+            else if (key == keyboard.kKey) //FUTURE: choose sensible key mapping
             {
                 _viewManager.Toggle(ViewManager.ViewId.Skills);
                 processed = true;

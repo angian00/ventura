@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+
+
+
+## [0.6] - 2024-01-09
 ### Added
 - item generation and drawing in map
 - monster generation and drawing in map
@@ -14,6 +18,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - zoom in/out in map
 - A* pathfinding implementation
 - water terrain
+- Some ScriptableObjects for storing game configuration
+
 
 ### Changed
 - Extracted SystemManager from GameManager to remove dirty DontDestroyOnLoad hack

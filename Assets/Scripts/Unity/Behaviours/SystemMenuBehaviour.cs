@@ -124,7 +124,7 @@ namespace Ventura.Unity.Behaviours
                     break;
 
                 case SystemMenuCommand.Settings:
-                    //TODO: show settings
+                    //FUTURE: show settings
                     break;
 
                 default:

@@ -2143,7 +2143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b861d4ebb2090438619b9f927d6354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphicsConfig: {fileID: 11400000, guid: 75f1a4be4a80f9a418e742cfc5faed33, type: 2}
+  mapColors: {fileID: 11400000, guid: 2e218ade60d6a3a45ba026da6ab9246e, type: 2}
   terrainTileTemplate: {fileID: 2557218920047493518, guid: 2c5ef730c56f37a4eb97bc10039fabda, type: 3}
   fogTileTemplate: {fileID: 2557218920047493518, guid: dc8abf41ac7b8a24686b20306c063736, type: 3}
   entityTemplate: {fileID: 2557218920047493518, guid: b0b30a744950af743bfe53255eb891f0, type: 3}

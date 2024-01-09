@@ -281,10 +281,6 @@ namespace Ventura.GameLogic
             {
                 if (e is Actor)
                     blocked[e.x, e.y] = true;
-
-                //FIXME: we should not automatically enter sites
-                if (e is Site)
-                    blocked[e.x, e.y] = true;
             }
 
 

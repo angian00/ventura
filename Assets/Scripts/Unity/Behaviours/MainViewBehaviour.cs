@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Entities;
-using Ventura.Unity.Config;
 using Ventura.Unity.Events;
-using Ventura.Unity.Graphics;
+using Ventura.Unity.ScriptableObjects;
 using Ventura.Util;
 
 
@@ -14,7 +13,8 @@ namespace Ventura.Unity.Behaviours
 
     public class MainViewBehaviour : MonoBehaviour
     {
-        public GameGraphicsConfig graphicsConfig;
+        public TerrainColorConfig mapColors;
+        public SpriteConfig spriteConfig;
 
         public GameObject terrainTileTemplate;
         public GameObject fogTileTemplate;
@@ -58,7 +58,7 @@ namespace Ventura.Unity.Behaviours
             _entityLayers = new() {
                 { typeof(Site), sitesLayer },
                 { typeof(GameItem), itemsLayer },
-                { typeof(BookItem), itemsLayer }, //FIXME
+                { typeof(BookItem), itemsLayer }, //FIXME: generalize GameItem subclassing
                 { typeof(Monster), monstersLayer },
                 { typeof(Player), playerLayer },
             };
@@ -192,7 +192,7 @@ namespace Ventura.Unity.Behaviours
                     var newMapTile = Instantiate(terrainTileTemplate, new Vector3(x, y), Quaternion.identity);
                     newMapTile.GetComponent<MapTileBehaviour>().mapManager = this;
                     newMapTile.GetComponent<MapTileBehaviour>().MapPos = new Vector2Int(x, y);
-                    newMapTile.GetComponent<SpriteRenderer>().color = graphicsConfig.GetColor(terrain.Type);
+                    newMapTile.GetComponent<SpriteRenderer>().color = mapColors.Get(terrain.Type);
                     newMapTile.transform.SetParent(terrainLayer);
                     _mapTiles[x, y] = newMapTile;
 
@@ -246,7 +246,7 @@ namespace Ventura.Unity.Behaviours
 
             string spriteId = null;
 
-            //TODO: make generic
+            //TODO: generalize GameItems
             if (e is Site)
                 spriteId = "site";
             else if ((e is GameItem) || (e.GetType().IsSubclassOf(typeof(GameItem))))
@@ -257,9 +257,8 @@ namespace Ventura.Unity.Behaviours
                 spriteId = "player";
             //
 
-            newEntityObj.GetComponent<SpriteRenderer>().sprite = SpriteCache.Instance.GetSprite(spriteId);
+            newEntityObj.GetComponent<SpriteRenderer>().sprite = spriteConfig.Get(spriteId);
 
-            //TODO: set color for butterflies
             //newEntityObj.GetComponent<SpriteRenderer>().color = UnityUtils.ColorFromHash(eObj.GetHashCode());
 
             newEntityObj.transform.SetParent(_entityLayers[e.GetType()]);

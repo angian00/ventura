@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Ventura.GameLogic;
 using Ventura.GameLogic.Entities;
-using Ventura.Unity.Graphics;
+using Ventura.Unity.ScriptableObjects;
 
 namespace Ventura.Unity.Behaviours
 {
@@ -16,6 +16,9 @@ namespace Ventura.Unity.Behaviours
         private GameItem _gameItem;
         public GameItem GameItem { set { _gameItem = value; } }
 
+        public SpriteConfig spriteConfig;
+
+        [HideInInspector]
         public InventoryViewBehaviour inventoryManager;
 
         public Image thumbnail;
@@ -25,7 +28,7 @@ namespace Ventura.Unity.Behaviours
         void Start()
         {
             var spriteId = _gameItem is BookItem ? "book" : "item";
-            thumbnail.sprite = SpriteCache.Instance.GetSprite(spriteId);
+            thumbnail.sprite = spriteConfig.Get(spriteId);
             labelText.text = _gameItem.Label;
 
             labelPanel.SetActive(false);

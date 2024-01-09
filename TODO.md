@@ -1,11 +1,13 @@
 # TODO
 
-## Current sprint
-- completare trasformaz graphicsConfig in ScriptableObject(s)
-- verificare DevTools per backup ScriptableObjects
-	https://learn.unity.com/tutorial/editor-scripting#5c7f8528edbc2a002053b5f9
+## Current sprint (v0.7)
 
-- verificare altri TODOs nel codice
+- combatStats component
+- monster factory architecture
+- ripristinare colore e icone custom per entities
+
+- irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
+- aggiornare visuals a mockup figma
 
 
 ## Bugfixing
@@ -26,6 +28,7 @@ https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
 - riattivare e migliorare PathfindingRequest 
 - generare cognomi degli autori dei libri
 ? spostare visibility status property da map tiles
+- Restore ScriptableObjects in editor tools
 + refactoring Consumable
 
 ++ refactoring Entity-Component-System
@@ -43,7 +46,6 @@ https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
 - raccogliere file utili sapientia*
 - raccogliere txt Poliziano
 
-- provare onGUI
 ? scouting musica (https://www.freesoundtrackmusic.com/)
 ? suoni ambientali
 
@@ -55,14 +57,6 @@ https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
 
 ## Milestones
 
-
-### 0.7
-- irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
-- aggiornare visuals a mockup figma
-
-- fighter component
-- monster factory architecture
-- ripristinare colore e icone custom per entities
 
 
 ### 0.x
@@ -102,8 +96,9 @@ https://github.com/GrandPiaf/Biome-and-Vegetation-PCG
 
 
 ### Visual Design
-- disegnare HUD (vedi esempio gioco CrossCode)
-- disegnare Character View
+- design HUD (vedi esempio gioco CrossCode)
+- design Character View
+
 - https://www.gameuidatabase.com/
 - Screenshot Strange Horticulture
 - https://www.color-hex.com/color-palettes/?keyword=Book
