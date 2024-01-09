@@ -18,8 +18,17 @@ namespace Ventura.Unity.Editor
             var soObjs = getVenturaScriptableObjs();
             
             var rootBackupPath = $"{Application.dataPath}/Backups";
+            if (!Directory.Exists(rootBackupPath))
+                Directory.CreateDirectory(rootBackupPath);
+
             var dateStr =  DateTime.Now.ToString("yyyy_MM_dd_HH_mm");
             var folderPath = $"{rootBackupPath}/backup_{dateStr}";
+            
+            //rewrite old backup if less than 1 minute old
+            if (Directory.Exists(folderPath))
+                Directory.Delete(folderPath, true);
+
+            Directory.CreateDirectory(folderPath);
 
             foreach (var sObj in soObjs)
             {
@@ -42,19 +51,13 @@ namespace Ventura.Unity.Editor
                 string assetPath = AssetDatabase.GUIDToAssetPath(guid);
                 ScriptableObject scriptableObject = AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPath);
 
-                if (scriptableObject != null && isMine(scriptableObject))
+                if (scriptableObject != null && sObj.GetType().Namespace.Contains("Ventura"))
                 {
                     res.Add(scriptableObject);
                 }
             }
 
             return res;
-        }
-
-
-        private static bool isMine(ScriptableObject sObj)
-        {
-            return sObj.GetType().Namespace.Contains("Ventura");
         }
 
         private void printMessage(string message)
