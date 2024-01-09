@@ -12,6 +12,7 @@ namespace Ventura.GameLogic.Entities
 
         public Site(string name, string mapName) : base(name, false)
         {
+            _spriteId = "site";
             _mapName = mapName;
         }
 

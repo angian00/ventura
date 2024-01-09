@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Ventura.GameLogic.Actions;
 using Ventura.GameLogic.Components;
 
 namespace Ventura.GameLogic.Entities
@@ -7,11 +8,26 @@ namespace Ventura.GameLogic.Entities
     [Serializable]
     public class Monster : Actor, ISerializationCallbackReceiver
     {
-        public Monster(string name) : base(name)
+        [NonSerialized]
+        protected AI _ai = null;
+
+
+        public Monster(MonsterTemplate template) : base(template.Name)
         {
-            _ai = new RandomMovementAI(this);
-            //_ai = new StaticAI(this);
+            if (template.BaseColor != null)
+            {
+                Color c;
+                if (ColorUtility.TryParseHtmlString(template.BaseColor, out c))
+                    this._color = c;
+            }
+
+            this._spriteId = template.SpriteId ?? this._name;
+
+            _ai = AIFactory.CreateAI(template.AIType);
+            if (_ai != null)
+                _ai.Parent = this;
         }
+
 
 
         // -------- Custom Serialization -------------------
@@ -24,7 +40,16 @@ namespace Ventura.GameLogic.Entities
         {
             base.OnAfterDeserialize();
 
-            _ai = new RandomMovementAI(this);
+            _ai = new RandomMovementAI(); //FIXME: get aiType from template again
+            _ai.Parent = this;
+        }
+
+        // -------------------------------------------------
+
+
+        public ActionData ChooseAction()
+        {
+            return _ai?.ChooseAction();
         }
     }
 }

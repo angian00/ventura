@@ -2144,6 +2144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapColors: {fileID: 11400000, guid: 2e218ade60d6a3a45ba026da6ab9246e, type: 2}
+  spriteConfig: {fileID: 11400000, guid: 048d790b8719af643ba5875c4edfb8a8, type: 2}
   terrainTileTemplate: {fileID: 2557218920047493518, guid: 2c5ef730c56f37a4eb97bc10039fabda, type: 3}
   fogTileTemplate: {fileID: 2557218920047493518, guid: dc8abf41ac7b8a24686b20306c063736, type: 3}
   entityTemplate: {fileID: 2557218920047493518, guid: b0b30a744950af743bfe53255eb891f0, type: 3}

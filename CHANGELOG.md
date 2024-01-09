@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
-
+### Added
+- MonsterTemplate mechanism
+- customizable color and sprite for entities
 
 
 ## [0.6] - 2024-01-09

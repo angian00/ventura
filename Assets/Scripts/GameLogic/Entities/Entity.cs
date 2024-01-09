@@ -27,6 +27,16 @@ namespace Ventura.GameLogic.Entities
         protected bool _isBlocking;
         public bool IsBlocking { get => _isBlocking; }
 
+
+        [SerializeField]
+        protected Color _color = Color.white;
+        public Color Color { get => _color; }
+
+        [SerializeField]
+        protected string _spriteId = null;
+        public string SpriteId { get => _spriteId; }
+
+
         public Vector2Int pos { get => new Vector2Int(x, y); }
 
 

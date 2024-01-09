@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Ventura.GameLogic.Actions;
 using Ventura.GameLogic.Components;
 
 namespace Ventura.GameLogic.Entities
@@ -8,9 +7,6 @@ namespace Ventura.GameLogic.Entities
     [Serializable]
     public class Actor : Entity, ISerializationCallbackReceiver
     {
-        [NonSerialized]
-        protected AI _ai = null;
-
         [SerializeReference]
         protected Skills _skills = null;
         public Skills Skills { get => _skills; }
@@ -35,9 +31,6 @@ namespace Ventura.GameLogic.Entities
             base.OnAfterDeserialize();
             //DebugUtils.Log($"Actor {_name}.OnAfterDeserialize()");
 
-            if (_ai != null)
-                _ai.Parent = this;
-
             if (_inventory != null)
                 _inventory.Parent = this;
 
@@ -51,12 +44,6 @@ namespace Ventura.GameLogic.Entities
         {
             base.MoveTo(x, y);
         }
-
-        public ActionData ChooseAction()
-        {
-            return _ai?.ChooseAction();
-        }
-
     }
 
 }

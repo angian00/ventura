@@ -190,7 +190,7 @@ namespace Ventura.Unity.Behaviours
             }
             else
             {
-                actionData = actor.ChooseAction();
+                actionData = ((Monster)actor).ChooseAction();
             }
 
             if (actionData == null)

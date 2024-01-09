@@ -18,8 +18,19 @@ namespace Ventura.GameLogic.Entities
 
         public virtual string Label { get => _name; }
 
-        public GameItem(string name) : base(name, false) { }
 
+        public GameItem(GameItemTemplate template) : base(template.Name, false)
+        {
+            if (template.BaseColor != null)
+            {
+                Color c;
+                if (ColorUtility.TryParseHtmlString(template.BaseColor, out c))
+                    this._color = c;
+            }
+
+            this._spriteId = template.SpriteId ?? "unknownItem";
+            //FUTURE: set consumable, ...
+        }
 
         // -------- Custom Serialization -------------------
         public override void OnBeforeSerialize()

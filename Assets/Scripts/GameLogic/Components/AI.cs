@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using Ventura.GameLogic.Actions;
+﻿using Ventura.GameLogic.Actions;
 using Ventura.GameLogic.Entities;
 using Ventura.Util;
 
@@ -8,72 +6,48 @@ namespace Ventura.GameLogic.Components
 {
     public abstract class AI
     {
-        protected Actor _parent;
-        public Actor Parent { get => _parent; set => _parent = value; }
+        protected Actor? _parent;
+        public Actor? Parent { get => _parent; set => _parent = value; }
 
+
+        protected AI()
+        {
+        }
 
         protected AI(Actor parent)
         {
             this._parent = parent;
         }
 
-        /** 
-         * Compute and return a path to the target position.
-         * If there is no valid path then returns an empty list.
-         */
-        protected List<Vector2Int> GetPathTo(GameMap targetMap, int destX, int destY)
-        {
-            //var walkables = new bool[,]();
-
-            for (var x = 0; x < targetMap.Width; x++)
-            {
-                //walkables.push([]);
-                for (var y = 0; y < targetMap.Height; y++)
-                {
-                    //walkables[x].push(map.tiles[x][y].walkable);
-                }
-            }
-
-            var e = targetMap.GetBlockingEntityAt(destX, destY);
-            {
-                if (e != null && !(e == _parent))
-                    //walkables[e.x][e.y] = false;
-                    ;
-            }
-
-            //FUTURE: use Unity pathfinding algorithm
-
-            //        let passableDelegate = function(x: number, y: number): boolean
-            //        {
-            //            if (x < 0 || x >= map.width || y < 0 || y >= map.height)
-            //                return false
-
-
-            //            return walkables[x][y]
-
-            //        }
-
-            var outputPath = new List<Vector2Int>();
-
-            //        let outputCallback = function(x: number, y: number): void
-            //{
-            //    outputPath.push([x, y])
-            //  }
-
-            //let dijkstra = new Path.Dijkstra(destX, destY, passableCallback, null)
-            //  dijkstra.compute(this.parent.x, this.parent.y, outputCallback)
-
-            //  //remove starting position from path
-            //  outputPath.shift()
-
-
-            return outputPath;
-        }
-
         public abstract ActionData? ChooseAction();
     }
 
+    public enum AIType
+    {
+        Null,
+        Static,
+        RandomMovement,
+    }
 
+
+    public class AIFactory
+    {
+        public static AI? CreateAI(AIType aiType)
+        {
+            switch (aiType)
+            {
+                case AIType.Null:
+                    return null;
+                case AIType.Static:
+                    return new StaticAI();
+                case AIType.RandomMovement:
+                    return new RandomMovementAI();
+
+                default:
+                    throw new GameException($"Unknown AIType: {DataUtils.EnumToStr(aiType)}");
+            }
+        }
+    }
     //public class EnemyAI : AI
     //{
     //    private List<Vector2Int> _path = new();
@@ -121,20 +95,9 @@ namespace Ventura.GameLogic.Components
     //}
 
 
-    //public class PlayerAI : AI
-    //{
-    //    public PlayerAI(Actor parent) : base(parent) { }
-
-    //    public override ActionData? ChooseAction()
-    //    {
-    //        return Orchestrator.Instance.DequeuePlayerAction();
-    //    }
-
-    //}
-
     public class StaticAI : AI
     {
-        public StaticAI(Actor parent) : base(parent) { }
+        //public StaticAI(Actor parent) : base(parent) { }
 
         public override ActionData? ChooseAction()
         {
@@ -145,7 +108,7 @@ namespace Ventura.GameLogic.Components
 
     public class RandomMovementAI : AI
     {
-        public RandomMovementAI(Actor parent) : base(parent) { }
+        //public RandomMovementAI(Actor parent) : base(parent) { }
 
         public override ActionData? ChooseAction()
         {

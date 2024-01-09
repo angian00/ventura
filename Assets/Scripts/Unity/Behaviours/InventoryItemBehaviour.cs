@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Ventura.GameLogic;
 using Ventura.GameLogic.Entities;
 using Ventura.Unity.ScriptableObjects;
 
@@ -27,8 +26,8 @@ namespace Ventura.Unity.Behaviours
 
         void Start()
         {
-            var spriteId = _gameItem is BookItem ? "book" : "item";
-            thumbnail.sprite = spriteConfig.Get(spriteId);
+            thumbnail.sprite = spriteConfig.Get(_gameItem.SpriteId);
+            thumbnail.color = _gameItem.Color;
             labelText.text = _gameItem.Label;
 
             labelPanel.SetActive(false);

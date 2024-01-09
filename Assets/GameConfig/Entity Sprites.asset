@@ -20,6 +20,6 @@ MonoBehaviour:
   - key: player
     value: {fileID: 21300000, guid: 3372b62438055a24583d78fdfb51c3b5, type: 3}
   - key: book
-    value: {fileID: 0}
+    value: {fileID: 21300000, guid: 948d1b9d0a79c5b4eb83526be8b4c6df, type: 3}
   - key: butterfly
     value: {fileID: 21300000, guid: b7f27931f0bb9224681dae342fdffc5c, type: 3}

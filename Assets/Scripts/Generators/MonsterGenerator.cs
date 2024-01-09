@@ -11,23 +11,19 @@ namespace Ventura.Generators
 
         public List<Monster> GenerateMonsters(int nMonsters = 10)
         {
+            var monsterTemplate = MonsterTemplate.Load("butterfly");
+
             var res = new List<Monster>();
 
             for (var i = 0; i < nMonsters; i++)
             {
-                res.Add(GenerateMonster());
+                res.Add(new Monster(monsterTemplate));
             }
 
             return res;
         }
 
 
-        private Monster GenerateMonster()
-        {
-            var m = new Monster("butterfly");
-
-            return m;
-        }
     }
 
 }

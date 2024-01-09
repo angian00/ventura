@@ -158,14 +158,14 @@ namespace Ventura.Generators
             if (nItems == -1)
                 nItems = (int)(perc * targetMap.Width * targetMap.Height);
 
-            var books = BookItemGenerator.Instance.GenerateBooks(nItems);
+            //var books = BookItemGenerator.Instance.GenerateBooks(nItems);
 
-            foreach (var book in books)
-            {
-                var pos = DataUtils.RandomWalkablePos(targetMap);
+            //foreach (var book in books)
+            //{
+            //    var pos = DataUtils.RandomWalkablePos(targetMap);
 
-                targetMap.AddEntity(book, pos);
-            }
+            //    targetMap.AddEntity(book, pos);
+            //}
         }
 
 

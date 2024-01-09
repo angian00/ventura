@@ -58,7 +58,6 @@ namespace Ventura.Unity.Behaviours
             _entityLayers = new() {
                 { typeof(Site), sitesLayer },
                 { typeof(GameItem), itemsLayer },
-                { typeof(BookItem), itemsLayer }, //FIXME: generalize GameItem subclassing
                 { typeof(Monster), monstersLayer },
                 { typeof(Player), playerLayer },
             };
@@ -244,22 +243,8 @@ namespace Ventura.Unity.Behaviours
             var newEntityObj = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
             newEntityObj.name = e.Name;
 
-            string spriteId = null;
-
-            //TODO: generalize GameItems
-            if (e is Site)
-                spriteId = "site";
-            else if ((e is GameItem) || (e.GetType().IsSubclassOf(typeof(GameItem))))
-                spriteId = "item";
-            else if (e is Monster)
-                spriteId = "butterfly";
-            else if (e is Player)
-                spriteId = "player";
-            //
-
-            newEntityObj.GetComponent<SpriteRenderer>().sprite = spriteConfig.Get(spriteId);
-
-            //newEntityObj.GetComponent<SpriteRenderer>().color = UnityUtils.ColorFromHash(eObj.GetHashCode());
+            newEntityObj.GetComponent<SpriteRenderer>().sprite = spriteConfig.Get(e.SpriteId);
+            newEntityObj.GetComponent<SpriteRenderer>().color = e.Color;
 
             newEntityObj.transform.SetParent(_entityLayers[e.GetType()]);
             _entityObjs[e.Id] = newEntityObj;

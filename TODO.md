@@ -2,9 +2,13 @@
 
 ## Current sprint (v0.7)
 
+- gameItemTemplate
+- pensare dove mettere colore
+- persistere monster template ref in Monster
+- cache monster templates
 - combatStats component
-- monster factory architecture
-- ripristinare colore e icone custom per entities
+- refactoring dataUtils
+
 
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - aggiornare visuals a mockup figma
@@ -15,6 +19,7 @@
 
 ## Improvements
 - aggiungere campo updatedFields a notifica EntityUpdate
+- informarsi su valore di default per Color in ScriptableObjects (alpha=0)
 
 - sperimentare uso colliders vs resetVisibleEntities
 
