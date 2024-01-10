@@ -15,14 +15,14 @@ namespace Ventura.GameLogic.Components
             var rollResult = Random.Range(-5, 6); // uniformly extracted from -5 to +5, both extremes included, to average 0
             var attackResult = rollResult + attacker.CombatStats.Attack - defender.CombatStats.Defense;
             if (attackResult <= 0)
-                return new ActionResult(false, $"{attacker.Name} attacks {defender.Name} and misses!");
+                return new ActionResult(false, $"{attacker.Name} attacks {defender.Name} and misses!", true);
 
             var damage = Random.Range(1, attacker.CombatStats.Damage + 1); //uniformly extracted from 1 to [Damage] included
             defender.CurrHP -= damage;
             if (defender.CurrHP > 0)
             {
                 EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Changed, defender));
-                return new ActionResult(true, $"{attacker.Name} attacks {defender.Name} and makes {damage} damage!");
+                return new ActionResult(true, $"{attacker.Name} attacks {defender.Name} and makes {damage} damage!", true);
             }
 
 
@@ -31,7 +31,7 @@ namespace Ventura.GameLogic.Components
             //TODO: if (defender is Player) --> game over event
             //FUTURE: drop body
 
-            return new ActionResult(true, $"{attacker.Name} attacks {defender.Name} and makes {damage} damage, killing him!");
+            return new ActionResult(true, $"{attacker.Name} attacks {defender.Name} and makes {damage} damage, killing him!", true);
         }
     }
 }

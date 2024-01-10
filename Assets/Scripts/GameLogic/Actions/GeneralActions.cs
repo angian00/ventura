@@ -6,17 +6,23 @@ namespace Ventura.GameLogic.Actions
 {
     public record ActionResult
     {
-        private bool _success;
-        private string? _reason;
+        private bool _isImportant;
+        public bool IsImportant { get => _isImportant; }
 
+
+        private bool _success;
         public bool Success { get => _success; }
+
+        private string? _reason;
         public string? Reason { get => _reason; }
 
 
-        public ActionResult(bool success, string? reason = null)
+
+        public ActionResult(bool success, string? reason = null, bool isImportant = false)
         {
             _success = success;
             _reason = reason;
+            _isImportant = isImportant;
         }
     }
 

@@ -18,17 +18,18 @@ namespace Ventura.Generators
             if (mapName == null)
                 mapName = FileStringGenerator.Sites.GenerateString();
 
-            var newMap = new GameMap(mapName, mapName, nRows, nCols);
+            var newMap = new GameMap(mapName, mapName, 10, 10);
+            //var newMap = new GameMap(mapName, mapName, nRows, nCols);
 
             generateTerrain(newMap);
-            if (doGenerateSites)
-                generateSites(newMap, 15);
+            //if (doGenerateSites)
+            //    generateSites(newMap);
             //generateSites(newMap, 1);
 
-            generateSomeItems(newMap);
-            generateSomeMonsters(newMap);
+            //generateSomeItems(newMap);
+            //generateSomeMonsters(newMap);
             //generateSomeItems(newMap, 1);
-            //generateSomeMonsters(newMap, 1);
+            generateSomeMonsters(newMap, 1);
 
             newMap.StartingPos = RandomUtils.RandomEmptyPos(newMap);
 
@@ -112,11 +113,17 @@ namespace Ventura.Generators
             return res;
         }
 
-        private static void generateSites(GameMap targetMap, int nSites)
+        private static void generateSites(GameMap targetMap, int nSites = -1)
         {
-            //DebugUtils.Log($"generateSites({targetMap.Name}, {nSites})");
-
             const int MIN_SITE_DISTANCE = 3;
+
+            //DebugUtils.Log($"generateSites({targetMap.Name}, {nSites})");
+            const float perc = .004f;
+
+            if (nSites == -1)
+                nSites = (int)(perc * targetMap.Width * targetMap.Height);
+
+
 
             var i = 0;
             while (i < nSites)

@@ -1,4 +1,5 @@
-﻿using Ventura.GameLogic.Actions;
+﻿using UnityEngine;
+using Ventura.GameLogic.Actions;
 using Ventura.GameLogic.Entities;
 using Ventura.Util;
 
@@ -73,7 +74,6 @@ namespace Ventura.GameLogic.Components
 
             return actionData;
         }
-
     }
 
 
@@ -81,10 +81,24 @@ namespace Ventura.GameLogic.Components
     {
         public override ActionData? ChooseAction(GameState gameState)
         {
-            var actionData = new ActionData(GameActionType.BumpAction);
-            actionData.DeltaPos = RandomUtils.RandomMovement();
+            //if player is close, attack it, else stay still
 
-            return actionData;
+            for (int dx = -1; dx <= 1; dx++)
+            {
+                for (int dy = -1; dy <= 1; dy++)
+                {
+                    if (gameState.CurrMap.GetAnyEntityAt<Player>(_parent.x + dx, _parent.y + dy) != null)
+                    {
+                        var actionData = new ActionData(GameActionType.BumpAction);
+                        actionData.DeltaPos = new Vector2Int(dx, dy);
+
+                        return actionData;
+                    }
+                }
+
+            }
+
+            return new ActionData(GameActionType.WaitAction);
         }
 
     }

@@ -212,7 +212,7 @@ namespace Ventura.Unity.Behaviours
             }
             else
             {
-                if (actor is Player)
+                if (actor is Player || actionResult.IsImportant)
                 {
                     EventManager.Publish(new TextNotification(actionResult.Reason, TextNotification.Severity.Warning));
                     DebugUtils.Warning($"{actor.Name} Cannot perform {DataUtils.EnumToStr(actionData.ActionType)}: {actionResult.Reason}");

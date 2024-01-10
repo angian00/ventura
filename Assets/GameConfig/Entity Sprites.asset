@@ -23,3 +23,5 @@ MonoBehaviour:
     value: {fileID: 21300000, guid: 948d1b9d0a79c5b4eb83526be8b4c6df, type: 3}
   - key: butterfly
     value: {fileID: 21300000, guid: b7f27931f0bb9224681dae342fdffc5c, type: 3}
+  - key: goblin
+    value: {fileID: 21300000, guid: 11c5e9d4bd52880439918eccf1457b90, type: 3}
