@@ -10,11 +10,16 @@ namespace Ventura.GameLogic.Entities
         private string _mapName;
         public string MapName { get => _mapName; }
 
+        public override string SpriteId { get => "site"; } //FIXME: create SiteTemplate
+
         public Site(string name, string mapName) : base(name, false)
         {
-            _spriteId = "site";
             _mapName = mapName;
         }
+
+
+
+
 
         public override void OnBeforeSerialize()
         {

@@ -11,23 +11,26 @@ namespace Ventura.GameLogic.Entities
         [NonSerialized]
         protected AI _ai = null;
 
+        [SerializeReference]
+        protected MonsterTemplate _template;
+
+        public override string Color { get => _template.BaseColor; }
+        public override string SpriteId { get => _template.SpriteId; }
+
 
         public Monster(MonsterTemplate template) : base(template.Name)
         {
-            if (template.BaseColor != null)
-            {
-                Color c;
-                if (ColorUtility.TryParseHtmlString(template.BaseColor, out c))
-                    this._color = c;
-            }
+            this._template = template;
+            initFromTemplate();
+        }
 
-            this._spriteId = template.SpriteId ?? this._name;
 
-            _ai = AIFactory.CreateAI(template.AIType);
+        private void initFromTemplate()
+        {
+            _ai = AIFactory.CreateAI(_template.AIType);
             if (_ai != null)
                 _ai.Parent = this;
         }
-
 
 
         // -------- Custom Serialization -------------------
@@ -40,8 +43,7 @@ namespace Ventura.GameLogic.Entities
         {
             base.OnAfterDeserialize();
 
-            _ai = new RandomMovementAI(); //FIXME: get aiType from template again
-            _ai.Parent = this;
+            initFromTemplate();
         }
 
         // -------------------------------------------------

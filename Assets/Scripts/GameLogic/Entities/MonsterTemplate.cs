@@ -5,22 +5,6 @@ using Ventura.Util;
 
 namespace Ventura.GameLogic.Entities
 {
-    [Serializable]
-    public abstract class EntityTemplate
-    {
-        [SerializeField]
-        protected string _name;
-        public string Name { get => _name; }
-
-        [SerializeField]
-        protected string _spriteId;
-        public string SpriteId { get => _spriteId; }
-
-        [SerializeField]
-        protected string _baseColor;
-        public string BaseColor { get => _baseColor; }
-
-    }
 
     [Serializable]
     public class MonsterTemplate : EntityTemplate, ISerializationCallbackReceiver
@@ -33,6 +17,7 @@ namespace Ventura.GameLogic.Entities
         /// -------- Custom Serialization -------------------
         [SerializeField]
         private string __auxAIType;
+
 
         public void OnBeforeSerialize()
         {
@@ -56,10 +41,5 @@ namespace Ventura.GameLogic.Entities
         }
     }
 
-
-    public class GameItemTemplate : EntityTemplate { }
-
 }
-
-
 

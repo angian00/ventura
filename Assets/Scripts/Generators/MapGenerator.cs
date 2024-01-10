@@ -158,14 +158,14 @@ namespace Ventura.Generators
             if (nItems == -1)
                 nItems = (int)(perc * targetMap.Width * targetMap.Height);
 
-            //var books = BookItemGenerator.Instance.GenerateBooks(nItems);
+            var items = GameItemGenerator.Instance.GenerateItems(nItems);
+            foreach (var item in items)
+            {
+                var pos = DataUtils.RandomEmptyPos(targetMap);
 
-            //foreach (var book in books)
-            //{
-            //    var pos = DataUtils.RandomWalkablePos(targetMap);
+                targetMap.AddEntity(item, pos);
+            }
 
-            //    targetMap.AddEntity(book, pos);
-            //}
         }
 
 
@@ -177,7 +177,6 @@ namespace Ventura.Generators
                 nMonsters = (int)(perc * targetMap.Width * targetMap.Height);
 
             var monsters = MonsterGenerator.Instance.GenerateMonsters(nMonsters);
-
             foreach (var monster in monsters)
             {
                 var pos = DataUtils.RandomEmptyPos(targetMap);

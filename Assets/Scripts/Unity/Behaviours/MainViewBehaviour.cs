@@ -244,7 +244,9 @@ namespace Ventura.Unity.Behaviours
             newEntityObj.name = e.Name;
 
             newEntityObj.GetComponent<SpriteRenderer>().sprite = spriteConfig.Get(e.SpriteId);
-            newEntityObj.GetComponent<SpriteRenderer>().color = e.Color;
+            var c = UnityUtils.ColorFromHex(e.Color);
+            if (c != null)
+                newEntityObj.GetComponent<SpriteRenderer>().color = (Color)c;
 
             newEntityObj.transform.SetParent(_entityLayers[e.GetType()]);
             _entityObjs[e.Id] = newEntityObj;

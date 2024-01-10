@@ -7,6 +7,9 @@ namespace Ventura.GameLogic.Entities
     [Serializable]
     public class GameItem : Entity, ISerializationCallbackReceiver
     {
+        [SerializeReference]
+        protected GameItemTemplate _template;
+
         protected Container _parent;
         public Container Parent { get => _parent; set => _parent = value; }
 
@@ -16,19 +19,14 @@ namespace Ventura.GameLogic.Entities
         //protected Equippable? _equippable;
         //protected Combinable? _combinable;
 
-        public virtual string Label { get => _name; }
+        public override string Color { get => _template.BaseColor; }
+        public override string SpriteId { get => _template.SpriteId; }
 
 
         public GameItem(GameItemTemplate template) : base(template.Name, false)
         {
-            if (template.BaseColor != null)
-            {
-                Color c;
-                if (ColorUtility.TryParseHtmlString(template.BaseColor, out c))
-                    this._color = c;
-            }
+            this._template = template;
 
-            this._spriteId = template.SpriteId ?? "unknownItem";
             //FUTURE: set consumable, ...
         }
 
@@ -48,6 +46,8 @@ namespace Ventura.GameLogic.Entities
 
         // -------------------------------------------------
 
+
+        //FIXME: remove
         public void TransferTo(Container targetContainer)
         {
             if (_parent != null)

@@ -26,6 +26,18 @@ namespace Ventura.Util
             targetObj.CrossFadeAlpha(0.0f, duration, false);
         }
 
+        public static Color? ColorFromHex(string? hexStr)
+        {
+            if (hexStr == null)
+                return null;
+
+            Color c;
+            if (ColorUtility.TryParseHtmlString(hexStr, out c))
+                return c;
+
+            return null;
+        }
+
         public static Color ColorFromHash(int objHash)
         {
             float r = Mathf.Abs(Mathf.Sin(objHash * 0.123f));

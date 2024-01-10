@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Ventura.GameLogic.Entities;
 using Ventura.Unity.ScriptableObjects;
+using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
@@ -27,7 +28,10 @@ namespace Ventura.Unity.Behaviours
         void Start()
         {
             thumbnail.sprite = spriteConfig.Get(_gameItem.SpriteId);
-            thumbnail.color = _gameItem.Color;
+            var c = UnityUtils.ColorFromHex(_gameItem.Color);
+            if (c != null)
+                thumbnail.color = (Color)c;
+
             labelText.text = _gameItem.Label;
 
             labelPanel.SetActive(false);

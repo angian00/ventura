@@ -1,6 +1,6 @@
 {
 	"_name": "butterfly",
 	"_spriteId": "butterfly",
-	"_baseColor": "#FF0000",
+	"_baseColor": "#FFFF00",
 	"__auxAIType": "RandomMovement"
 }

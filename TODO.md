@@ -2,12 +2,10 @@
 
 ## Current sprint (v0.7)
 
-- gameItemTemplate
-- pensare dove mettere colore
+- refactoring dataUtils
 - persistere monster template ref in Monster
 - cache monster templates
 - combatStats component
-- refactoring dataUtils
 
 
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
