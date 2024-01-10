@@ -2,9 +2,8 @@
 
 ## Current sprint (v0.7)
 
-- refactoring dataUtils
 - persistere monster template ref in Monster
-- cache monster templates
+- cache monster templates (MonsterFactory)
 - combatStats component
 
 
@@ -33,6 +32,7 @@ https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
 ? spostare visibility status property da map tiles
 - Restore ScriptableObjects in editor tools
 + refactoring Consumable
+- item identification mechanism
 
 ++ refactoring Entity-Component-System
 	- fare git clone AnyRPG

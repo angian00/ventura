@@ -113,7 +113,7 @@ namespace Ventura.GameLogic.Components
         public override ActionData? ChooseAction()
         {
             var actionData = new ActionData(GameActionType.BumpAction);
-            actionData.DeltaPos = DataUtils.RandomMovement();
+            actionData.DeltaPos = RandomUtils.RandomMovement();
 
             return actionData;
         }

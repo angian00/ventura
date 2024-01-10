@@ -30,7 +30,7 @@ namespace Ventura.Generators
             //generateSomeItems(newMap, 1);
             //generateSomeMonsters(newMap, 1);
 
-            newMap.StartingPos = DataUtils.RandomEmptyPos(newMap);
+            newMap.StartingPos = RandomUtils.RandomEmptyPos(newMap);
 
             return newMap;
         }
@@ -161,7 +161,7 @@ namespace Ventura.Generators
             var items = GameItemGenerator.Instance.GenerateItems(nItems);
             foreach (var item in items)
             {
-                var pos = DataUtils.RandomEmptyPos(targetMap);
+                var pos = RandomUtils.RandomEmptyPos(targetMap);
 
                 targetMap.AddEntity(item, pos);
             }
@@ -179,7 +179,7 @@ namespace Ventura.Generators
             var monsters = MonsterGenerator.Instance.GenerateMonsters(nMonsters);
             foreach (var monster in monsters)
             {
-                var pos = DataUtils.RandomEmptyPos(targetMap);
+                var pos = RandomUtils.RandomEmptyPos(targetMap);
 
                 targetMap.AddEntity(monster, pos);
             }

@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - template mechanism for entities
 
+### Changed
+- extracted RandomUtils from DataUtils
+
 
 ## [0.6] - 2024-01-09
 ### Added
