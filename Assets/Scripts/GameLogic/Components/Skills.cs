@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 using Ventura.GameLogic.Entities;
 using Ventura.Unity.Events;
-using Ventura.Util;
 
 namespace Ventura.GameLogic.Components
 {
@@ -73,13 +72,6 @@ namespace Ventura.GameLogic.Components
         {
             _skillValues[skillId] = GetSkillValue(skillId) + deltaValue;
             EventManager.Publish(new EntityUpdate(EntityUpdate.Type.Changed, _parent));
-        }
-
-
-        public void Dump()
-        {
-            foreach (var skillId in _skillValues.Keys)
-                DebugUtils.Log($"{skillId}: {_skillValues[skillId]}");
         }
     }
 }

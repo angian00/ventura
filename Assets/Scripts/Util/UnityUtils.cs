@@ -26,6 +26,7 @@ namespace Ventura.Util
             targetObj.CrossFadeAlpha(0.0f, duration, false);
         }
 
+
         public static Color? ColorFromHex(string? hexStr)
         {
             if (hexStr == null)

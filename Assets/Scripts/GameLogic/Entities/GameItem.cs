@@ -45,15 +45,5 @@ namespace Ventura.GameLogic.Entities
         }
 
         // -------------------------------------------------
-
-
-        //FIXME: remove
-        public void TransferTo(Container targetContainer)
-        {
-            if (_parent != null)
-                _parent.RemoveItem(this);
-
-            targetContainer.AddItem(this);
-        }
     }
 }

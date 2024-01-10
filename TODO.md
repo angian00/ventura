@@ -2,10 +2,8 @@
 
 ## Current sprint (v0.7)
 
-- persistere monster template ref in Monster
-- cache monster templates (MonsterFactory)
-- combatStats component
-
+- game over state
+- feedback visuale stato mostro
 
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - aggiornare visuals a mockup figma
@@ -15,8 +13,10 @@
 
 
 ## Improvements
+- strutturare meglio il feedback del combattimento (markup statusline?)
+- creare "recipes" per combatStats, es. "1d3"
 - aggiungere campo updatedFields a notifica EntityUpdate
-- informarsi su valore di default per Color in ScriptableObjects (alpha=0)
+- cache monster templates (MonsterFactory), e config probabilita' mostri
 
 - sperimentare uso colliders vs resetVisibleEntities
 
@@ -33,6 +33,7 @@ https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
 - Restore ScriptableObjects in editor tools
 + refactoring Consumable
 - item identification mechanism
+- procedura iniziale di check consistency (es. spriteIds)
 
 ++ refactoring Entity-Component-System
 	- fare git clone AnyRPG

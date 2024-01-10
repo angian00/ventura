@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - template mechanism for entities
+- very basic combat system
 
 ### Changed
 - extracted RandomUtils from DataUtils

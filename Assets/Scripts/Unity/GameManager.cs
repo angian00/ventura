@@ -190,7 +190,7 @@ namespace Ventura.Unity.Behaviours
             }
             else
             {
-                actionData = ((Monster)actor).ChooseAction();
+                actionData = ((Monster)actor).ChooseAction(_gameState);
             }
 
             if (actionData == null)
@@ -199,7 +199,7 @@ namespace Ventura.Unity.Behaviours
             DebugUtils.Log($"Actor {actor.Name} performs {actionData}");
 
             var startPos = actor.pos;
-            var actionResult = performAction(actor, actionData);
+            var actionResult = performAction(actor, actionData, _gameState);
 
             if (actionResult.Success)
             {
@@ -224,7 +224,7 @@ namespace Ventura.Unity.Behaviours
 
         //------------------------ Action Processing ------------------------------------------
 
-        private ActionResult performAction(Actor actor, ActionData actionData)
+        private ActionResult performAction(Actor actor, ActionData actionData, GameState gameState)
         {
             GameAction action = null;
 

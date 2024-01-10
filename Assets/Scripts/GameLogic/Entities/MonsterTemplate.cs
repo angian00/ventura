@@ -9,6 +9,13 @@ namespace Ventura.GameLogic.Entities
     [Serializable]
     public class MonsterTemplate : EntityTemplate, ISerializationCallbackReceiver
     {
+        [SerializeField]
+        protected int _startHP;
+        public int StartHP { get => _startHP; }
+
+        [SerializeField]
+        protected CombatStats _combatStats;
+        public CombatStats CombatStats { get => _combatStats; }
 
         [NonSerialized]
         protected AIType _aiType;

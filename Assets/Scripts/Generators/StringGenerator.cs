@@ -55,7 +55,7 @@ namespace Ventura.Generators
 
         private void loadFile(string filename)
         {
-            var fileObj = Resources.Load<TextAsset>($"Data/{filename}");
+            var fileObj = Resources.Load<TextAsset>($"Data/Generators/{filename}");
             var fileLines = fileObj.text.Split("\n");
 
 

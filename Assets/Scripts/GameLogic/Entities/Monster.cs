@@ -17,17 +17,23 @@ namespace Ventura.GameLogic.Entities
         public override string Color { get => _template.BaseColor; }
         public override string SpriteId { get => _template.SpriteId; }
 
+        public override CombatStats CombatStats { get => _template.CombatStats; }
+
 
         public Monster(MonsterTemplate template) : base(template.Name)
         {
-            this._template = template;
-            initFromTemplate();
+            initFromTemplate(template);
         }
 
 
-        private void initFromTemplate()
+        private void initFromTemplate(MonsterTemplate template)
         {
-            _ai = AIFactory.CreateAI(_template.AIType);
+            this._template = template;
+
+            _maxHP = template.StartHP;
+            _currHP = _maxHP;
+
+            _ai = AIFactory.CreateAI(template.AIType);
             if (_ai != null)
                 _ai.Parent = this;
         }
@@ -43,15 +49,15 @@ namespace Ventura.GameLogic.Entities
         {
             base.OnAfterDeserialize();
 
-            initFromTemplate();
+            initFromTemplate(_template);
         }
 
         // -------------------------------------------------
 
 
-        public ActionData ChooseAction()
+        public ActionData ChooseAction(GameState gameState)
         {
-            return _ai?.ChooseAction();
+            return _ai?.ChooseAction(gameState);
         }
     }
 }

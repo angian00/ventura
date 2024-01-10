@@ -11,7 +11,8 @@ namespace Ventura.Generators
 
         public List<Monster> GenerateMonsters(int nMonsters = 10)
         {
-            var monsterTemplate = MonsterTemplate.Load("butterfly");
+            //var monsterTemplate = MonsterTemplate.Load("butterfly");
+            var monsterTemplate = MonsterTemplate.Load("goblin");
 
             var res = new List<Monster>();
 

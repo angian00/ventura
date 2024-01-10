@@ -81,7 +81,11 @@ namespace Ventura.GameLogic.Actions
 
             var targetItem = tileItems[0]; //FUTURE: properly support the case of multiple tileItems on the same tile
 
-            targetItem.TransferTo(actor.Inventory);
+            if (targetItem.Parent != null)
+                targetItem.Parent.RemoveItem(targetItem);
+
+            actor.Inventory.AddItem(targetItem);
+
             return new ActionResult(true, $"{actor.Name} picks up {targetItem.Label}");
         }
     }

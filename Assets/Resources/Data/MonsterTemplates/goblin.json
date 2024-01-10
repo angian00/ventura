@@ -1,0 +1,8 @@
+{
+	"_name": "goblin",
+	"_spriteId": "goblin",
+	"_baseColor": "#404040",
+	"__auxAIType": "Hostile",
+	"_startHP": 6,
+	"_combatStats": { "_attack": 2, "_defense": 4, "_damage": 2 }
+}

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Ventura.GameLogic.Components;
 using Ventura.GameLogic.Entities;
 
 namespace Ventura.GameLogic.Actions
@@ -58,7 +59,9 @@ namespace Ventura.GameLogic.Actions
         public override ActionResult Perform(Actor actor, ActionData actionData, GameState gameState)
         {
             actionData.CheckActionType(GameActionType.MeleeAction);
-            return new ActionResult(false, "TODO: implement MeleeAction");
+
+            var targetActor = GetTargetActor(actor, actionData, gameState);
+            return Combat.PerformMeleeAttack(actor, targetActor, gameState);
         }
     }
 
