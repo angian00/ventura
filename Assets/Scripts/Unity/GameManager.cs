@@ -201,24 +201,22 @@ namespace Ventura.Unity.Behaviours
             var startPos = actor.pos;
             var actionResult = performAction(actor, actionData, _gameState);
 
-            if (actionResult.Success)
+            if (actor is Player || (actionResult.IsImportant &&
+                (_gameState.CurrMap.Visible[startPos.x, startPos.y] || _gameState.CurrMap.Visible[actor.x, actor.y])))
             {
-                if (actor is Player || _gameState.CurrMap.Visible[startPos.x, startPos.y] || _gameState.CurrMap.Visible[actor.x, actor.y])
+                if (actionResult.Success)
                 {
                     if (actionResult.Reason != null)
                         EventManager.Publish(new TextNotification(actionResult.Reason));
                 }
-                return true;
-            }
-            else
-            {
-                if (actor is Player || actionResult.IsImportant)
+                else
                 {
                     EventManager.Publish(new TextNotification(actionResult.Reason, TextNotification.Severity.Warning));
                     DebugUtils.Warning($"{actor.Name} Cannot perform {DataUtils.EnumToStr(actionData.ActionType)}: {actionResult.Reason}");
                 }
-                return false;
             }
+
+            return actionResult.Success;
         }
 
 

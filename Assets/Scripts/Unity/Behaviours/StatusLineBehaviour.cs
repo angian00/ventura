@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using Ventura.Unity.Events;
+using Ventura.Unity.ScriptableObjects;
 using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
@@ -8,6 +9,8 @@ namespace Ventura.Unity.Behaviours
     public class StatusLineBehaviour : MonoBehaviour
     {
         public TextMeshProUGUI statusLine;
+        public SeverityColorConfig severityColors;
+
 
         private void OnEnable()
         {
@@ -28,7 +31,7 @@ namespace Ventura.Unity.Behaviours
             if (msg != null && msg != "")
                 DebugUtils.Log(msg);
 
-            //statusLine.color = GraphicsConfigOld.StatusLineColors[severity]; //FIXME
+            statusLine.color = severityColors.Get(eventData.severity);
             statusLine.text = msg;
 
             UnityUtils.FlashAndFade(statusLine);

@@ -1,11 +1,8 @@
 # TODO
 
 ## Current sprint (v0.7)
-
-- strutturare meglio il feedback del combattimento (markup statusline?)
 - game over state
 - feedback visuale stato mostro
-- hud base player (hp, ...)
 
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - aggiornare visuals a mockup figma
@@ -15,6 +12,7 @@
 
 
 ## Improvements
+- strutturare meglio il feedback del combattimento (markup statusline?)
 - creare "recipes" per combatStats, es. "1d3"
 - aggiungere campo updatedFields a notifica EntityUpdate
 - cache monster templates (MonsterFactory), e config probabilita' mostri
