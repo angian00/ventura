@@ -7,17 +7,44 @@ namespace Ventura.Util
 {
     public class DataUtils
     {
-        public static int CountValues<T>(T[,] arr2d, T targetElem)
+        public static int CountValues<T>(T[,] arr2d, T targetValue)
         {
             int res = 0;
 
             foreach (var arrElem in arr2d)
             {
-                if (arrElem.Equals(targetElem))
+                if (arrElem.Equals(targetValue))
                     res++;
             }
 
             return res;
+        }
+
+        public static int CountMatchingNeighbours<T>(T[,] arr2d, T targetValue, int x, int y, int radius = 1)
+        {
+            int nMatches = 0;
+
+            for (int dx = -radius; dx <= radius; dx++)
+            {
+                for (int dy = -radius; dy <= radius; dy++)
+                {
+                    var currX = x + dx;
+                    var currY = y + dy;
+
+                    if ((currX == x) && (currY == y))
+                        continue;
+
+                    if ((currX < 0) || (currX >= arr2d.GetLength(0)) || (currY < 0) || (currY >= arr2d.GetLength(1)))
+                        continue;
+
+
+                    if (targetValue.Equals(arr2d[currX, currY]))
+                        nMatches++;
+
+                }
+            }
+
+            return nMatches;
         }
 
 

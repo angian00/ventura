@@ -13,8 +13,8 @@ namespace Ventura.GameLogic
     [Serializable]
     public class GameMap : GameLogicObject, Container, ISerializationCallbackReceiver
     {
-        const bool MAP_DEBUGGING = false;
-        //const bool MAP_DEBUGGING = true;
+        //const bool MAP_DEBUGGING = false;
+        const bool MAP_DEBUGGING = true;
 
         const float VISIBILITY_RADIUS = 4.0f;
 
@@ -53,14 +53,19 @@ namespace Ventura.GameLogic
         //public HashSet<Entity> Entities { get => _entities; }
 
 
-        public GameMap(string name, string label, int width, int height)
+        public GameMap(string name, string label, TerrainDef[,] terrain)
         {
             this._name = name;
             this._label = label;
+
+            this._terrain = terrain;
+
+            var width = terrain.GetLength(0);
+            var height = terrain.GetLength(1);
+
             this._width = width;
             this._height = height;
 
-            _terrain = new TerrainDef[width, height];
             _visible = new bool[width, height];
             _explored = new bool[width, height];
 
@@ -76,6 +81,9 @@ namespace Ventura.GameLogic
                 }
             }
         }
+
+
+        public GameMap(string name, string label, int width, int height) : this(name, label, new TerrainDef[width, height]) { }
 
 
         /// -------- Custom Serialization -------------------

@@ -10,20 +10,39 @@ namespace Ventura.Generators
 
     public class MapGenerator
     {
-
-        public static GameMap GenerateWildernessMap(int nRows, int nCols, string? mapName = null, bool doGenerateSites = true)
+        public enum MapType
         {
-            DebugUtils.Log("GenerateWildernessMap()");
+            Cave,
+            Wilderness,
+        }
+
+        public static GameMap GenerateMap(MapType mapType, string? mapName = null)
+        {
+            DebugUtils.Log("GenerateMap()");
+            const int WORLD_MAP_WIDTH = 80;
+            const int WORLD_MAP_HEIGHT = 65;
 
             if (mapName == null)
                 mapName = FileStringGenerator.Sites.GenerateString();
 
-            var newMap = new GameMap(mapName, mapName, 10, 10);
-            //var newMap = new GameMap(mapName, mapName, nRows, nCols);
 
-            generateTerrain(newMap);
-            //if (doGenerateSites)
-            //    generateSites(newMap);
+            TerrainDef[,] terrainMap;
+            switch (mapType)
+            {
+                case MapType.Wilderness:
+                    terrainMap = WildernessTerrainGenerator.generateTerrain(WORLD_MAP_WIDTH, WORLD_MAP_HEIGHT);
+                    break;
+                case MapType.Cave:
+                    terrainMap = CaveTerrainGenerator.generateTerrain(20, 20);
+                    break;
+                default:
+                    throw new GameException($"Invalid map type: {DataUtils.EnumToStr(mapType)}");
+            }
+
+            var newMap = new GameMap(mapName, mapName, terrainMap);
+
+            if (mapType == MapType.Wilderness)
+                generateSites(newMap);
             //generateSites(newMap, 1);
 
             //generateSomeItems(newMap);
@@ -36,82 +55,6 @@ namespace Ventura.Generators
             return newMap;
         }
 
-        private static void generateTerrain(GameMap targetMap)
-        {
-            float noiseXOffset = 0.0f;
-            float noiseYOffset = 0.0f;
-            float noiseScale = 10.0f;
-
-
-            var terrainWeights = new float[] { 40, 40, 22, 18, 10, 10 };
-            TerrainDef[] terrainTypes = new TerrainDef[] {
-                TerrainDef.Water,
-                TerrainDef.Plains1,
-                TerrainDef.Plains2,
-                TerrainDef.Hills1,
-                TerrainDef.Hills2,
-                TerrainDef.Mountains,
-            };
-
-            var terrainLevels = computeTerrainLevels(terrainWeights);
-
-
-            //stats collection
-            var maxTerrain = 0;
-            var maxNoise = -1.0f;
-            int[] countTerrain = new int[terrainTypes.Length];
-            //
-
-            for (var x = 0; x < targetMap.Width; x++)
-            {
-                for (var y = 0; y < targetMap.Height; y++)
-                {
-                    var noiseX = noiseXOffset + noiseScale * x / targetMap.Width;
-                    var noiseY = noiseYOffset + noiseScale * y / targetMap.Height;
-
-                    var noiseVal = Mathf.PerlinNoise(noiseX, noiseY);
-                    //GameDebugging.Log($"noiseVal (x/y): {noiseVal}");
-                    if (noiseVal > maxNoise)
-                        maxNoise = noiseVal;
-
-                    int iTerrain;
-                    for (iTerrain = 0; iTerrain < terrainLevels.Length; iTerrain++)
-                    {
-                        if (noiseVal < terrainLevels[iTerrain])
-                            break;
-                    }
-
-                    //stats collection
-                    if (iTerrain > maxTerrain)
-                        maxTerrain = iTerrain;
-                    countTerrain[iTerrain - 1]++;
-                    //
-
-                    targetMap.Terrain[x, y] = terrainTypes[iTerrain - 1];
-                }
-            }
-
-            //GameDebugging.Log($"DEBUG - maxTerrain: {maxTerrain}, maxPerlin: {maxNoise}");
-            //for (var i=0; i < countTerrain.Length; i++)
-            //{
-            //    GameDebugging.Log($"DEBUG - countTerrain[{i}]: {countTerrain[i]}");
-            //}
-        }
-
-        private static float[] computeTerrainLevels(float[] terrainWeights)
-        {
-            var res = new float[terrainWeights.Length + 1];
-            res[0] = 0.0f;
-
-            float totWeight = 0.0f;
-            for (var i = 0; i < terrainWeights.Length; i++)
-                totWeight += terrainWeights[i];
-
-            for (var i = 0; i < terrainWeights.Length; i++)
-                res[i + 1] = res[i] + terrainWeights[i] / totWeight;
-
-            return res;
-        }
 
         private static void generateSites(GameMap targetMap, int nSites = -1)
         {
@@ -122,7 +65,6 @@ namespace Ventura.Generators
 
             if (nSites == -1)
                 nSites = (int)(perc * targetMap.Width * targetMap.Height);
-
 
 
             var i = 0;

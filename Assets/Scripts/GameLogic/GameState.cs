@@ -78,9 +78,7 @@ namespace Ventura.GameLogic
         {
             DebugUtils.Log("GameState.NewGame()");
 
-            const int WORLD_MAP_WIDTH = 80;
-            const int WORLD_MAP_HEIGHT = 65;
-            var startMap = MapGenerator.GenerateWildernessMap(WORLD_MAP_WIDTH, WORLD_MAP_HEIGHT);
+            var startMap = MapGenerator.GenerateMap(MapGenerator.MapType.Wilderness);
             _currMap = startMap;
 
             _allMaps[startMap.Name] = startMap;
@@ -106,7 +104,7 @@ namespace Ventura.GameLogic
             }
             else
             {
-                newMap = MapGenerator.GenerateWildernessMap(10, 10, mapName, false);
+                newMap = MapGenerator.GenerateMap(MapGenerator.MapType.Cave, mapName);
                 _allMaps[mapName] = newMap;
             }
 

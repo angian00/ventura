@@ -20,8 +20,6 @@
 - sperimentare uso colliders vs resetVisibleEntities
 
 - dialog scelta nome savefile
-- generatore mappe dungeon (e citta'?)
-	https://github.com/angian00/giangen/tree/master/src/giangen/generators
 - visibility algorithms:
 https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#:~:text=Bresenham's%20line%20algorithm%20is%20a,straight%20line%20between%20two%20points.
 https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
@@ -31,8 +29,8 @@ https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
 ? spostare visibility status property da map tiles
 - Restore ScriptableObjects in editor tools
 + refactoring Consumable
-- item identification mechanism
-- procedura iniziale di check consistency (es. spriteIds)
++ item identification mechanism
++ procedura iniziale di check consistency (es. validita' spriteIds)
 
 ++ refactoring Entity-Component-System
 	- fare git clone AnyRPG

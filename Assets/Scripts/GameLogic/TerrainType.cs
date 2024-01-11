@@ -10,6 +10,9 @@
             Hills1,
             Hills2,
             Mountains,
+
+            Wall,
+            Room,
         }
 
 
@@ -43,6 +46,9 @@
         public static TerrainDef Hills1 = new TerrainDef(TerrainType.Hills1, "hills1", "Hills", true, true);
         public static TerrainDef Hills2 = new TerrainDef(TerrainType.Hills2, "hills2", "Hills", true, true);
         public static TerrainDef Mountains = new TerrainDef(TerrainType.Mountains, "mountains", "Mountains", true, true);
+
+        public static TerrainDef Wall = new TerrainDef(TerrainType.Wall, "wall", "Wall", false, false);
+        public static TerrainDef Room = new TerrainDef(TerrainType.Room, "room", "Room", true, true);
 
 
         public static TerrainDef FromType(TerrainType terrainType)

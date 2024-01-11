@@ -531,7 +531,7 @@ GameObject:
   - component: {fileID: 74366371}
   - component: {fileID: 74366370}
   m_Layer: 5
-  m_Name: frame
+  m_Name: background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -760,6 +760,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statusLine: {fileID: 28245007}
+  severityColors: {fileID: 11400000, guid: a28e7fafd7aa3f8428b0590323aee7d2, type: 2}
 --- !u!4 &92445696
 Transform:
   m_ObjectHideFlags: 0
@@ -1975,7 +1976,7 @@ GameObject:
   - component: {fileID: 591228149}
   - component: {fileID: 591228148}
   m_Layer: 5
-  m_Name: background
+  m_Name: MaxHP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3133,7 +3134,7 @@ GameObject:
   - component: {fileID: 1255378834}
   - component: {fileID: 1255378833}
   m_Layer: 5
-  m_Name: hp
+  m_Name: CurrHP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3315,6 +3316,7 @@ GameObject:
   - component: {fileID: 1368748251}
   - component: {fileID: 1368748253}
   - component: {fileID: 1368748252}
+  - component: {fileID: 1368748254}
   m_Layer: 5
   m_Name: Player Stats Panel
   m_TagString: Untagged
@@ -3381,6 +3383,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1368748250}
   m_CullTransparentMesh: 1
+--- !u!114 &1368748254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1368748250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66680e7b79f7883478cb6aa66512ee64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hpBar: {fileID: 1750349022}
 --- !u!1 &1420489679
 GameObject:
   m_ObjectHideFlags: 0
