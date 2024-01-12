@@ -2,7 +2,6 @@
 
 ## Current sprint (v0.7)
 - game over state
-- feedback visuale stato mostro
 
 - irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - aggiornare visuals a mockup figma
@@ -12,6 +11,11 @@
 
 
 ## Improvements
+- scena di prova visuals con animazioni
+- quote random all'inizio
+"Travellers, like poets, are mostly an angry race".
+Richard Francis Burton
+- feedback visuale stato mostro
 - strutturare meglio il feedback del combattimento (markup statusline?)
 - creare "recipes" per combatStats, es. "1d3"
 - aggiungere campo updatedFields a notifica EntityUpdate
@@ -46,6 +50,7 @@ https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
 ## Errands
 - raccogliere file utili sapientia*
 - raccogliere txt Poliziano
+- provare mappa dipinta a mano
 
 ? scouting musica (https://www.freesoundtrackmusic.com/)
 ? suoni ambientali

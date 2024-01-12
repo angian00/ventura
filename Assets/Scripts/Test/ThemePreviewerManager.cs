@@ -18,8 +18,6 @@ namespace Ventura.Test
         }
 
 
-        public TextAsset configFile;
-
         public GameObject previewScreenContainer;
         public TMP_Dropdown themeDropdown;
         public TMP_Dropdown screenDropdown;
@@ -30,13 +28,15 @@ namespace Ventura.Test
         private Dictionary<string, TMP_FontAsset> _fontCache = new();
 
 
+        private static List<string> _previewScreenNames = new List<string>() { "Inventory", "Settings" };
+
 
         void Start()
         {
             findScreenObjs();
 
             screenDropdown.onValueChanged.AddListener(delegate { onScreenChosen(); });
-            //populateDropdown(screenDropdown, _configData.previewScreenNames); //FIXME
+            populateDropdown(screenDropdown, _previewScreenNames);
 
             themeDropdown.onValueChanged.AddListener(delegate { onThemeChosen(); });
             populateDropdown(themeDropdown, themePreviewerConfig.GetKeys());
@@ -77,11 +77,11 @@ namespace Ventura.Test
         private void findScreenObjs()
         {
             //FIXME: findScreenObjs
-            //foreach (var screenName in _configData.previewScreenNames)
-            //{
-            //    var screenObj = previewScreenContainer.transform.Find($"{screenName} Screen");
-            //    _previewScreenObjs.Add(screenName, screenObj);
-            //}
+            foreach (var screenName in _previewScreenNames)
+            {
+                var screenObj = previewScreenContainer.transform.Find($"{screenName} Screen");
+                _previewScreenObjs.Add(screenName, screenObj);
+            }
         }
 
 

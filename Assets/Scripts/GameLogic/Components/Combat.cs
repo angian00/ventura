@@ -33,6 +33,7 @@ namespace Ventura.GameLogic.Components
 
             return new ActionResult(true, $"{attacker.Name} attacks {defender.Name} and makes {damage} damage, killing him!", true);
         }
+
     }
 }
 
