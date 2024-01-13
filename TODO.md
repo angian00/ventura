@@ -23,8 +23,8 @@ Richard Francis Burton
 - sperimentare uso colliders vs resetVisibleEntities
 
 - dialog scelta nome savefile
-- visibility algorithms:
-https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
+- verificare performance visibility algorithm, nel caso:
+	https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
 
 - riattivare e migliorare PathfindingRequest 
 - generare cognomi degli autori dei libri

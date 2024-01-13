@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - very basic combat system
 - hp bar in map ui
 - cave terrain generator
+- basic visibility algorithm
 
 ### Changed
 - extracted RandomUtils from DataUtils
