@@ -11,7 +11,6 @@
 
 
 ## Improvements
-- scena di prova visuals con animazioni
 - quote random all'inizio
 "Travellers, like poets, are mostly an angry race".
 Richard Francis Burton
@@ -25,7 +24,6 @@ Richard Francis Burton
 
 - dialog scelta nome savefile
 - visibility algorithms:
-https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#:~:text=Bresenham's%20line%20algorithm%20is%20a,straight%20line%20between%20two%20points.
 https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
 
 - riattivare e migliorare PathfindingRequest 
@@ -51,6 +49,7 @@ https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
 - raccogliere file utili sapientia*
 - raccogliere txt Poliziano
 - provare mappa dipinta a mano
+- brainstorming actor effects, badges, etc.
 
 ? scouting musica (https://www.freesoundtrackmusic.com/)
 ? suoni ambientali

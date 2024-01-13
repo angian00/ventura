@@ -9,10 +9,25 @@ Author: [Nathan Harris](https://github.com/pixelfac).
 Licensed under [MIT License](https://opensource.org/license/mit/).
 
 
+### Visibility
+Line casting follows Bresenham's algorithm, which is patent-free, in its Wikipedia formulation:
+https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#:~:text=Bresenham's%20line%20algorithm%20is%20a,straight%20line%20between%20two%20points.
+
+
 ## Media resources
 
 ### Fonts
-Body text?
+Titles: Libre Baskerville
+Source: [Libre Baskerville](https://www.1001fonts.com/libre-baskerville-font.html).
+Author: [Impallari Type](https://www.1001fonts.com/users/impallari/).
+Licensed under [SIL Open Font License (OFL)](https://openfontlicense.org/).
+
+Subtitles: Liberation Sans
+Source: Unity3d Game Engine.
+Author: [Ascender](https://en.wikipedia.org/wiki/Ascender_Corporation).
+Licensed under [SIL Open Font License (OFL)](https://openfontlicense.org/).
+
+Body text: Griffo
 Source: [Flanker Griffo](https://www.1001fonts.com/flanker-griffo-font.html).
 Author: [Flanker](https://www.1001fonts.com/users/Flanker/).
 Licensed under [CC BY-ND](https://creativecommons.org/licenses/by-nd/3.0/).
