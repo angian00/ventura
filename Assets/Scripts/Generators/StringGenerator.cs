@@ -42,6 +42,7 @@ namespace Ventura.Generators
         //public static FileStringGenerator Sites = new FileStringGenerator("names_sites_international");
         public static FileStringGenerator Sites = new FileStringGenerator("names_sites_italia");
         public static FileStringGenerator FirstNames = new FileStringGenerator("names_people_toscana");
+        public static FileStringGenerator Jobs = new FileStringGenerator("village_jobs");
 
 
         protected FileStringGenerator(string sourceFile) : this(new string[] { sourceFile }) { }

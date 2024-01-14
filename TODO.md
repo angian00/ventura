@@ -1,9 +1,8 @@
 # TODO
 
 ## Current sprint (v0.7)
-- game over state
+- gestione game over
 
-- irrobustire il layout delle ui presenti rispetto al cambio di risoluzione/aspect ratio (anchor points, etc.)
 - aggiornare visuals a mockup figma
 
 
@@ -11,6 +10,8 @@
 
 
 ## Improvements
++ provare painting dungeon custom
+
 - quote random all'inizio
 "Travellers, like poets, are mostly an angry race".
 Richard Francis Burton
@@ -55,9 +56,6 @@ Richard Francis Burton
 ? suoni ambientali
 
 ## Brainstorming
-- Familiarity feedback
-- Detail info panels
-
 
 
 ## Milestones
@@ -79,40 +77,16 @@ Richard Francis Burton
 
 
 ## Prototyping
-### Procedural Item Generation
-- solo copertine libri
-- dimensioni
-- proporzioni
-- (sfumatura di) colore
-- motivo cornice
-- motivo centrale
-- texture (effetto di superficie)
-- accessori
-	- segnalibro
-	- lucchetto chiusura
-	- ...
-- frequenza per ogni valore di ogni parametro
-
-+ icona libro: orientamento/prospettiva
-+ alcuni valori disponibili solo per certe culture
+### Procedural Generation
+- Simulazione villaggi con relationships
 
 ### Biomes
 https://github.com/GrandPiaf/Biome-and-Vegetation-PCG 
-
+- 
 
 ### Visual Design
 - design HUD (vedi esempio gioco CrossCode)
 - design Character View
 
 - https://www.gameuidatabase.com/
-- Screenshot Strange Horticulture
-- https://www.color-hex.com/color-palettes/?keyword=Book
-- creare sfondo watercolor https://creativemarket.com/ArtistMef/2928714-Minimalist-Watercolor-Backgrounds
-- creare palette da https://www.mountangelabbey.org/library/illuminated-manuscripts/
 - provare icone pozioni con solo liquido colorato
-
-- scelta font
-	https://www.1001fonts.com/vinque-font.html
-	https://fontsgeek.com/lombardic-narrow-font
-	https://www.1001fonts.com/flanker-griffo-font.html
-	https://www.1001fonts.com/camelotcaps-font.html

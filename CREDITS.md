@@ -40,8 +40,12 @@ Source: [Game-icons.net](https://game-icons.net/).
 Licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
 
 
-UI Background
-...
-
 Concept art and some ui backgrounds created by Andrea Giancola, with [Deep Dream Generator](https://deepdreamgenerator.com/).
 Terms of use: https://deepdreamgenerator.com/terms.
+
+
+## Other Data
+Village Jobs list
+Source: [Midnight Wolf fandom.com site](https://midnight-wolf.fandom.com/wiki/Fantasy/Medieval_Character_Jobs_or_Occupations).
+Author: [Midnight Wolf Wiki community](https://midnight-wolf.fandom.com/).
+Licensed under [CC BY SA](https://www.fandom.com/licensing).

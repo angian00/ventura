@@ -1,0 +1,246 @@
+actor
+advocate (lawyer)
+alchemist
+animal handler
+apothecary
+architect
+archer
+archivist
+aristocrat
+armorer
+artisan
+artist
+astrologer
+baker
+banker
+barbarian
+barber
+bard
+barkeep
+barmaid
+beekeeper
+beer seller
+beggar
+blacksmith
+boatman
+bookbinder
+bookseller
+brewer
+bricklayer
+brick maker
+brigand
+brothel keeper
+buckle maker
+builder
+butcher
+caravan leader
+carpenter
+cartographer
+chandler
+charioteer
+chatelaine
+chef
+chieftain
+chirurgeon
+clergyman
+clerk
+clock maker
+clothworker
+cobbler
+commander
+concubine
+cook
+cooper
+copyist
+costermonger
+counselor
+courtesan
+courtier
+cowherd
+crossbowman
+cutler
+daimyo
+dairymaid
+dancer
+dictator
+diplomat
+distiller
+diver
+diviner
+doctor
+domestic servant
+emperor/empress
+eunuch
+explorer
+farmer
+fighter
+fisherman
+fishmonger
+footman
+furrier
+galley slave
+gardener
+geisha
+general
+gladiator
+glovemaker
+goldsmith
+grocer
+groom
+guardsman
+guildmaster
+harness maker
+hatmaker
+hay merchant
+healer
+hearthwitch
+herald
+herbalist
+herder
+hermit
+highwayman
+historian
+housemaid
+hunter
+illuminator
+infantryman
+innkeeper
+interpreter
+inventor
+jailer
+jester
+jeweler
+jongleur
+judge
+king
+kitchen drudge
+knight
+laborer
+lady
+lady in waiting
+leatherworker
+librarian
+linguist
+locksmith
+longbowman
+longshoreman
+lord
+maidservant
+majordomo
+man at arms
+mason
+masseur
+mayor
+mercer
+merchant
+messenger
+midwife
+miller
+miner
+minister
+minstrel
+monk
+mortician
+mourner
+musician
+necromancer
+noble
+nun
+nurse
+old-clothes seller
+page
+painter
+pariah
+pastry cook
+peasant
+perfumer
+philosopher
+physician
+pigkeeper
+pilgrim
+pirate
+plasterer
+potter
+priest/ess
+prince/ss
+privateer
+professor
+prostitute
+pursemaker
+queen
+ranger
+ratcatcher
+reeve
+ronin
+roofer
+ropemaker
+royal adviser
+rugmaker
+ruler
+saddler
+sailor
+samurai
+scabbard maker
+sculptor
+scavenger
+scholar
+scrivener
+seamstress
+servant
+shaman
+shepherd
+ship's captain
+shoemaker
+silversmith
+slave
+slaver
+smith
+soldier
+sorcerer/sorceress
+spice merchant
+squire
+stablehand
+stevedore
+stonemason
+storyteller
+steward
+street kid
+street seller
+street sweeper
+student
+surgeon
+surveyor
+swordsman
+sycophant
+tailor
+tanner
+tavernkeeper
+tax collector
+teacher
+teamster
+thatcher
+thief
+tinker
+torturer
+town crier
+toymaker
+trapper
+vendor
+vermin catcher
+veterinarian
+village chief
+vintner
+viking
+warlock
+warrior
+water carrier
+weaver
+wetnurse
+wine seller
+witch
+wizard
+woodcarver
+woodcutter
+wood seller
+wrestler
+writer
