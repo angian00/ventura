@@ -10,11 +10,15 @@
 
 
 ## Improvements
+- krita: 
+	- map tile wall (sassi) 
+	- icone items:
+		- pozione
+		- libro
+
 + provare painting dungeon custom
 
 - quote random all'inizio
-"Travellers, like poets, are mostly an angry race".
-Richard Francis Burton
 - feedback visuale stato mostro
 - strutturare meglio il feedback del combattimento (markup statusline?)
 - creare "recipes" per combatStats, es. "1d3"
@@ -47,8 +51,6 @@ Richard Francis Burton
 
 
 ## Errands
-- raccogliere file utili sapientia*
-- raccogliere txt Poliziano
 - provare mappa dipinta a mano
 - brainstorming actor effects, badges, etc.
 
@@ -79,6 +81,19 @@ Richard Francis Burton
 ## Prototyping
 ### Procedural Generation
 - Simulazione villaggi con relationships
+	- eventi: quarrels, falls in love, helps; 
+	- friendship levels
+	- children; sickness, deaths
+	- merchants
+	- job details: merchants, craftsmen
+	- priests, scholars
+	- fairs
+	- competitions
+	+ factions
+	+ travel
+	+ secrets
+- visualizzazione network relazioni
+
 
 ### Biomes
 https://github.com/GrandPiaf/Biome-and-Vegetation-PCG 
