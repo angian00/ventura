@@ -80,6 +80,17 @@
 
 ## Prototyping
 ### Procedural Generation
+- world generator
+	- cambiare a 10 i livelli di altitudine
+	- aggiungere legenda colormap
+	- aggiungere metodo arr2dStatistics a DataUtils
+	- creare laghi
+	+ indagare algorithm generazione laghi usando simulaz pioggia? calcolo minimi locali?
+	- aggiungere select metrica a TestWorldGenerator
+	? generare fiumi su mappe a scala ridotta
+	- pensare a multiscala
+	x razze
+
 - Simulazione villaggi con relationships
 	- eventi: quarrels, falls in love, helps; 
 	- friendship levels

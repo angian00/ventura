@@ -2,38 +2,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using Ventura.Test.WorldGenerating;
 
+
 namespace Ventura.Test
 {
-
-
     public class TestWorldGenerator : MonoBehaviour
     {
-        private static Color visibleColor = Color.green;
-        private static Color notVisibleColor = Color.blue;
-        private static Color startColor = Color.red;
-        private static Color endColor = Color.yellow;
-        private static Color wallColor = Color.grey;
-
         public GameObject terrainTileTemplate;
         public Transform terrainLayer;
 
         private GameObject[,] _mapTiles;
 
-        private static int MAP_WIDTH = 42;
+        private static int MAP_WIDTH = 40;
         private static int MAP_HEIGHT = 30;
 
-        private static Dictionary<int, Color> tileColors;
+        private static Dictionary<int, Color> biomeColors;
 
 
         static TestWorldGenerator()
         {
-            tileColors = new Dictionary<int, Color>
+            biomeColors = new Dictionary<TerrainType, Color>
             {
-                {0, Color.blue },
-                {1, Color.green },
-                {2, Color.yellow },
-                {3, Color.red },
-                {4, Color.white },
+                {TerrainType.Water, Color.blue },
+                {TerrainType.Desert, Color.red },
+                {TerrainType.Grass, Color.green },
+                {TerrainType.Forest, Color.black }, //TODO
+                {TerrainType.Tropical, Color.yellow },
+                {TerrainType.Rock, Color.grey },
+                {TerrainType.Snow, Color.white },
             };
         }
 
@@ -58,7 +53,7 @@ namespace Ventura.Test
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
                     var newMapTile = Instantiate(terrainTileTemplate, new Vector3(x, y), Quaternion.identity);
-                    newMapTile.GetComponent<SpriteRenderer>().color = notVisibleColor;
+                    newMapTile.GetComponent<SpriteRenderer>().color = Color.magenta;
                     newMapTile.transform.SetParent(terrainLayer);
                     _mapTiles[x, y] = newMapTile;
                 }
@@ -72,11 +67,22 @@ namespace Ventura.Test
             {
                 for (int y = 0; y < MAP_HEIGHT; y++)
                 {
-                    Color tileColor = tileColors[world.altitudes[x, y]];
+                    Color tileColor = valueColor(world.altitudes[x, y]);
+                    //Color tileColor = valueColor(Math.abs(world.latitudes[x, y]));
+                    //Color tileColor = valueColor(world.temperatures[x, y]);
+                    //Color tileColor = valueColor(world.moistures[x, y]);
+                    //Color tileColor = biomeColors[world.terrain[x, y]];
 
                     _mapTiles[x, y].GetComponent<SpriteRenderer>().color = tileColor;
                 }
             }
+        }
+
+        private static Color valueColor(int value, int maxValue = 10)
+        {
+            const Color baseColor = Color.red;
+
+            return Color.lerp(baseColor.black, baseColor, (float)value / maxValue);
         }
     }
 }
