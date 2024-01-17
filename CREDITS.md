@@ -10,7 +10,7 @@ Licensed under [MIT License](https://opensource.org/license/mit/).
 
 
 ### Visibility
-Line casting follows Bresenham's algorithm, which is patent-free, in its Wikipedia formulation:
+Line casting follows Bresenham's algorithm (which is patent-free):
 https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#:~:text=Bresenham's%20line%20algorithm%20is%20a,straight%20line%20between%20two%20points.
 
 

@@ -20,6 +20,18 @@ namespace Ventura.Util
             return res;
         }
 
+        public static int[] IntValueStats(int[,] arr2d, int maxValue)
+        {
+            var statsArr = new int[maxValue + 1];
+
+            foreach (var arrElem in arr2d)
+            {
+                statsArr[arrElem]++;
+            }
+
+            return statsArr;
+        }
+
         public static int CountMatchingNeighbours<T>(T[,] arr2d, T targetValue, int x, int y, int radius = 1)
         {
             int nMatches = 0;

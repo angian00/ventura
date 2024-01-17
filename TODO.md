@@ -10,6 +10,18 @@
 
 
 ## Improvements
+- rifare wrapping noise usando simplex 4d:
+https://ronvalstar.nl/creating-tileable-noise-maps 
+o
+https://gamedev.stackexchange.com/questions/23625/how-do-you-generate-tileable-perlin-noise
+
++ 
+
+https://github.com/KdotJPG/OpenSimplex2
+o
+https://github.com/weswigham/simplex/blob/master/c/src/simplex.c
+
+
 - krita: 
 	- map tile wall (sassi) 
 	- icone items:
@@ -28,8 +40,6 @@
 - sperimentare uso colliders vs resetVisibleEntities
 
 - dialog scelta nome savefile
-- verificare performance visibility algorithm, nel caso:
-	https://www.roguebasin.com/index.php/Restrictive_Precise_Angle_Shadowcasting
 
 - riattivare e migliorare PathfindingRequest 
 - generare cognomi degli autori dei libri
@@ -81,14 +91,13 @@
 ## Prototyping
 ### Procedural Generation
 - world generator
-	- cambiare a 10 i livelli di altitudine
-	- aggiungere legenda colormap
-	- aggiungere metodo arr2dStatistics a DataUtils
-	- creare laghi
-	+ indagare algorithm generazione laghi usando simulaz pioggia? calcolo minimi locali?
-	- aggiungere select metrica a TestWorldGenerator
-	? generare fiumi su mappe a scala ridotta
+	- wrapping noise: seguire http://www.jgallant.com/procedurally-generating-wrapping-world-maps-in-unity-csharp-part-1/#generatingheight
+		e in particolare usare https://github.com/TinkerWorX/AccidentalNoiseLibrary
+	- ghiaccio su acqua con temperature molto basse
 	- pensare a multiscala
+	? generare fiumi su mappe a scala ridotta
+	+ indagare algorithm generazione laghi usando simulaz pioggia? calcolo minimi locali? "flood fill"
+	- creare laghi
 	x razze
 
 - Simulazione villaggi con relationships

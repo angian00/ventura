@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - hp bar in map ui
 - cave terrain generator
 - basic visibility algorithm
+- experiments with world generation
 
 ### Changed
 - extracted RandomUtils from DataUtils
