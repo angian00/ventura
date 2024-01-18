@@ -216,6 +216,12 @@ namespace Ventura.Unity.Behaviours
                 }
             }
 
+            if (_gameState.Player.CurrHP <= 0)
+            {
+                EventManager.Publish(new TextNotification($"{_gameState.Player.Name} is dead. Game is over", TextNotification.Severity.Critical));
+                EventManager.Publish(new SystemRequest(SystemRequest.Command.GameOver));
+            }
+
             return actionResult.Success;
         }
 

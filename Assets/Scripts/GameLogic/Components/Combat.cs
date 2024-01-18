@@ -27,8 +27,6 @@ namespace Ventura.GameLogic.Components
 
 
             gameState.CurrMap.RemoveEntity(defender);
-
-            //TODO: if (defender is Player) --> game over event
             //FUTURE: drop body
 
             return new ActionResult(true, $"{attacker.Name} attacks {defender.Name} and makes {damage} damage, killing him!", true);

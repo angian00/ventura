@@ -9,7 +9,7 @@ namespace Ventura.Unity.Behaviours
     public class SystemManager : MonoBehaviour
     {
         private const string savegameFile = "testSave.json";
-
+        private const int restartDelaySeconds = 2;
 
         public GameManager gameManager;
 
@@ -54,6 +54,11 @@ namespace Ventura.Unity.Behaviours
                 case SystemRequest.Command.Save:
                     gameManager.SaveGame(savegameFile);
                     break;
+
+                case SystemRequest.Command.GameOver:
+                    Invoke("restartGame", restartDelaySeconds);
+                    break;
+
             }
         }
 
@@ -69,6 +74,10 @@ namespace Ventura.Unity.Behaviours
 #endif
         }
 
+        private void restartGame()
+        {
+            SceneManager.LoadScene(UnityUtils.START_SCENE_NAME);
+        }
     }
 }
 

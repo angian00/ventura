@@ -78,6 +78,7 @@ namespace Ventura.Unity.Behaviours
             {
                 ShowPopup(((AskYesNoRequest)uiRequest).title, ((AskYesNoRequest)uiRequest).systemCommand);
             }
+
         }
 
         private void resetDefaultView()

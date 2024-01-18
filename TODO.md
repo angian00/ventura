@@ -1,8 +1,6 @@
 # TODO
 
 ## Current sprint (v0.7)
-- gestione game over
-
 - aggiornare visuals a mockup figma
 
 

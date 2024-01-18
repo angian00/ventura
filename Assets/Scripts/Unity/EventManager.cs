@@ -87,6 +87,7 @@ namespace Ventura.Unity.Events
             Exit,
             Load,
             Save,
+            GameOver,
         }
 
         public Command command { get; }
