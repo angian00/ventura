@@ -1,4 +1,5 @@
 using System;
+using TinkerWorX.AccidentalNoiseLibrary;
 using UnityEngine;
 using Ventura.Util;
 
@@ -37,8 +38,7 @@ namespace Ventura.Test.WorldGenerating
 
     public class WorldGenerator
     {
-        //public static int MAX_ALTITUDE = 4; //values go from 0 to MAX_ALTITUDE
-        public static int MAX_ALTITUDE = 10;
+        public static int MAX_ALTITUDE = 10; //values go from 0 to MAX_ALTITUDE
         public static int MAX_LATITUDE = 10; //values go from -MAX_LATITUDE to +MAX_LATITUDE
         public static int MAX_TEMPERATURE = 10;
         public static int MAX_MOISTURE = 10;
@@ -63,79 +63,76 @@ namespace Ventura.Test.WorldGenerating
         {
             DebugUtils.Log("generateAltitudes");
 
-            //var noiseFrequencies = new float[] { .4f, .8f, 1.6f };
-            //var noiseAmplitudes = new float[] { 0.6f, 0.4f, 0.2f };
-            var noiseFrequencies = new float[] { 1f };
-            var noiseAmplitudes = new float[] { 1f };
-            //var quantizationLevels = new float[] { 0.65f, 0.68f, 0.7f, 0.74f, 0.78f, 0.85f, 0.9f, 0.95f, 0.98f, 0.99f };
-            var quantizationLevels = new float[] { 0.60f, 0.65f, 0.7f, 0.74f, 0.78f, 0.85f, 0.9f, 0.95f, 0.98f, 0.99f };
+            var quantizationLevels = new float[] { 0.40f, 0.50f, 0.60f, 0.65f, 0.70f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f };
 
-            return generateNoise(width, height, true, noiseFrequencies, noiseAmplitudes, quantizationLevels);
+            return generateNoise(width, height, true, quantizationLevels);
         }
 
 
-        private static int seedProg = 101;
-        private static int[,] generateNoise(int width, int height, bool isWrapped, float[] noiseFrequencies, float[] noiseAmplitudes, float[] quantizationLevels)
+        private static int[,] generateNoise(int width, int height, bool isWrapped, float[] quantizationLevels)
         {
-            //stats collection
-            var maxNoise = -1.0f;
+            ImplicitFractal HeightMap = new ImplicitFractal(FractalType.Multi, BasisType.Simplex, InterpolationType.Quintic);
+            HeightMap.Octaves = 5;
+            HeightMap.Lacunarity = 2.5;
+            //HeightMap.Lacunarity = 1.2;
+
+            var minNoise = 999.0f;
+            var maxNoise = -999.0f;
             var cumNoise = 0.0f;
-            //
 
-
-            var res = new int[width, height];
-            var seed = (int)Math.Round(UnityEngine.Random.value * 100_000);
+            var noiseValues = new float[width, height];
 
             for (var x = 0; x < width; x++)
             {
                 for (var y = 0; y < height; y++)
                 {
-                    float noiseVal = 0.0f;
-                    for (var iOctave = 0; iOctave < noiseFrequencies.Length; iOctave++)
+                    var xNormalized = ((float)x) / width;
+                    var yNormalized = ((float)y) / height;
+
+                    float noiseValue;
+                    if (isWrapped)
                     {
-                        if (isWrapped)
-                        {
-                            var s = noiseFrequencies[iOctave] * x / width;
-                            var t = noiseFrequencies[iOctave] * y / height;
-                            var nx = Math.Cos(s * 2 * MathF.PI) / (Mathf.PI);
-                            var ny = Math.Cos(t * 2 * MathF.PI) / (Mathf.PI);
-                            var nz = Math.Sin(s * 2 * MathF.PI) / (Mathf.PI);
-                            var nw = Math.Sin(t * 2 * MathF.PI) / (Mathf.PI);
+                        var s = xNormalized;
+                        var nx = Math.Cos(s * 2 * MathF.PI) / (2 * Mathf.PI);
+                        var ny = Math.Sin(s * 2 * MathF.PI) / (2 * Mathf.PI);
+                        var nz = yNormalized;
 
-                            noiseVal += noiseAmplitudes[iOctave] * (0.5f + OpenSimplex2S.Noise4_Fallback(seed, nx, ny, nz, nw));
-                        }
-                        else
-                        {
-
-                            var noiseX = noiseFrequencies[iOctave] * x / width;
-                            var noiseY = noiseFrequencies[iOctave] * y / height;
-                            //noiseVal += noiseAmplitudes[iOctave] * Mathf.PerlinNoise(noiseX, noiseY
-                            noiseVal += noiseAmplitudes[iOctave] * (0.5f + OpenSimplex2S.Noise2(seed, noiseX, noiseY));
-                        }
+                        noiseValue = (float)HeightMap.Get(nx, ny, nz);
+                    }
+                    else
+                    {
+                        noiseValue = (float)HeightMap.Get(xNormalized, yNormalized);
                     }
 
-                    //DebugUtils.Log($"noiseVal ({x}, {y}): {noiseVal}");
-                    if (noiseVal > maxNoise)
-                        maxNoise = noiseVal;
-                    cumNoise += noiseVal;
 
-                    var altitude = quantizeNoise(noiseVal, quantizationLevels);
+                    noiseValues[x, y] = noiseValue;
+                    //DebugUtils.Log($"noiseValue ({x}, {y}): {noiseValue}");
 
-
-                    res[x, y] = altitude;
+                    if (noiseValue > maxNoise)
+                        maxNoise = noiseValue;
+                    if (noiseValue < minNoise)
+                        minNoise = noiseValue;
+                    cumNoise += noiseValue;
                 }
             }
 
-            seedProg += 10000;
+            DebugUtils.Log($"DEBUG generateNoise - min noise: {minNoise}, max noise: {maxNoise}, avg noise: {cumNoise / (width * height)}");
 
-            var countValues = DataUtils.IntValueStats(res, quantizationLevels.Length);
-            DebugUtils.Log($"DEBUG generateNoise - maxNoise: {maxNoise}");
-            for (var i = 0; i < countValues.Length; i++)
+            var res = new int[width, height];
+            for (var x = 0; x < width; x++)
             {
-                DebugUtils.Log($"DEBUG - countValues [{i}]: {countValues[i]}");
+                for (var y = 0; y < height; y++)
+                {
+                    var level = quantizeNoise(noiseValues[x, y], minNoise, maxNoise, quantizationLevels);
+                    res[x, y] = level;
+                }
             }
 
-            DebugUtils.Log($"DEBUG - average noise: {cumNoise / (width * height)}");
+            var countLevels = DataUtils.IntValueStats(res, quantizationLevels.Length);
+            for (var i = 0; i < countLevels.Length; i++)
+            {
+                DebugUtils.Log($"DEBUG - countLevels [{i}]: {countLevels[i]}");
+            }
 
 
             return res;
@@ -199,7 +196,7 @@ namespace Ventura.Test.WorldGenerating
                 }
             }
 
-            //TODO: generate lakes noise
+            //FUTURE: generate lakes
             //highAltitudeLakeNoise = PerlinNoise(x * highAltitudeLakeScale, y * highAltitudeLakeScale)
             // maxHighAltitude = 0.8  # Altitudine massima consentita per laghi in altitudine elevata
             // if altitude > seaThreshold and altitude < maxHighAltitude and highAltitudeLakeNoise > highAltitudeLakeThreshold:
@@ -217,11 +214,8 @@ namespace Ventura.Test.WorldGenerating
             var h = water.GetLength(1);
             var moistures = new int[w, h];
 
-            var noiseFrequencies = new float[] { .4f, .8f, 1.6f, 3.2f };
-            var noiseAmplitudes = new float[] { 0.6f, 0.4f, 0.2f, 0.1f };
-            var quantizationLevels = new float[] { 0.5f, 0.6f, 0.7f, 0.8f, 0.9f };
-
-            var randomMoistures = generateNoise(w, h, true, noiseFrequencies, noiseAmplitudes, quantizationLevels);
+            var quantizationLevels = new float[] { 0.3f, 0.5f, 0.6f, 0.7f, 0.8f };
+            var randomMoistures = generateNoise(w, h, true, quantizationLevels);
 
             for (var x = 0; x < w; x++)
             {
@@ -232,7 +226,7 @@ namespace Ventura.Test.WorldGenerating
                         moistures[x, y] = MAX_MOISTURE;
                     else
                     {
-                        int baseMoisture = (int)Math.Round(MAX_MOISTURE / 2.5f) - (int)Math.Round(Math.Abs(latitudes[x, y]) / 3.0f);
+                        int baseMoisture = (int)Math.Round(MAX_MOISTURE / 2.0f) - (int)Math.Round(Math.Abs(latitudes[x, y]) / 3.0f);
 
                         if (DataUtils.CountMatchingNeighbours(water, true, x, y) > 0)
                             //close to water
@@ -338,14 +332,15 @@ namespace Ventura.Test.WorldGenerating
         }
 
 
-        private static int quantizeNoise(float noiseVal, float[] quantizationLevels)
+        private static int quantizeNoise(float noiseValue, float minValue, float maxValue, float[] quantizationLevels)
         {
-            var totalVal = noiseVal;
+            //renormalize from 0 to 1
+            var normalizedValue = (noiseValue - minValue) / (maxValue - minValue);
 
             int iLevel;
             for (iLevel = 0; iLevel < quantizationLevels.Length; iLevel++)
             {
-                if (totalVal < quantizationLevels[iLevel])
+                if (normalizedValue < quantizationLevels[iLevel])
                     break;
             }
 

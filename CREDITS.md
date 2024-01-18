@@ -14,6 +14,14 @@ Line casting follows Bresenham's algorithm (which is patent-free):
 https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#:~:text=Bresenham's%20line%20algorithm%20is%20a,straight%20line%20between%20two%20points.
 
 
+### Noise Generation
+
+Accidental Noise Library
+Source: https://github.com/TinkerWorX/AccidentalNoiseLibrary
+Author: Original implementation by [Joshua Tippetts](https://accidentalnoise.sourceforge.net/index.html); C# port by [TinkerWorX](https://github.com/TinkerWorX).
+Licensed under [MIT license](https://opensource.org/license/mit/).
+
+
 ## Media resources
 
 ### Fonts
