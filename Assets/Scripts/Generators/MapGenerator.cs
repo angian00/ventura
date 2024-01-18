@@ -45,10 +45,10 @@ namespace Ventura.Generators
                 generateSites(newMap);
             //generateSites(newMap, 1);
 
-            //generateSomeItems(newMap);
-            //generateSomeMonsters(newMap);
+            generateSomeItems(newMap);
+            generateSomeMonsters(newMap);
             //generateSomeItems(newMap, 1);
-            generateSomeMonsters(newMap, 1);
+            //generateSomeMonsters(newMap, 1);
 
             newMap.StartingPos = RandomUtils.RandomEmptyPos(newMap);
 
