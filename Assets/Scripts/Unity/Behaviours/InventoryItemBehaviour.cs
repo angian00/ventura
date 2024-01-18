@@ -16,7 +16,7 @@ namespace Ventura.Unity.Behaviours
         private GameItem _gameItem;
         public GameItem GameItem { set { _gameItem = value; } }
 
-        public SpriteConfig spriteConfig;
+        public StringSpriteConfig spriteConfig;
 
         [HideInInspector]
         public InventoryViewBehaviour inventoryManager;

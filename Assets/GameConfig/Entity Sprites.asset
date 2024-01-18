@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propertyValues:
   - key: site
-    value: {fileID: 21300000, guid: 14312d7a6c40d5e4ebe125203bcc5273, type: 3}
+    value: {fileID: 21300000, guid: ca9adf1096a74144db6ef600b9d51c30, type: 3}
   - key: item
     value: {fileID: 21300000, guid: b1a250e4e4e8ac0408c6f3751a5cc2f7, type: 3}
   - key: player
-    value: {fileID: 21300000, guid: 3372b62438055a24583d78fdfb51c3b5, type: 3}
+    value: {fileID: 21300000, guid: f3a26563ff789244493925ee116c4595, type: 3}
   - key: book
     value: {fileID: 21300000, guid: 948d1b9d0a79c5b4eb83526be8b4c6df, type: 3}
   - key: butterfly

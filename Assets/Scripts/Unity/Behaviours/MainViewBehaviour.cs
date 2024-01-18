@@ -13,8 +13,10 @@ namespace Ventura.Unity.Behaviours
 
     public class MainViewBehaviour : MonoBehaviour
     {
-        public TerrainColorConfig mapColors;
-        public SpriteConfig spriteConfig;
+        //public TerrainColorConfig mapColors;
+        public StringColorConfig uiColors;
+        public StringSpriteConfig entitySpriteConfig;
+        public TerrainSpriteConfig mapSpriteConfig;
 
         public GameObject terrainTileTemplate;
         public GameObject fogTileTemplate;
@@ -191,7 +193,12 @@ namespace Ventura.Unity.Behaviours
                     var newMapTile = Instantiate(terrainTileTemplate, new Vector3(x, y), Quaternion.identity);
                     newMapTile.GetComponent<MapTileBehaviour>().mapManager = this;
                     newMapTile.GetComponent<MapTileBehaviour>().MapPos = new Vector2Int(x, y);
-                    newMapTile.GetComponent<SpriteRenderer>().color = mapColors.Get(terrain.Type);
+
+                    newMapTile.transform.Find("Background").GetComponent<SpriteRenderer>().color = uiColors.Get("mapBackground");
+                    newMapTile.transform.Find("Terrain").GetComponent<SpriteRenderer>().color = uiColors.Get("mapTerrains");
+                    newMapTile.transform.Find("Terrain").GetComponent<SpriteRenderer>().sprite = mapSpriteConfig.Get(terrain.Type);
+                    if (mapSpriteConfig.Get(terrain.Type) == null)
+                        throw new GameException($"Sprite not found for terrain {DataUtils.EnumToStr(terrain.Type)}");
                     newMapTile.transform.SetParent(terrainLayer);
                     _mapTiles[x, y] = newMapTile;
 
@@ -243,10 +250,11 @@ namespace Ventura.Unity.Behaviours
             var newEntityObj = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
             newEntityObj.name = e.Name;
 
-            newEntityObj.GetComponent<SpriteRenderer>().sprite = spriteConfig.Get(e.SpriteId);
-            var c = UnityUtils.ColorFromHex(e.Color);
-            if (c != null)
-                newEntityObj.GetComponent<SpriteRenderer>().color = (Color)c;
+            newEntityObj.GetComponent<SpriteRenderer>().sprite = entitySpriteConfig.Get(e.SpriteId);
+            newEntityObj.GetComponent<SpriteRenderer>().color = uiColors.Get("mapEntities");
+            //var c = UnityUtils.ColorFromHex(e.Color);
+            //if (c != null)
+            //    newEntityObj.GetComponent<SpriteRenderer>().color = (Color)c;
 
             newEntityObj.transform.SetParent(_entityLayers[e.GetType()]);
             _entityObjs[e.Id] = newEntityObj;

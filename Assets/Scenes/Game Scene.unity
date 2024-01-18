@@ -393,7 +393,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 10, y: 0}
+  m_AnchoredPosition: {x: 10, y: 10}
   m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &28245007
@@ -2167,8 +2167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27b861d4ebb2090438619b9f927d6354, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapColors: {fileID: 11400000, guid: 2e218ade60d6a3a45ba026da6ab9246e, type: 2}
-  spriteConfig: {fileID: 11400000, guid: 048d790b8719af643ba5875c4edfb8a8, type: 2}
+  uiColors: {fileID: 11400000, guid: 20849687a9939734a9f0764eca68268f, type: 2}
+  entitySpriteConfig: {fileID: 11400000, guid: 048d790b8719af643ba5875c4edfb8a8, type: 2}
+  mapSpriteConfig: {fileID: 11400000, guid: c79952c239f4c6347a0b8f82dec44804, type: 2}
   terrainTileTemplate: {fileID: 2557218920047493518, guid: 2c5ef730c56f37a4eb97bc10039fabda, type: 3}
   fogTileTemplate: {fileID: 2557218920047493518, guid: dc8abf41ac7b8a24686b20306c063736, type: 3}
   entityTemplate: {fileID: 2557218920047493518, guid: b0b30a744950af743bfe53255eb891f0, type: 3}
@@ -2231,7 +2232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!20 &886285555
 Camera:
   m_ObjectHideFlags: 0

@@ -2,12 +2,23 @@
 
 ## Current sprint (v0.7)
 - aggiornare visuals a mockup figma
-
+	- sprite goblin
+	- sprite pozione
+	- cornice player
+	- fog
+	+ inventory
+		- titolo (bitmap)
+		- quadratini item
+	- prova deploy itch
+- usare visibility
 
 ## Bugfixing
 
 
 ## Improvements
+- limitare movimento map camera ai bordi
+- usare pathfinding per ai ostile
+
 - krita: 
 	- map tile wall (sassi) 
 	- icone items:
