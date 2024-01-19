@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using Ventura.GameLogic.Algorithms;
 using Ventura.GameLogic.Entities;
 using Ventura.Unity.Events;
 using Ventura.Util;
@@ -13,8 +14,8 @@ namespace Ventura.GameLogic
     [Serializable]
     public class GameMap : GameLogicObject, Container, ISerializationCallbackReceiver
     {
-        //const bool MAP_DEBUGGING = false;
-        const bool MAP_DEBUGGING = true;
+        const bool MAP_DEBUGGING = false;
+        //const bool MAP_DEBUGGING = true;
 
         const float VISIBILITY_RADIUS = 4.0f;
 
@@ -52,6 +53,8 @@ namespace Ventura.GameLogic
         //only exposed through specific methods
         //public HashSet<Entity> Entities { get => _entities; }
 
+        private Visibility _visibilityAlgo;
+
 
         public GameMap(string name, string label, TerrainDef[,] terrain)
         {
@@ -80,6 +83,8 @@ namespace Ventura.GameLogic
                         _explored[x, y] = true;
                 }
             }
+
+            _visibilityAlgo = new Visibility(GetOpaqueTiles());
         }
 
 
@@ -295,6 +300,22 @@ namespace Ventura.GameLogic
             return blocked;
         }
 
+
+        public bool[,] GetOpaqueTiles()
+        {
+            var opaque = new bool[_width, _height];
+            for (var x = 0; x < _width; x++)
+            {
+                for (var y = 0; y < _height; y++)
+                {
+                    opaque[x, y] = (!_terrain[x, y].Transparent);
+                }
+            }
+
+            return opaque;
+        }
+
+
         public Vector2Int MoveActorTo(Actor a, int targetX, int targetY)
         {
             if (GetAnyEntityAt<Actor>(targetX, targetY) != a && !IsWalkable(targetX, targetY))
@@ -304,19 +325,18 @@ namespace Ventura.GameLogic
                 a.MoveTo(targetX, targetY);
 
             if (a is Player)
-                updateExploration(targetX, targetY);
+                updateExploration(a.pos);
 
 
             return new Vector2Int(a.x, a.y);
         }
 
 
-        private void updateExploration(int targetX, int targetY)
+        private void updateExploration(Vector2Int targetPos)
         {
             var r = VISIBILITY_RADIUS;
 
             //GameDebugging.Log("updateExploration");
-            //fov.compute(this.player.x, this.player.y, lightRadius, this.setFov.bind(this))
 
             //reset visible
             for (var x = 0; x < _width; x++)
@@ -324,18 +344,28 @@ namespace Ventura.GameLogic
                     _visible[x, y] = false;
 
 
-            //FUTURE: use Unity line-of-sight algorithm
-            var startX = (int)Math.Max(targetX - r, 0);
-            var endX = (int)Math.Min(targetX + r, _width - 1);
-            var startY = (int)Math.Max(targetY - r, 0);
-            var endY = (int)Math.Min(targetY + r, _height - 1);
+            ////FUTURE: use Unity line-of-sight algorithm
+            //var startX = (int)Math.Max(targetX - r, 0);
+            //var endX = (int)Math.Min(targetX + r, _width - 1);
+            //var startY = (int)Math.Max(targetY - r, 0);
+            //var endY = (int)Math.Min(targetY + r, _height - 1);
 
-            for (var x = startX; x <= endX; x++)
+            //for (var x = startX; x <= endX; x++)
+            //{
+            //    for (var y = startY; y <= endY; y++)
+            //    {
+            //        _visible[x, y] = true;
+            //        _explored[x, y] = true;
+            //    }
+            //}
+
+            _visible = _visibilityAlgo.ComputeVisibility(targetPos, VISIBILITY_RADIUS);
+            for (var x = 0; x < _width; x++)
             {
-                for (var y = startY; y <= endY; y++)
+                for (var y = 0; y < _height; y++)
                 {
-                    _visible[x, y] = true;
-                    _explored[x, y] = true;
+                    if (_visible[x, y])
+                        _explored[x, y] = true;
                 }
             }
 

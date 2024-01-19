@@ -21,6 +21,8 @@ namespace Ventura.Generators
             DebugUtils.Log("GenerateMap()");
             const int WORLD_MAP_WIDTH = 80;
             const int WORLD_MAP_HEIGHT = 65;
+            const int CAVE_MAP_WIDTH = 30;
+            const int CAVE_MAP_HEIGHT = 30;
 
             if (mapName == null)
                 mapName = FileStringGenerator.Sites.GenerateString();
@@ -33,7 +35,7 @@ namespace Ventura.Generators
                     terrainMap = WildernessTerrainGenerator.generateTerrain(WORLD_MAP_WIDTH, WORLD_MAP_HEIGHT);
                     break;
                 case MapType.Cave:
-                    terrainMap = CaveTerrainGenerator.generateTerrain(20, 20);
+                    terrainMap = CaveTerrainGenerator.generateTerrain(CAVE_MAP_WIDTH, CAVE_MAP_HEIGHT);
                     break;
                 default:
                     throw new GameException($"Invalid map type: {DataUtils.EnumToStr(mapType)}");

@@ -27,3 +27,5 @@ MonoBehaviour:
     value: {r: 0.8980392, g: 0.8627451, b: 0.77254903, a: 1}
   - key: mapEntities
     value: {r: 0.4862745, g: 0.44313726, b: 0.36862746, a: 1}
+  - key: auraHostile
+    value: {r: 0.94509804, g: 0.003921569, b: 0.003921569, a: 0.3764706}

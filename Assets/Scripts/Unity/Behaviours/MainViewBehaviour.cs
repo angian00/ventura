@@ -250,8 +250,20 @@ namespace Ventura.Unity.Behaviours
             var newEntityObj = Instantiate(entityTemplate, new Vector3(e.x, e.y), Quaternion.identity);
             newEntityObj.name = e.Name;
 
-            newEntityObj.GetComponent<SpriteRenderer>().sprite = entitySpriteConfig.Get(e.SpriteId);
-            newEntityObj.GetComponent<SpriteRenderer>().color = uiColors.Get("mapEntities");
+            var entitySprite = newEntityObj.transform.Find("Sprite");
+            var auraSprite = newEntityObj.transform.Find("Aura");
+            entitySprite.GetComponent<SpriteRenderer>().sprite = entitySpriteConfig.Get(e.SpriteId);
+            entitySprite.GetComponent<SpriteRenderer>().color = uiColors.Get("mapEntities");
+            if (e is GameItem)
+            {
+                entitySprite.localScale = new Vector3(0.75f, 0.75f, 1.0f);
+            }
+            else if (e is Monster)
+            {
+                auraSprite.GetComponent<SpriteRenderer>().color = uiColors.Get("auraHostile");
+                auraSprite.gameObject.SetActive(true);
+            }
+
             //var c = UnityUtils.ColorFromHex(e.Color);
             //if (c != null)
             //    newEntityObj.GetComponent<SpriteRenderer>().color = (Color)c;
@@ -336,7 +348,8 @@ namespace Ventura.Unity.Behaviours
 
             if (targetEntityObjs.Count == 1)
             {
-                targetEntityObjs[0].GetComponent<SpriteRenderer>().enabled = isTileVisible;
+                //targetEntityObjs[0].transform.Find("Sprite").GetComponent<SpriteRenderer>().enabled = isTileVisible;
+                targetEntityObjs[0].SetActive(isTileVisible);
                 return;
             }
 
@@ -358,7 +371,8 @@ namespace Ventura.Unity.Behaviours
                 else
                     mustEnable = false;
 
-                e.GetComponent<SpriteRenderer>().enabled = mustEnable;
+                //e.transform.Find("Sprite").GetComponent<SpriteRenderer>().enabled = mustEnable;
+                e.SetActive(mustEnable);
             }
         }
 

@@ -2,15 +2,11 @@
 
 ## Current sprint (v0.7)
 - aggiornare visuals a mockup figma
-	- sprite goblin
-	- sprite pozione
 	- cornice player
 	- fog
 	+ inventory
 		- titolo (bitmap)
 		- quadratini item
-	- prova deploy itch
-- usare visibility
 
 ## Bugfixing
 
@@ -72,17 +68,12 @@
 
 
 ### 0.x
-- skill system
-- full-fledged familiarity
-- secondary ui
-	- stats
-	- knowledge base
+- ui mobile-friendly
+- pathfinding per hostile ai
+
 
 ### 0.xx
-- shaders (https://www.ronja-tutorials.com/)
-- procedural generation
-	- books
-	- butterflies
+- studiare shaders (https://www.ronja-tutorials.com/)
 
 
 ## Prototyping

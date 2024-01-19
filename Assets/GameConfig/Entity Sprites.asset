@@ -24,6 +24,6 @@ MonoBehaviour:
   - key: butterfly
     value: {fileID: 21300000, guid: b7f27931f0bb9224681dae342fdffc5c, type: 3}
   - key: goblin
-    value: {fileID: 21300000, guid: 11c5e9d4bd52880439918eccf1457b90, type: 3}
+    value: {fileID: 21300000, guid: a91e7412293307b49b1263aaccba37cf, type: 3}
   - key: potion
-    value: {fileID: 21300000, guid: 90a8bfd12e01e6a41b7f5ec1ee8684d7, type: 3}
+    value: {fileID: 21300000, guid: 54435e9b42b7a3e49a2f9637c9c94d08, type: 3}
