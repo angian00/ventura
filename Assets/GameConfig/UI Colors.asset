@@ -29,3 +29,7 @@ MonoBehaviour:
     value: {r: 0.4862745, g: 0.44313726, b: 0.36862746, a: 1}
   - key: auraHostile
     value: {r: 0.94509804, g: 0.003921569, b: 0.003921569, a: 0.3764706}
+  - key: playerHighlight
+    value: {r: 0.8509804, g: 0.36078432, b: 0.16470589, a: 1}
+  - key: mapFog
+    value: {r: 0.37254903, g: 0.35686275, b: 0.35686275, a: 1}

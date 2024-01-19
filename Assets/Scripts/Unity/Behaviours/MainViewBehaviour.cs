@@ -22,13 +22,11 @@ namespace Ventura.Unity.Behaviours
         public GameObject fogTileTemplate;
         public GameObject entityTemplate;
 
-        public Color fogColor = Color.grey;
-
         [Range(0.0f, 1.0f)]
         public float fogExploredAlpha = 0.2f;
 
         [Range(0.0f, 1.0f)]
-        public float fogUnexploredAlpha = 0.9f;
+        public float fogUnexploredAlpha = 1.0f;
 
 
         private float[] zoomLevelsFactors = { 0.5f, 0.75f, 1.0f, 1.5f, 2.0f, };
@@ -203,7 +201,8 @@ namespace Ventura.Unity.Behaviours
                     _mapTiles[x, y] = newMapTile;
 
                     var newFogTile = Instantiate(fogTileTemplate, new Vector3(x, y), Quaternion.identity);
-                    newFogTile.GetComponent<SpriteRenderer>().color = fogColor;
+                    newFogTile.transform.Find("Sprite").GetComponent<SpriteRenderer>().color = uiColors.Get("mapFog");
+                    newFogTile.transform.Find("Background").GetComponent<SpriteRenderer>().color = uiColors.Get("mapBackground");
                     newFogTile.transform.SetParent(fogLayer);
 
                     _fogTiles[x, y] = newFogTile;
@@ -252,9 +251,16 @@ namespace Ventura.Unity.Behaviours
 
             var entitySprite = newEntityObj.transform.Find("Sprite");
             var auraSprite = newEntityObj.transform.Find("Aura");
+            var borderSprite = newEntityObj.transform.Find("Border");
             entitySprite.GetComponent<SpriteRenderer>().sprite = entitySpriteConfig.Get(e.SpriteId);
             entitySprite.GetComponent<SpriteRenderer>().color = uiColors.Get("mapEntities");
-            if (e is GameItem)
+
+            if (e is Player)
+            {
+                borderSprite.GetComponent<SpriteRenderer>().color = uiColors.Get("playerHighlight");
+                borderSprite.gameObject.SetActive(true);
+            }
+            else if (e is GameItem)
             {
                 entitySprite.localScale = new Vector3(0.75f, 0.75f, 1.0f);
             }
@@ -398,10 +404,13 @@ namespace Ventura.Unity.Behaviours
                     else
                         alpha = fogUnexploredAlpha;
 
-                    var tileColor = fogColor;
-                    tileColor.a = alpha;
+                    var fogSpriteColor = _fogTiles[x, y].transform.Find("Sprite").GetComponent<SpriteRenderer>().color;
+                    fogSpriteColor.a = alpha;
+                    _fogTiles[x, y].transform.Find("Sprite").GetComponent<SpriteRenderer>().color = fogSpriteColor;
 
-                    _fogTiles[x, y].GetComponent<SpriteRenderer>().color = tileColor;
+                    var fogBackgroundColor = _fogTiles[x, y].transform.Find("Background").GetComponent<SpriteRenderer>().color;
+                    fogBackgroundColor.a = alpha;
+                    _fogTiles[x, y].transform.Find("Background").GetComponent<SpriteRenderer>().color = fogBackgroundColor;
 
                     //surreptitiously using mapTile to store visibility status
                     _mapTiles[x, y].GetComponent<MapTileBehaviour>().isVisible = gameMap.Visible[x, y];
