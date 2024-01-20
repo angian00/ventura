@@ -5,37 +5,7 @@ using Ventura.Util;
 
 namespace Ventura.Test.WorldGenerating
 {
-    public enum TerrainType
-    {
-        Water,
-        Desert,
-        Grass,
-        Forest,
-        Tropical,
-        Rock,
-        Snow,
-    }
-
-
-    public class GameMap
-    {
-        public int width;
-        public int height;
-        public float[,] altitudes;
-        public float[,] temperatures;
-        public float[,] moistures;
-        public TerrainType[,] terrain;
-
-
-        public GameMap(int width, int height)
-        {
-            this.width = width;
-            this.height = height;
-        }
-    }
-
-
-    public class WorldGenerator
+    public class WorldTerrainGenerator
     {
         private const float WATER_ALTITUDE = 0.1f;
 
@@ -49,34 +19,39 @@ namespace Ventura.Test.WorldGenerating
         public int nTemperatureOctaves;
 
 
-        public WorldGenerator(int width, int height)
+        public WorldTerrainGenerator(int width, int height)
         {
             this.width = width;
             this.height = height;
         }
 
-        public GameMap GenerateWorld()
+        public GameMap GenerateWorldTerrain()
         {
             var t0 = Time.realtimeSinceStartup;
             var gameMap = new GameMap(width, height);
             var tMap = Time.realtimeSinceStartup;
-            DebugUtils.Log($"GenerateWorld; tMap duration : {(tMap - t0):f2} seconds");
+            DebugUtils.Log($"GenerateWorldTerrain; tMap duration : {(tMap - t0):f2} seconds");
 
-            gameMap.altitudes = generateAltitudes();
+            var altitudes = generateAltitudes();
             var tAlt = Time.realtimeSinceStartup;
-            DebugUtils.Log($"GenerateWorld; tAlt duration : {(tAlt - tMap):f2} seconds");
+            DebugUtils.Log($"GenerateWorldTerrain; tAlt duration : {(tAlt - tMap):f2} seconds");
 
-            gameMap.temperatures = generateTemperatures(gameMap.altitudes);
+            var temperatures = generateTemperatures(altitudes);
             var tTemp = Time.realtimeSinceStartup;
-            DebugUtils.Log($"GenerateWorld; tTemp duration : {(tTemp - tAlt):f2} seconds");
+            DebugUtils.Log($"GenerateWorldTerrain; tTemp duration : {(tTemp - tAlt):f2} seconds");
 
-            gameMap.moistures = generateMoistures(gameMap.altitudes);
+            var moistures = generateMoistures(altitudes);
             var tMoist = Time.realtimeSinceStartup;
-            DebugUtils.Log($"GenerateWorld; tMoist duration : {(tMoist - tTemp):f2} seconds");
+            DebugUtils.Log($"GenerateWorldTerrain; tMoist duration : {(tMoist - tTemp):f2} seconds");
 
-            gameMap.terrain = computeBiomes(gameMap.temperatures, gameMap.moistures);
+            var terrain = computeBiomes(temperatures, moistures);
             var tTerrain = Time.realtimeSinceStartup;
-            DebugUtils.Log($"GenerateWorld; tTerrain duration : {(tTerrain - tMoist):f2} seconds");
+            DebugUtils.Log($"GenerateWorldTerrain; tTerrain duration : {(tTerrain - tMoist):f2} seconds");
+
+            gameMap.altitudes = altitudes;
+            gameMap.temperatures = temperatures;
+            gameMap.moistures = moistures;
+            gameMap.terrain = terrain;
 
             return gameMap;
         }
@@ -98,6 +73,8 @@ namespace Ventura.Test.WorldGenerating
             var w = altitudes.GetLength(0);
             var h = altitudes.GetLength(1);
             var temperatures = new float[w, h];
+
+            DebugUtils.Log("generateTemperatures");
 
             var noiseValues = generateNoise(w, h, true, temperatureMapping, nTemperatureOctaves);
 
@@ -201,6 +178,8 @@ namespace Ventura.Test.WorldGenerating
             //       │                │           │             │       │
             //       └────────────────┴───────────┴─────────────┴───────┘
 
+            DebugUtils.Log("computeBiomes");
+
             var w = temperatures.GetLength(0);
             var h = temperatures.GetLength(1);
             var terrain = new TerrainType[w, h];
@@ -300,7 +279,7 @@ namespace Ventura.Test.WorldGenerating
                 }
             }
 
-            DebugUtils.Log($"DEBUG generateNoise - min noise: {minNoise}, max noise: {maxNoise}, avg noise: {cumNoise / (width * height)}");
+            //DebugUtils.Log($"DEBUG generateNoise - min noise: {minNoise}, max noise: {maxNoise}, avg noise: {cumNoise / (width * height)}");
 
             var res = new float[width, height];
             for (var x = 0; x < width; x++)
@@ -314,7 +293,7 @@ namespace Ventura.Test.WorldGenerating
             var noiseHistogram = DataUtils.ComputeHistogram(res);
             for (var i = 0; i < noiseHistogram.Length; i++)
             {
-                DebugUtils.Log($"DEBUG - noise distribution [{((float)i) / noiseHistogram.Length}]: {noiseHistogram[i]}");
+                //DebugUtils.Log($"DEBUG - noise distribution [{((float)i) / noiseHistogram.Length}]: {noiseHistogram[i]}");
             }
 
             return res;

@@ -16,6 +16,7 @@ namespace Ventura.Test
             Temperature,
             Moisture,
             Terrain,
+            Civilizations,
         }
 
         public TMP_Dropdown mapTypeDropdown;
@@ -35,8 +36,13 @@ namespace Ventura.Test
         public AnimationCurve temperatureMapping = AnimationCurve.Linear(0, 0, 1, 1);
         public int nTemperatureOctaves = 5;
 
+        public int nCivilizations = 5;
+
+
+        public List<Color> civilizationColors;
+
         private Dictionary<TerrainType, Color> biomeColors;
-        private GameMap _world;
+        private GameMap worldMap;
 
 
 
@@ -59,32 +65,37 @@ namespace Ventura.Test
 
             var t0 = Time.realtimeSinceStartup;
 
-            var worldGen = new WorldGenerator(mapWidth, mapHeight);
-            worldGen.altitudeMapping = altitudeMapping;
-            worldGen.nAltitudeOctaves = nAltitudeOctaves;
-            worldGen.temperatureMapping = temperatureMapping;
-            worldGen.nTemperatureOctaves = nTemperatureOctaves;
-            worldGen.moistureMapping = moistureMapping;
-            worldGen.nMoistureOctaves = nMoistureOctaves;
+            var terrainGen = new WorldTerrainGenerator(mapWidth, mapHeight);
+            terrainGen.altitudeMapping = altitudeMapping;
+            terrainGen.nAltitudeOctaves = nAltitudeOctaves;
+            terrainGen.temperatureMapping = temperatureMapping;
+            terrainGen.nTemperatureOctaves = nTemperatureOctaves;
+            terrainGen.moistureMapping = moistureMapping;
+            terrainGen.nMoistureOctaves = nMoistureOctaves;
 
-            _world = worldGen.GenerateWorld();
-
+            worldMap = terrainGen.GenerateWorldTerrain();
             var t1 = Time.realtimeSinceStartup;
-            DebugUtils.Log($"GenerateWorld duration : {(t1 - t0):f2} seconds");
-            onMapTypeChanged();
+            DebugUtils.Log($"GenerateWorldTerrain duration : {(t1 - t0):f2} seconds");
+
+            var civGen = new CivilizationGenerator(mapWidth, mapHeight);
+            civGen.GenerateCivilizations(worldMap, nCivilizations);
             var t2 = Time.realtimeSinceStartup;
-            DebugUtils.Log($"onMapTypeChanged duration : {(t2 - t1):f2} seconds");
+            DebugUtils.Log($"GenerateCivilizations duration : {(t2 - t1):f2} seconds");
+
+            onMapTypeChanged();
+            var t3 = Time.realtimeSinceStartup;
+            DebugUtils.Log($"onMapTypeChanged duration : {(t3 - t2):f2} seconds");
         }
 
         private void onMapTypeChanged()
         {
-            if (_world == null)
+            if (worldMap == null)
                 return;
 
             var mapType = Enum.Parse<MapType>(mapTypeDropdown.options[mapTypeDropdown.value].text);
             DebugUtils.Log($"onMapTypeChanged: {mapType}");
 
-            mapImage.sprite = createMapSprite(_world, mapType);
+            mapImage.sprite = createMapSprite(worldMap, mapType);
         }
 
 
@@ -126,6 +137,9 @@ namespace Ventura.Test
                         case MapType.Terrain:
                             tileColor = biomeColors[world.terrain[x, y]];
                             break;
+                        case MapType.Civilizations:
+                            tileColor = civilizationColor(world.civilizations[x, y]);
+                            break;
                     }
 
                     texture.SetPixel(x, y, tileColor);
@@ -137,6 +151,16 @@ namespace Ventura.Test
                 new Vector2(texture.width / 2, texture.height / 2));
         }
 
+
+        private Color civilizationColor(int civId)
+        {
+            if (civId == -1)
+                return Color.blue;
+            else if (civId == 0)
+                return Color.grey;
+            else
+                return civilizationColors[(civId - 1) % 5]; //FIXME
+        }
 
         private static Color valueColor(float value)
         {

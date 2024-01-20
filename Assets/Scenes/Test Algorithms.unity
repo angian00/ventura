@@ -3084,6 +3084,13 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   nTemperatureOctaves: 5
+  nCivilizations: 5
+  civilizationColors:
+  - {r: 1, g: 0.09661572, b: 0, a: 1}
+  - {r: 0.9245283, g: 0.88148534, b: 0.056692798, a: 1}
+  - {r: 0, g: 1, b: 0.12644672, a: 1}
+  - {r: 0.6386528, g: 0, b: 1, a: 1}
+  - {r: 1, g: 0.51359504, b: 0, a: 1}
 --- !u!4 &2133075710
 Transform:
   m_ObjectHideFlags: 0
