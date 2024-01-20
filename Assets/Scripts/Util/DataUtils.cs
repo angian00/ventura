@@ -20,13 +20,29 @@ namespace Ventura.Util
             return res;
         }
 
-        public static int[] IntValueStats(int[,] arr2d, int maxValue)
+        /**
+         * Assumes values are in the 0.0 - 1.0 range
+         */
+        public static float[] ComputeHistogram(float[,] arr2d, int nBins = 10)
         {
-            var statsArr = new int[maxValue + 1];
+            var statsArr = new float[nBins];
 
             foreach (var arrElem in arr2d)
             {
-                statsArr[arrElem]++;
+                int iBin = (int)Math.Floor(arrElem * nBins);
+
+                if (iBin < 0)
+                    iBin = 0;
+
+                if (iBin >= nBins)
+                    iBin = nBins - 1;
+
+                statsArr[iBin]++;
+            }
+
+            for (var iBin = 0; iBin < statsArr.Length; iBin++)
+            {
+                statsArr[iBin] /= (arr2d.GetLength(0) * arr2d.GetLength(1));
             }
 
             return statsArr;

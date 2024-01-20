@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Ventura.Test.WorldGenerating;
 using Ventura.Util;
 
@@ -9,35 +10,39 @@ namespace Ventura.Test
 {
     public class TestWorldGenerator : MonoBehaviour
     {
-        public GameObject terrainTileTemplate;
-        public Transform terrainLayer;
-        public TMP_Dropdown mapTypeDropdown;
-
-
-        private static int MAP_WIDTH = 40;
-        private static int MAP_HEIGHT = 30;
-
-        private Dictionary<TerrainType, Color> biomeColors;
-
-        private GameObject[,] _mapTiles;
-        private GameMap _world;
-
-
         private enum MapType
         {
             Altitude,
-            Latitude,
             Temperature,
             Moisture,
             Terrain,
         }
+
+        public TMP_Dropdown mapTypeDropdown;
+        public Image mapImage;
+
+        //private static int mapWidth = 40;
+        //private static int mapHeight = 30;
+        public int mapWidth = 40 * 10;
+        public int mapHeight = 30 * 10;
+
+        public AnimationCurve altitudeMapping = AnimationCurve.Linear(0, 0, 1, 1);
+        public int nAltitudeOctaves = 5;
+
+        public AnimationCurve moistureMapping = AnimationCurve.Linear(0, 0, 1, 1);
+        public int nMoistureOctaves = 3;
+
+        public AnimationCurve temperatureMapping = AnimationCurve.Linear(0, 0, 1, 1);
+        public int nTemperatureOctaves = 5;
+
+        private Dictionary<TerrainType, Color> biomeColors;
+        private GameMap _world;
 
 
 
         private void Awake()
         {
             initColors();
-            initMap();
 
             mapTypeDropdown.onValueChanged.AddListener(delegate { onMapTypeChanged(); });
             mapTypeDropdown.ClearOptions();
@@ -50,8 +55,25 @@ namespace Ventura.Test
 
         public void OnButtonClicked()
         {
-            _world = WorldGenerator.GenerateWorld(MAP_WIDTH, MAP_HEIGHT);
+            DebugUtils.Log("OnButtonClicked");
+
+            var t0 = Time.realtimeSinceStartup;
+
+            var worldGen = new WorldGenerator(mapWidth, mapHeight);
+            worldGen.altitudeMapping = altitudeMapping;
+            worldGen.nAltitudeOctaves = nAltitudeOctaves;
+            worldGen.temperatureMapping = temperatureMapping;
+            worldGen.nTemperatureOctaves = nTemperatureOctaves;
+            worldGen.moistureMapping = moistureMapping;
+            worldGen.nMoistureOctaves = nMoistureOctaves;
+
+            _world = worldGen.GenerateWorld();
+
+            var t1 = Time.realtimeSinceStartup;
+            DebugUtils.Log($"GenerateWorld duration : {(t1 - t0):f2} seconds");
             onMapTypeChanged();
+            var t2 = Time.realtimeSinceStartup;
+            DebugUtils.Log($"onMapTypeChanged duration : {(t2 - t1):f2} seconds");
         }
 
         private void onMapTypeChanged()
@@ -61,7 +83,8 @@ namespace Ventura.Test
 
             var mapType = Enum.Parse<MapType>(mapTypeDropdown.options[mapTypeDropdown.value].text);
             DebugUtils.Log($"onMapTypeChanged: {mapType}");
-            updateView(_world, mapType);
+
+            mapImage.sprite = createMapSprite(_world, mapType);
         }
 
 
@@ -80,37 +103,19 @@ namespace Ventura.Test
         }
 
 
-
-        private void initMap()
+        private Sprite createMapSprite(GameMap world, MapType mapType)
         {
-            _mapTiles = new GameObject[MAP_WIDTH, MAP_HEIGHT];
-            for (int x = 0; x < MAP_WIDTH; x++)
-            {
-                for (int y = 0; y < MAP_HEIGHT; y++)
-                {
-                    var newMapTile = Instantiate(terrainTileTemplate, new Vector3(x, y), Quaternion.identity);
-                    newMapTile.GetComponent<SpriteRenderer>().color = Color.magenta;
-                    newMapTile.transform.SetParent(terrainLayer);
-                    _mapTiles[x, y] = newMapTile;
-                }
-            }
-        }
+            var texture = new Texture2D(world.width, world.height, TextureFormat.ARGB32, false);
 
-
-        private void updateView(GameMap world, MapType mapType)
-        {
-            for (int x = 0; x < MAP_WIDTH; x++)
+            for (int x = 0; x < world.width; x++)
             {
-                for (int y = 0; y < MAP_HEIGHT; y++)
+                for (int y = 0; y < world.height; y++)
                 {
                     Color tileColor = Color.magenta;
                     switch (mapType)
                     {
                         case MapType.Altitude:
                             tileColor = valueColor(world.altitudes[x, y]);
-                            break;
-                        case MapType.Latitude:
-                            tileColor = valueColor(Math.Abs(world.latitudes[x, y]));
                             break;
                         case MapType.Temperature:
                             tileColor = valueColor(world.temperatures[x, y]);
@@ -123,19 +128,26 @@ namespace Ventura.Test
                             break;
                     }
 
-                    _mapTiles[x, y].GetComponent<SpriteRenderer>().color = tileColor;
+                    texture.SetPixel(x, y, tileColor);
                 }
             }
+
+            texture.Apply();
+            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height),
+                new Vector2(texture.width / 2, texture.height / 2));
         }
 
-        private static Color valueColor(int value, int maxValue = 10)
+
+        private static Color valueColor(float value)
         {
-            if (value == 0)
+            float EPSILON = 0.1f;
+
+            if (value < EPSILON)
                 return Color.blue;
 
             Color baseColor = Color.red;
 
-            return Color.Lerp(Color.black, baseColor, (float)value / maxValue);
+            return Color.Lerp(Color.black, baseColor, value);
         }
     }
 }

@@ -1,20 +1,24 @@
 # TODO
 
+## Current sprint (v0.8)
+
+- ui mobile-friendly
+- limitare movimento map camera ai bordi
+- usare pathfinding per ai ostile
+- migliorare colori status line
+- migliorare tiling fog
+- animazione player e combat
+- quote random all'inizio
+- minimap
+
 
 ## Bugfixing
 
 
 ## Improvements
-- limitare movimento map camera ai bordi
-- usare pathfinding per ai ostile
 ? visibilita' foresta
-- minimap
-- migliorare colori status line
-
 
 + provare painting dungeon custom
-- animazione player e combat
-- quote random all'inizio
 - feedback visuale stato mostro
 - strutturare meglio il feedback del combattimento (markup statusline?)
 - creare "recipes" per combatStats, es. "1d3"
@@ -56,9 +60,6 @@
 
 
 ### 0.x
-- ui mobile-friendly
-- pathfinding per hostile ai
-
 
 ### 0.xx
 - studiare shaders (https://www.ronja-tutorials.com/)
@@ -68,7 +69,7 @@
 ### Procedural Generation
 - world generator
 	+ ghiaccio su acqua con temperature molto basse
-	- pensare a multiscala
+	x pensare a multiscala
 	? generare fiumi su mappe a scala ridotta
 	+ indagare algorithm generazione laghi usando simulaz pioggia? calcolo minimi locali? "flood fill"
 	- creare laghi
