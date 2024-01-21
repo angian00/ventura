@@ -47,7 +47,7 @@ namespace Ventura.GameLogic.Actions
             actionData.CheckActionType(GameActionType.EquipItemAction);
             //if (_item.Equippable != null)
             //{
-            //    _actor.Equipment.Toggle(_item);
+            //    _actor.Equipment.toggleView(_item);
 
             //    return new ActionResult(true);
             //}

@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using Ventura.GameLogic.Actions;
-using Ventura.Unity.Behaviours;
 using Ventura.Unity.Events;
 
 namespace Ventura.Unity.Input
@@ -11,15 +10,12 @@ namespace Ventura.Unity.Input
     {
         //private Vector2Int? _lastPos = null;
 
-        public MapInputHandler(ViewManager viewManager) : base(viewManager) { }
+        //public MapInputHandler(ViewManager viewManager) : base(viewManager) { }
 
 
         public override void OnKeyPressed(KeyControl key)
         {
             //DebugUtils.Log("MapInputHandler.OnKeyPressed");
-
-            if (processCommonKey(key))
-                return;
 
             var keyboard = Keyboard.current;
             ActionData? newActionData = null;
@@ -80,7 +76,7 @@ namespace Ventura.Unity.Input
             }
             else if (key == keyboard.escapeKey)
             {
-                _viewManager.Toggle(ViewManager.ViewId.System);
+                EventManager.Publish(new ToggleSecondaryViewRequest(UIRequest.ViewId.System));
             }
             else if (key == keyboard.equalsKey)
             {
@@ -98,7 +94,6 @@ namespace Ventura.Unity.Input
 
             if (newActionData != null)
                 EventManager.Publish(new ActionRequest(newActionData));
-
         }
     }
 }

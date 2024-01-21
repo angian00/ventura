@@ -9,47 +9,53 @@ namespace Ventura.Unity.Behaviours
     public class PopupBehaviour : MonoBehaviour
     {
         private SystemRequest.Command _command;
-        public SystemRequest.Command Command { set { _command = value; } }
 
-        public ViewManager viewManager;
         public TextMeshProUGUI titleObj;
 
         //public Camera popupCamera;
         public GraphicRaycaster raycaster;
 
-        public string Title { set => titleObj.text = value; }
+
+        private void OnEnable()
+        {
+            EventManager.Subscribe<UIRequest>(onUIRequest);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.Unsubscribe<UIRequest>(onUIRequest);
+        }
 
         //private void Awake()
         //{
         //    hide();
         //}
 
-        //public void Show(string title, SystemCommandManager.Command _command)
-        //{
-        //    titleObj.text = title;
-        //    _command = _command;
 
-        //    show();
-        //}
-
-        //public void Hide()
-        //{
-
-        //}
+        private void onUIRequest(UIRequest uiRequest)
+        {
+            if (uiRequest.command == UIRequest.Command.AskYesNo)
+            {
+                var askYesNoRequest = (AskYesNoRequest)uiRequest;
+                titleObj.text = askYesNoRequest.title;
+                _command = askYesNoRequest.systemCommand;
+                gameObject.SetActive(true);
+            }
+        }
 
         public void OnYes()
         {
             Debug.Log($"PopupBehaviour.OnYes()");
-            viewManager.HidePopup();
+            gameObject.SetActive(false);
 
             EventManager.Publish(new SystemRequest(_command));
-
         }
 
         public void OnNo()
         {
             Debug.Log($"PopupBehaviour.OnNo()");
-            viewManager.HidePopup();
+            gameObject.SetActive(false);
+
         }
 
     }

@@ -57,10 +57,10 @@
 
     //    public override ActionResult Use(Actor consumer, ItemAction action)
     //    {
-    //        if (consumer.Skills == null)
+    //        if (consumer.Character == null)
     //            return new ActionResult(false, $"{consumer.Name} cannot use [{_parent.Label}]");
 
-    //        consumer.Skills.AddToSkillValue(_skill, _amount);
+    //        consumer.Character.AddToSkillValue(_skill, _amount);
 
     //        Consume();
 

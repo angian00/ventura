@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using Ventura.Unity.Input;
 
 namespace Ventura.Unity.Behaviours
 {
     public class KeyboardInputManager : MonoBehaviour
     {
-        public ViewManager viewManager;
+        //public ViewManager viewManager;
 
         [Tooltip("In seconds")]
         public float keyRepeatInitialDelay = 0.5f;
@@ -16,7 +17,7 @@ namespace Ventura.Unity.Behaviours
 
         private Dictionary<KeyControl, float> _keyElapsedTimes = new();
         private Dictionary<KeyControl, bool> _pressedKeys = new();
-
+        private MapInputHandler _mapKeyboardHandler = new();
 
         void Start()
         {
@@ -66,7 +67,9 @@ namespace Ventura.Unity.Behaviours
                 if (triggered)
                 {
                     //DebugUtils.Log("Key press detected: " + key.displayName);
-                    viewManager.CurrInputHandler.OnKeyPressed(key);
+
+                    //TODO: check if map view is active
+                    _mapKeyboardHandler.OnKeyPressed(key);
                 }
             }
         }

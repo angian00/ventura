@@ -8,10 +8,10 @@ namespace Ventura.Unity.Input
     {
         private PopupBehaviour _popupManager;
 
-        public PopupInputHandler(ViewManager viewManager, PopupBehaviour popupManager) : base(viewManager)
-        {
-            this._popupManager = popupManager;
-        }
+        //public PopupInputHandler(ViewManager viewManager, PopupBehaviour popupManager) : base(viewManager)
+        //{
+        //    this._popupManager = popupManager;
+        //}
 
 
         public override void OnKeyPressed(KeyControl key)
@@ -22,7 +22,7 @@ namespace Ventura.Unity.Input
 
             if (key == keyboard.escapeKey)
             {
-                _viewManager.HidePopup();
+                //_viewManager.HidePopup();
             }
             else if (key == keyboard.yKey)
             {

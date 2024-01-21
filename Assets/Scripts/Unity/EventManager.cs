@@ -168,6 +168,16 @@ namespace Ventura.Unity.Events
             ZoomIn,
             ZoomOut,
             AskYesNo,
+            ToggleSecondaryView,
+        }
+
+        public enum ViewId
+        {
+            Map,
+            Inventory,
+            Skills,
+            System,
+            Popup,
         }
 
         public Command command { get; }
@@ -188,6 +198,17 @@ namespace Ventura.Unity.Events
         {
             this.title = title;
             this.systemCommand = systemCommand;
+        }
+    }
+
+    public record ToggleSecondaryViewRequest : UIRequest
+    {
+
+        public ViewId viewId { get; }
+
+        public ToggleSecondaryViewRequest(ViewId viewId) : base(Command.ToggleSecondaryView)
+        {
+            this.viewId = viewId;
         }
     }
 

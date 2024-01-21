@@ -4,6 +4,8 @@
 
 ### Roguelike base e UI
 - ui mobile-friendly
+	- bugfixing popup events
+- investigare gestione swatches colore
 - limitare movimento map camera ai bordi
 - usare pathfinding per ai ostile
 - migliorare colori status line
@@ -21,7 +23,6 @@
 		- affinita' con terrain
 
 	- generazione citta e strade
-	- investigare gestione swatches colore
 
 
 ## Bugfixing
