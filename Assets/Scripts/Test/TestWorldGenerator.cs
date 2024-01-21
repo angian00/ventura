@@ -74,17 +74,24 @@ namespace Ventura.Test
             terrainGen.nMoistureOctaves = nMoistureOctaves;
 
             worldMap = terrainGen.GenerateWorldTerrain();
-            var t1 = Time.realtimeSinceStartup;
-            DebugUtils.Log($"GenerateWorldTerrain duration : {(t1 - t0):f2} seconds");
+            var tTerrain = Time.realtimeSinceStartup;
+            DebugUtils.Log($"GenerateWorldTerrain duration : {(tTerrain - t0):f2} seconds");
 
-            var civGen = new CivilizationGenerator(mapWidth, mapHeight);
-            civGen.GenerateCivilizations(worldMap, nCivilizations);
-            var t2 = Time.realtimeSinceStartup;
-            DebugUtils.Log($"GenerateCivilizations duration : {(t2 - t1):f2} seconds");
+            worldMap.ComputeSectors();
+            var tSectors = Time.realtimeSinceStartup;
+            DebugUtils.Log($"ComputeSectors duration : {(tSectors - tTerrain):f2} seconds");
+
+            var civGen = new CivilizationGenerator(worldMap);
+            //worldMap.civilizations = civGen.GenerateCivilizationsFloodFill(nCivilizations);
+            worldMap.civilizations = civGen.GenerateCivilizationsBySector(nCivilizations);
+            //worldMap.civilizations = civGen.GenerateCivilizationsVoronoi(nCivilizations);
+
+            var tCiv = Time.realtimeSinceStartup;
+            DebugUtils.Log($"GenerateCivilizations duration : {(tCiv - tSectors):f2} seconds");
 
             onMapTypeChanged();
-            var t3 = Time.realtimeSinceStartup;
-            DebugUtils.Log($"onMapTypeChanged duration : {(t3 - t2):f2} seconds");
+            var tVisual = Time.realtimeSinceStartup;
+            DebugUtils.Log($"onMapTypeChanged duration : {(tVisual - tCiv):f2} seconds");
         }
 
         private void onMapTypeChanged()
@@ -159,7 +166,7 @@ namespace Ventura.Test
             else if (civId == 0)
                 return Color.grey;
             else
-                return civilizationColors[(civId - 1) % 5]; //FIXME
+                return civilizationColors[(civId - 1) % 5]; //FIXME: support more than 5 colors
         }
 
         private static Color valueColor(float value)

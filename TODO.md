@@ -2,6 +2,7 @@
 
 ## Current sprint (v0.8)
 
+### Roguelike base e UI
 - ui mobile-friendly
 - limitare movimento map camera ai bordi
 - usare pathfinding per ai ostile
@@ -10,6 +11,17 @@
 - animazione player e combat
 - quote random all'inizio
 - minimap
+- provare un altro stile di painting dungeon
+
+### Generators
+- world generator
+	- investigare erosion
+	- investigare migliorie civ generator
+		- smussare confini frastagliati
+		- affinita' con terrain
+
+	- generazione citta e strade
+	- investigare gestione swatches colore
 
 
 ## Bugfixing
@@ -18,7 +30,6 @@
 ## Improvements
 ? visibilita' foresta
 
-+ provare painting dungeon custom
 - feedback visuale stato mostro
 - strutturare meglio il feedback del combattimento (markup statusline?)
 - creare "recipes" per combatStats, es. "1d3"
@@ -67,12 +78,8 @@
 
 ## Prototyping
 ### Procedural Generation
-- world generator
-	+ ghiaccio su acqua con temperature molto basse
-	x pensare a multiscala
-	? generare fiumi su mappe a scala ridotta
-	+ indagare algorithm generazione laghi usando simulaz pioggia? calcolo minimi locali? "flood fill"
-	- creare laghi
+
+	x ghiaccio su acqua con temperature molto basse
 	x razze
 
 - Simulazione villaggi con relationships
