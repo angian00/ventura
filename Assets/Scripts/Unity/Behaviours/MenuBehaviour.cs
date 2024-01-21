@@ -1,5 +1,6 @@
 using UnityEngine;
 using Ventura.Unity.Events;
+using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
@@ -9,19 +10,20 @@ namespace Ventura.Unity.Behaviours
 
         public void ToggleMenu()
         {
-            gameObject.SetActive(!gameObject.activeSelf);
+            UnityUtils.ToggleUIView(gameObject);
         }
 
         public void ShowInventoryUI()
         {
-            gameObject.SetActive(false);
-            EventManager.Publish(new ToggleSecondaryViewRequest(UIRequest.ViewId.Inventory));
+            UnityUtils.HideUIView(gameObject);
+
+            EventManager.Publish(new ShowUIViewRequest(UIRequest.ViewId.Inventory));
         }
 
         public void ShowSystemUI()
         {
-            gameObject.SetActive(false);
-            EventManager.Publish(new ToggleSecondaryViewRequest(UIRequest.ViewId.System));
+            UnityUtils.HideUIView(gameObject);
+            EventManager.Publish(new ShowUIViewRequest(UIRequest.ViewId.System));
         }
     }
 }

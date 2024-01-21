@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Ventura.GameLogic;
 using Ventura.Unity.Events;
 using Ventura.Util;
 
@@ -42,28 +41,19 @@ namespace Ventura.Unity.Behaviours
             {
                 resetDefaultView();
             }
-            else if (uiRequest.command == UIRequest.Command.ToggleSecondaryView)
+            else if (uiRequest.command == UIRequest.Command.ShowUIView)
             {
-                toggleView(((ToggleSecondaryViewRequest)uiRequest).viewId);
+                var viewId = ((ShowUIViewRequest)uiRequest).viewId;
+                UnityUtils.ShowUIView(_uiViews[viewId]);
             }
         }
 
         private void resetDefaultView()
         {
             foreach (var viewId in _uiViews.Keys)
-            {
-                _uiViews[viewId].SetActive(false);
-            }
+                UnityUtils.HideUIView(_uiViews[viewId]);
+
             EventManager.Publish(new TextNotification(null));
-        }
-
-        private void toggleView(UIRequest.ViewId viewId)
-        {
-            var viewObj = _uiViews[viewId];
-            if (viewObj == null)
-                throw new GameException($"viewObj not found for viewId {DataUtils.EnumToStr(viewId)}");
-
-            viewObj.SetActive(!viewObj.activeSelf);
         }
     }
 }

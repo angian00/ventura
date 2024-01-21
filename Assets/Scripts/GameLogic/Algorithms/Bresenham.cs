@@ -7,13 +7,12 @@ namespace Ventura.GameLogic.Algorithms
     using System;
     using System.Collections.Generic;
     using UnityEngine;
-    using Ventura.Util;
 
     public class Bresenham
     {
         public static List<Vector2Int> ComputeLine(Vector2Int startPos, Vector2Int endPos)
         {
-            DebugUtils.Log($"ComputeLine; startPos: {startPos}, endPos: {endPos}");
+            //DebugUtils.Log($"ComputeLine; startPos: {startPos}, endPos: {endPos}");
             List<Vector2Int> line;
             bool flipped = false;
 
@@ -46,7 +45,7 @@ namespace Ventura.GameLogic.Algorithms
 
         private static List<Vector2Int> ComputeLineHigh(Vector2Int startPos, Vector2Int endPos)
         {
-            DebugUtils.Log("ComputeLineHigh");
+            //DebugUtils.Log("ComputeLineHigh");
             List<Vector2Int> res = new();
 
             var dx = endPos.x - startPos.x;
@@ -84,7 +83,7 @@ namespace Ventura.GameLogic.Algorithms
 
         private static List<Vector2Int> ComputeLineLow(Vector2Int startPos, Vector2Int endPos)
         {
-            DebugUtils.Log("ComputeLineLow");
+            //DebugUtils.Log("ComputeLineLow");
             List<Vector2Int> res = new();
 
             var dx = endPos.x - startPos.x;

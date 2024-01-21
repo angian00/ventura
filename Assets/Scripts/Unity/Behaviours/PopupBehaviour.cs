@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Ventura.Unity.Events;
+using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
@@ -11,9 +11,6 @@ namespace Ventura.Unity.Behaviours
         private SystemRequest.Command _command;
 
         public TextMeshProUGUI titleObj;
-
-        //public Camera popupCamera;
-        public GraphicRaycaster raycaster;
 
 
         private void OnEnable()
@@ -39,14 +36,14 @@ namespace Ventura.Unity.Behaviours
                 var askYesNoRequest = (AskYesNoRequest)uiRequest;
                 titleObj.text = askYesNoRequest.title;
                 _command = askYesNoRequest.systemCommand;
-                gameObject.SetActive(true);
+                UnityUtils.ShowUIView(gameObject);
             }
         }
 
         public void OnYes()
         {
             Debug.Log($"PopupBehaviour.OnYes()");
-            gameObject.SetActive(false);
+            UnityUtils.HideUIView(gameObject);
 
             EventManager.Publish(new SystemRequest(_command));
         }
@@ -54,8 +51,7 @@ namespace Ventura.Unity.Behaviours
         public void OnNo()
         {
             Debug.Log($"PopupBehaviour.OnNo()");
-            gameObject.SetActive(false);
-
+            UnityUtils.HideUIView(gameObject);
         }
 
     }

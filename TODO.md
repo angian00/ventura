@@ -4,7 +4,6 @@
 
 ### Roguelike base e UI
 - ui mobile-friendly
-	- bugfixing popup events
 - investigare gestione swatches colore
 - limitare movimento map camera ai bordi
 - usare pathfinding per ai ostile

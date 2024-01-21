@@ -168,7 +168,7 @@ namespace Ventura.Unity.Events
             ZoomIn,
             ZoomOut,
             AskYesNo,
-            ToggleSecondaryView,
+            ShowUIView,
         }
 
         public enum ViewId
@@ -201,12 +201,12 @@ namespace Ventura.Unity.Events
         }
     }
 
-    public record ToggleSecondaryViewRequest : UIRequest
+    public record ShowUIViewRequest : UIRequest
     {
 
         public ViewId viewId { get; }
 
-        public ToggleSecondaryViewRequest(ViewId viewId) : base(Command.ToggleSecondaryView)
+        public ShowUIViewRequest(ViewId viewId) : base(Command.ShowUIView)
         {
             this.viewId = viewId;
         }

@@ -76,7 +76,7 @@ namespace Ventura.Unity.Input
             }
             else if (key == keyboard.escapeKey)
             {
-                EventManager.Publish(new ToggleSecondaryViewRequest(UIRequest.ViewId.System));
+                EventManager.Publish(new ShowUIViewRequest(UIRequest.ViewId.System));
             }
             else if (key == keyboard.equalsKey)
             {

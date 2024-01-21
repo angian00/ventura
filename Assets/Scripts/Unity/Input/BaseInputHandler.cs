@@ -49,21 +49,21 @@ namespace Ventura.Unity.Input
             //    //    processed = true;
             //    //}
 
-            //    //------------------- view toggleView commands -------------------
+            //    //------------------- view showUIView commands -------------------
             //    //else if (key == keyboard.iKey)
             //    if (key == keyboard.iKey)
             //    {
-            //        EventManager.Publish(new ToggleSecondaryViewRequest(ViewManager.ViewId.Inventory));
+            //        EventManager.Publish(new ShowUIViewRequest(ViewManager.ViewId.Inventory));
             //        processed = true;
             //    }
             //    else if (key == keyboard.kKey)
             //    {
-            //        EventManager.Publish(new ToggleSecondaryViewRequest(ViewManager.ViewId.Character));
+            //        EventManager.Publish(new ShowUIViewRequest(ViewManager.ViewId.Character));
             //        processed = true;
             //    }
             //    else if (key == keyboard.mKey)
             //    {
-            //        //NB: map view doesn't have a toggleView behaviour,
+            //        //NB: map view doesn't have a showUIView behaviour,
             //        //    it is the default view
             //        //_viewManager.switchTo(ViewManager.ViewId.Map);
             //        processed = true;

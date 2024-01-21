@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Ventura.GameLogic;
 
 namespace Ventura.Util
 {
@@ -14,6 +15,33 @@ namespace Ventura.Util
             {
                 GameObject.Destroy(child.gameObject);
             }
+        }
+
+        public static void ShowUIView(GameObject viewObj)
+        {
+            ToggleUIView(viewObj, true);
+        }
+
+        public static void HideUIView(GameObject viewObj)
+        {
+            ToggleUIView(viewObj, false);
+        }
+
+        public static void ToggleUIView(GameObject viewObj, bool? proposedVisibilityStatus = null)
+        {
+            var targetCanvasGroup = viewObj.GetComponent<CanvasGroup>();
+            if (targetCanvasGroup == null)
+                throw new GameException($"viewObj {viewObj.name} does not have a CanvasGroup");
+
+            bool newVisibilityStatus;
+            if (proposedVisibilityStatus == null)
+                newVisibilityStatus = !(targetCanvasGroup.interactable);
+            else
+                newVisibilityStatus = (bool)proposedVisibilityStatus;
+
+            targetCanvasGroup.alpha = newVisibilityStatus ? 1 : 0;
+            targetCanvasGroup.interactable = newVisibilityStatus;
+            targetCanvasGroup.blocksRaycasts = newVisibilityStatus;
         }
 
         /**

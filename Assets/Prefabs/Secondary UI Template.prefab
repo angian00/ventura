@@ -307,7 +307,7 @@ GameObject:
   - component: {fileID: 3182760819107221854}
   - component: {fileID: 69903765800559453}
   - component: {fileID: 4529831535065458531}
-  - component: {fileID: 3567625572850402856}
+  - component: {fileID: 4182179133848796597}
   m_Layer: 6
   m_Name: Close Button
   m_TagString: Untagged
@@ -417,19 +417,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 4182179133848796597}
+        m_TargetAssemblyTypeName: Ventura.Unity.Behaviours.CloseButtonBehaviour,
+          Assembly-CSharp
+        m_MethodName: HideUI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &3567625572850402856
+--- !u!114 &4182179133848796597
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -438,6 +439,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8473174562297793171}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a46dabc8b0d90364091535afe399da57, type: 3}
+  m_Script: {fileID: 11500000, guid: 027e191c129cb3a459bcb72ab4ea6f8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  closeTarget: {fileID: 0}

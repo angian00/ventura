@@ -1,15 +1,16 @@
 using UnityEngine;
+using Ventura.Util;
 
 namespace Ventura.Unity.Behaviours
 {
 
     public class CloseButtonBehaviour : MonoBehaviour
     {
-        public GameObject closeTarget;
+        public GameObject targetObj;
 
         public void HideUI()
         {
-            closeTarget.SetActive(false);
+            UnityUtils.HideUIView(targetObj);
         }
     }
 }
