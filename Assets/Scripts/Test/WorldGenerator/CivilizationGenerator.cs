@@ -5,23 +5,23 @@ using Random = UnityEngine.Random;
 
 namespace Ventura.Test.WorldGenerating
 {
+    public struct FloodFillPos
+    {
+        public int id;
+        public int x;
+        public int y;
+
+        public FloodFillPos(int id, int x, int y)
+        {
+            this.id = id;
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+
     public class CivilizationGenerator
     {
-        private struct CivilizationPoint
-        {
-            public int civId;
-            public int x;
-            public int y;
-
-            public CivilizationPoint(int civId, int x, int y)
-            {
-                this.civId = civId;
-                this.x = x;
-                this.y = y;
-            }
-        }
-
-
         public int width;
         public int height;
         public int sectorSize;
@@ -209,12 +209,12 @@ namespace Ventura.Test.WorldGenerating
         public int[,] GenerateCivilizationsBySector(int nCivilizations)
         {
             var civSectorDistribution = new int[wSectors, hSectors];
-            var posQueue = new List<CivilizationPoint>();
+            var posQueue = new List<FloodFillPos>();
             var contendedSectors = new HashSet<Vector2Int>();
             for (int civId = 1; civId <= nCivilizations; civId++)
             {
                 var startPos = findFreeSector(civSectorDistribution, gameMap.sectors);
-                posQueue.Add(new CivilizationPoint(civId, startPos.x, startPos.y));
+                posQueue.Add(new FloodFillPos(civId, startPos.x, startPos.y));
             }
             while (posQueue.Count > 0)
             {
@@ -223,7 +223,7 @@ namespace Ventura.Test.WorldGenerating
                 posQueue.RemoveAt(targetIndex);
                 if (civSectorDistribution[currPoint.x, currPoint.y] != 0)
                 {
-                    if (civSectorDistribution[currPoint.x, currPoint.y] > 0 && civSectorDistribution[currPoint.x, currPoint.y] != currPoint.civId)
+                    if (civSectorDistribution[currPoint.x, currPoint.y] > 0 && civSectorDistribution[currPoint.x, currPoint.y] != currPoint.id)
                         contendedSectors.Add(new Vector2Int(currPoint.x, currPoint.y));
                     continue;
                 }
@@ -232,15 +232,15 @@ namespace Ventura.Test.WorldGenerating
                     civSectorDistribution[currPoint.x, currPoint.y] = -1;
                     continue;
                 }
-                civSectorDistribution[currPoint.x, currPoint.y] = currPoint.civId;
+                civSectorDistribution[currPoint.x, currPoint.y] = currPoint.id;
 
                 //x coordinate wraps, y doesn't
-                posQueue.Add(new CivilizationPoint(currPoint.civId, (currPoint.x - 1 + wSectors) % wSectors, currPoint.y));
-                posQueue.Add(new CivilizationPoint(currPoint.civId, (currPoint.x + 1) % wSectors, currPoint.y));
+                posQueue.Add(new FloodFillPos(currPoint.id, (currPoint.x - 1 + wSectors) % wSectors, currPoint.y));
+                posQueue.Add(new FloodFillPos(currPoint.id, (currPoint.x + 1) % wSectors, currPoint.y));
                 if (currPoint.y > 0)
-                    posQueue.Add(new CivilizationPoint(currPoint.civId, currPoint.x, currPoint.y - 1));
+                    posQueue.Add(new FloodFillPos(currPoint.id, currPoint.x, currPoint.y - 1));
                 if (currPoint.y < hSectors - 1)
-                    posQueue.Add(new CivilizationPoint(currPoint.civId, currPoint.x, currPoint.y + 1));
+                    posQueue.Add(new FloodFillPos(currPoint.id, currPoint.x, currPoint.y + 1));
             }
             var civDistribution = new int[width, height];
             for (int xSector = 0; xSector < wSectors; xSector++)
@@ -282,11 +282,11 @@ namespace Ventura.Test.WorldGenerating
                 {
                     var x = (xSector * sectorSize - 1 + width) % width;
                     if (gameMap.terrain[x, y] != TerrainType.Water && civDistribution[x, y] > 0)
-                        posQueue.Add(new CivilizationPoint(civDistribution[x, y], (x + 1) % width, y));
+                        posQueue.Add(new FloodFillPos(civDistribution[x, y], (x + 1) % width, y));
 
                     x = ((xSector + 1) * sectorSize) % width;
                     if (gameMap.terrain[x, y] != TerrainType.Water && civDistribution[x, y] > 0)
-                        posQueue.Add(new CivilizationPoint(civDistribution[x, y], (x - 1 + width) % width, y));
+                        posQueue.Add(new FloodFillPos(civDistribution[x, y], (x - 1 + width) % width, y));
                 }
 
                 //top and bottom
@@ -294,11 +294,11 @@ namespace Ventura.Test.WorldGenerating
                 {
                     var y = ySector * sectorSize - 1;
                     if (y >= 0 && gameMap.terrain[x, y] != TerrainType.Water && civDistribution[x, y] > 0)
-                        posQueue.Add(new CivilizationPoint(civDistribution[x, y], x, y + 1));
+                        posQueue.Add(new FloodFillPos(civDistribution[x, y], x, y + 1));
 
                     y = (ySector + 1) * sectorSize;
                     if (y < height && gameMap.terrain[x, y] != TerrainType.Water && civDistribution[x, y] > 0)
-                        posQueue.Add(new CivilizationPoint(civDistribution[x, y], x, y - 1));
+                        posQueue.Add(new FloodFillPos(civDistribution[x, y], x, y - 1));
                 }
 
                 //flood fill
@@ -322,19 +322,19 @@ namespace Ventura.Test.WorldGenerating
                         continue;
                     }
 
-                    civDistribution[currPoint.x, currPoint.y] = currPoint.civId;
+                    civDistribution[currPoint.x, currPoint.y] = currPoint.id;
 
                     //stay inside sector
                     if (currPoint.x > xSector * sectorSize)
-                        posQueue.Add(new CivilizationPoint(currPoint.civId, currPoint.x - 1, currPoint.y));
+                        posQueue.Add(new FloodFillPos(currPoint.id, currPoint.x - 1, currPoint.y));
 
                     if (currPoint.x < (xSector + 1) * sectorSize - 1)
-                        posQueue.Add(new CivilizationPoint(currPoint.civId, currPoint.x + 1, currPoint.y));
+                        posQueue.Add(new FloodFillPos(currPoint.id, currPoint.x + 1, currPoint.y));
 
                     if (currPoint.y > ySector * sectorSize)
-                        posQueue.Add(new CivilizationPoint(currPoint.civId, currPoint.x, currPoint.y - 1));
+                        posQueue.Add(new FloodFillPos(currPoint.id, currPoint.x, currPoint.y - 1));
                     if (currPoint.y < (ySector + 1) * sectorSize - 1)
-                        posQueue.Add(new CivilizationPoint(currPoint.civId, currPoint.x, currPoint.y + 1));
+                        posQueue.Add(new FloodFillPos(currPoint.id, currPoint.x, currPoint.y + 1));
                 }
             }
 
@@ -347,14 +347,16 @@ namespace Ventura.Test.WorldGenerating
             const int maxCivArea = 10000;
 
             var civDistribution = new int[width, height];
-            var posQueue = new List<CivilizationPoint>();
+            var posQueue = new List<FloodFillPos>();
+            //var posQueue = new Queue<FloodFillPos>();
 
             for (int civId = 1; civId <= nCivilizations; civId++)
             {
                 //var currCivArea = 0;
 
                 var startPos = findFreePos(civDistribution, gameMap.terrain);
-                posQueue.Add(new CivilizationPoint(civId, startPos.x, startPos.y));
+                posQueue.Add(new FloodFillPos(civId, startPos.x, startPos.y));
+                //posQueue.Enqueue(new FloodFillPos(id, startPos.x, startPos.y));
             }
 
 
@@ -363,6 +365,7 @@ namespace Ventura.Test.WorldGenerating
                 var targetIndex = Random.Range(0, posQueue.Count);
                 var currPoint = posQueue[targetIndex];
                 posQueue.RemoveAt(targetIndex);
+                //var currPoint = posQueue.Dequeue();
 
                 if (civDistribution[currPoint.x, currPoint.y] != 0)
                     continue;
@@ -373,15 +376,22 @@ namespace Ventura.Test.WorldGenerating
                     continue;
                 }
 
-                civDistribution[currPoint.x, currPoint.y] = currPoint.civId;
+                civDistribution[currPoint.x, currPoint.y] = currPoint.id;
                 //currCivArea++;
                 //if (currCivArea >= maxCivArea)
                 //    break;
 
-                posQueue.Add(new CivilizationPoint(currPoint.civId, (currPoint.x - 1 + width) % width, currPoint.y));
-                posQueue.Add(new CivilizationPoint(currPoint.civId, (currPoint.x + 1) % width, currPoint.y));
-                posQueue.Add(new CivilizationPoint(currPoint.civId, currPoint.x, (currPoint.y - 1 + height) % height));
-                posQueue.Add(new CivilizationPoint(currPoint.civId, currPoint.x, (currPoint.y + 1) % height));
+                posQueue.Add(new FloodFillPos(currPoint.id, (currPoint.x - 1 + width) % width, currPoint.y));
+                posQueue.Add(new FloodFillPos(currPoint.id, (currPoint.x + 1) % width, currPoint.y));
+
+                if (currPoint.y > 0)
+                    posQueue.Add(new FloodFillPos(currPoint.id, currPoint.x, currPoint.y - 1));
+                if (currPoint.y < height - 1)
+                    posQueue.Add(new FloodFillPos(currPoint.id, currPoint.x, currPoint.y + 1));
+                //posQueue.Enqueue(new FloodFillPos(currPoint.id, (currPoint.x - 1 + width) % width, currPoint.y));
+                //posQueue.Enqueue(new FloodFillPos(currPoint.id, (currPoint.x + 1) % width, currPoint.y));
+                //posQueue.Enqueue(new FloodFillPos(currPoint.id, currPoint.x, (currPoint.y - 1 + height) % height));
+                //posQueue.Enqueue(new FloodFillPos(currPoint.id, currPoint.x, (currPoint.y + 1) % height));
             }
 
             return civDistribution;

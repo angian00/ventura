@@ -17,6 +17,7 @@ namespace Ventura.Test
             Moisture,
             Terrain,
             Civilizations,
+            Islands,
         }
 
         public TMP_Dropdown mapTypeDropdown;
@@ -82,12 +83,16 @@ namespace Ventura.Test
             DebugUtils.Log($"ComputeSectors duration : {(tSectors - tTerrain):f2} seconds");
 
             var civGen = new CivilizationGenerator(worldMap);
-            //worldMap.civilizations = civGen.GenerateCivilizationsFloodFill(nCivilizations);
-            worldMap.civilizations = civGen.GenerateCivilizationsBySector(nCivilizations);
+            worldMap.civilizations = civGen.GenerateCivilizationsFloodFill(nCivilizations);
+            //worldMap.civilizations = civGen.GenerateCivilizationsBySector(nCivilizations);
             //worldMap.civilizations = civGen.GenerateCivilizationsVoronoi(nCivilizations);
 
             var tCiv = Time.realtimeSinceStartup;
             DebugUtils.Log($"GenerateCivilizations duration : {(tCiv - tSectors):f2} seconds");
+
+            worldMap.ComputeIslands();
+            var tIslands = Time.realtimeSinceStartup;
+            DebugUtils.Log($"ComputeIslands duration : {(tIslands - tCiv):f2} seconds");
 
             onMapTypeChanged();
             var tVisual = Time.realtimeSinceStartup;
@@ -147,6 +152,9 @@ namespace Ventura.Test
                         case MapType.Civilizations:
                             tileColor = civilizationColor(world.civilizations[x, y]);
                             break;
+                        case MapType.Islands:
+                            tileColor = civilizationColor(world.islandIds[x, y]);
+                            break;
                     }
 
                     texture.SetPixel(x, y, tileColor);
@@ -166,7 +174,7 @@ namespace Ventura.Test
             else if (civId == 0)
                 return Color.grey;
             else
-                return civilizationColors[(civId - 1) % 5]; //FIXME: support more than 5 colors
+                return civilizationColors[(civId - 1) % civilizationColors.Count];
         }
 
         private static Color valueColor(float value)
