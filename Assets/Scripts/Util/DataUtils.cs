@@ -48,6 +48,14 @@ namespace Ventura.Util
             return statsArr;
         }
 
+        /**
+         * From any given range to (0.0, 1.0)
+         */
+        public static float RescaleValue(float origValue, float origMin, float origMax)
+        {
+            return (origValue - origMin) / (origMax - origMin);
+        }
+
         public static int CountMatchingNeighbours<T>(T[,] arr2d, T targetValue, int x, int y, int radius = 1)
         {
             int nMatches = 0;

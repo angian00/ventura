@@ -23,6 +23,10 @@
 
 	- generazione citta e strade
 
+- world generator 2
+	- investigare wrapping triangle mesh
+	- implementare erosion (Planchon-Darboux) da https://mewo2.com/notes/terrain/
+
 
 ## Bugfixing
 
